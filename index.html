@@ -4,8 +4,24 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Solar Odyssey VR — Modular Prototype 05</title>
 <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
-<script src="data/planets.js"></script>
-<script src="data/quiz.js"></script>
+<script src="data/planets/sun.js"></script>
+<script src="data/planets/mercury.js"></script>
+<script src="data/planets/venus.js"></script>
+<script src="data/planets/earth.js"></script>
+<script src="data/planets/mars.js"></script>
+<script src="data/planets/jupiter.js"></script>
+<script src="data/planets/saturn.js"></script>
+<script src="data/planets/uranus.js"></script>
+<script src="data/planets/neptune.js"></script>
+<script src="data/quiz/sun.js"></script>
+<script src="data/quiz/mercury.js"></script>
+<script src="data/quiz/venus.js"></script>
+<script src="data/quiz/earth.js"></script>
+<script src="data/quiz/mars.js"></script>
+<script src="data/quiz/jupiter.js"></script>
+<script src="data/quiz/saturn.js"></script>
+<script src="data/quiz/uranus.js"></script>
+<script src="data/quiz/neptune.js"></script>
 <style>body{margin:0}#help{position:fixed;top:12px;left:12px;color:white;background:#101827c9;padding:12px 16px;border-radius:10px;font:14px system-ui;z-index:2;pointer-events:none}#help small{color:#b7c8e0}</style>
 </head>
 <body>
@@ -63,16 +79,17 @@ let currentPlanet=null, quizState=null;
 function clearUI(){while(uiRoot.firstChild)uiRoot.removeChild(uiRoot.firstChild);}
 
 // ฟังก์ชันวาดข้อความด้วย HTML5 Canvas เพื่อรองรับภาษาไทย 100% ใน A-Frame
-function txt(parent, value, pos, width, color = '#e7faff', align = 'center') {
+function txt(parent, value, pos, width, color = '#e7faff', align = 'center', customStyle = {}) {
   const rawLines = String(value).split('\n');
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d');
-  const fontSize = 42;
+  const fontSize = customStyle.fontSize || 42;
+  const fontFamily = customStyle.fontFamily || '"Sarabun", "Kanit", "Tahoma", system-ui, sans-serif';
   const lineHeight = fontSize * 1.38;
   const maxWidth = 944;
 
   canvas.width = 1024;
-  ctx.font = `bold ${fontSize}px "Sarabun", "Kanit", "Tahoma", system-ui, sans-serif`;
+  ctx.font = `bold ${fontSize}px ${fontFamily}`;
 
   // ตัดบรรทัดอัตโนมัติกรณีข้อความยาวเกินกรอบ
   const lines = [];
@@ -95,7 +112,7 @@ function txt(parent, value, pos, width, color = '#e7faff', align = 'center') {
 
   canvas.height = Math.max(96, Math.ceil(lines.length * lineHeight + 32));
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.font = `bold ${fontSize}px "Sarabun", "Kanit", "Tahoma", system-ui, sans-serif`;
+  ctx.font = `bold ${fontSize}px ${fontFamily}`;
   ctx.fillStyle = color;
   ctx.textBaseline = 'middle';
   ctx.textAlign = align;
@@ -144,79 +161,98 @@ function txt(parent, value, pos, width, color = '#e7faff', align = 'center') {
   return el;
 }
 
-function button(parent,label,pos,width,height,fn,color='#155e75'){
+function button(parent,label,pos,width,height,fn,color='#155e75',hoverColor='#0891b2',customStyle={}){
  const b=make('a-plane',{class:'selectable ui-button',width,height,position:pos,material:`shader: flat; color:${color}; opacity:0.98; side:double`},parent);
- txt(b,label,'0 0 0.012',width*.92,'#ffffff');
+ txt(b,label,'0 0 0.012',width*.92,'#ffffff','center',customStyle);
  b.addEventListener('click',e=>{e.stopPropagation();if(!b.dataset.locked)fn();});
- b.addEventListener('mouseenter',()=>b.setAttribute('material','shader: flat; color:#0891b2; opacity:1; side:double'));
+ b.addEventListener('mouseenter',()=>b.setAttribute('material',`shader: flat; color:${hoverColor}; opacity:1; side:double`));
  b.addEventListener('mouseleave',()=>b.setAttribute('material',`shader: flat; color:${color}; opacity:0.98; side:double`));
  return b;
 }
 function setPlanetSelection(on){planetEntities.forEach(({sphere})=>on?sphere.classList.add('selectable'):sphere.classList.remove('selectable'));}
 function openUI(){uiRoot.setAttribute('visible',true);setPlanetSelection(false);}
 function closeUI(){clearUI();uiRoot.setAttribute('visible',false);currentPlanet=null;quizState=null;setPlanetSelection(true);}
-function basePanel(title,subtitle=''){
- make('a-plane',{width:1.78,height:1.22,position:'0 0 0',material:'shader: flat; color:#071827; opacity:0.94; side:double'},uiRoot);
- make('a-plane',{width:1.78,height:.018,position:'0 .60 .008',material:'shader: flat; color:#22d3ee; side:double'},uiRoot);
- make('a-plane',{width:1.78,height:.018,position:'0 -.60 .008',material:'shader: flat; color:#22d3ee; side:double'},uiRoot);
- txt(uiRoot,title,'0 .48 .02',1.35,'#a5f3fc'); if(subtitle)txt(uiRoot,subtitle,'0 .34 .02',1.25,'#c8e9f3');
+function basePanel(title,subtitle='',style={}){
+ const bg=style.panelBgColor||'#071827';
+ const border=style.panelBorderColor||'#22d3ee';
+ const tColor=style.titleColor||'#a5f3fc';
+ const subColor=style.subtitleColor||'#c8e9f3';
+ make('a-plane',{width:1.78,height:1.22,position:'0 0 0',material:`shader: flat; color:${bg}; opacity:0.94; side:double`},uiRoot);
+ make('a-plane',{width:1.78,height:.018,position:'0 .60 .008',material:`shader: flat; color:${border}; side:double`},uiRoot);
+ make('a-plane',{width:1.78,height:.018,position:'0 -.60 .008',material:`shader: flat; color:${border}; side:double`},uiRoot);
+ txt(uiRoot,title||'ยังไม่ได้ระบุชื่อดาว','0 .48 .02',1.35,tColor,'center',style);
+ if(subtitle)txt(uiRoot,subtitle,'0 .34 .02',1.25,subColor,'center',style);
 }
 function planetImage(p){
+ const color=p.color||'#64748b';
  const v=make('a-entity',{position:'-.52 .02 .035'},uiRoot);
- make('a-sphere',{radius:.25,color:p.color,segmentsWidth:24,segmentsHeight:18,material:`shader: standard; color:${p.color}; roughness:.8`},v);
- if(p.id==='saturn')make('a-torus',{radius:.37,'radius-tubular':.025,rotation:'70 0 0',color:'#cdb98d'},v);
+ const mat=p.texture?`shader: standard; src:${p.texture}; roughness:.8`:`shader: standard; color:${color}; roughness:.8`;
+ make('a-sphere',{radius:.25,color:color,segmentsWidth:24,segmentsHeight:18,material:mat},v);
+ if(p.id==='saturn'||p.ringColor)make('a-torus',{radius:.37,'radius-tubular':.025,rotation:'70 0 0',color:p.ringColor||'#cdb98d'},v);
  if(p.image){
    const image=make('a-image',{src:p.image,width:.48,height:.48,position:'0 0 .28',transparent:true,side:'double'},v);
    image.addEventListener('error',()=>{image.setAttribute('visible',false);});
  }
- txt(uiRoot,'ภาพประกอบใน assets/images','-.52 -.35 .04',.72,'#67e8f9');
+ txt(uiRoot,'ภาพประกอบใน assets/images','-.52 -.35 .04',.72,p.style?.titleColor||'#67e8f9','center',p.style||{});
 }
 function showInfo(p){
- currentPlanet=p;openUI();clearUI();basePanel(p.name,p.en);planetImage(p);
- const facts=p.id==='sun'?['ดวงอาทิตย์เป็นดาวฤกษ์','เป็นศูนย์กลางของระบบสุริยะ']:[p.info,'ข้อมูลเพิ่มเติมจะใส่ภายหลัง','ขนาดและระยะทาง','อุณหภูมิและองค์ประกอบ','ข้อเท็จจริงที่น่าสนใจ'];
- txt(uiRoot,facts.map(x=>'• '+x).join('\n'),'-.10 .08 .03',.90,'#ffffff','left');
- if(p.id!=='sun')button(uiRoot,'PLAY MINIGAME','.35 -.39 .035',.72,.19,()=>startQuiz(p),'#0e7490');
- else txt(uiRoot,'ดวงอาทิตย์คงพฤติกรรมเดิม\nไม่มีมินิเกมในต้นแบบนี้','.31 -.36 .03',.82,'#bae6fd');
- button(uiRoot,'ปิดการ์ด','-.56 -.51 .035',.48,.15,closeUI,'#334155');
+ const s=p.style||{};
+ currentPlanet=p;openUI();clearUI();basePanel(p.name,p.en,s);planetImage(p);
+ const customFacts=Array.isArray(p.facts)&&p.facts.filter(Boolean).length?p.facts.filter(Boolean):null;
+ const facts=customFacts||(p.id==='sun'?['ดวงอาทิตย์เป็นดาวฤกษ์','เป็นศูนย์กลางของระบบสุริยะ']:[p.info||'รอเพิ่มข้อมูลของดาวดวงนี้','ข้อมูลเพิ่มเติมจะใส่ภายหลัง','ขนาดและระยะทาง','อุณหภูมิและองค์ประกอบ','ข้อเท็จจริงที่น่าสนใจ']);
+ txt(uiRoot,facts.map(x=>'• '+x).join('\n'),'-.10 .08 .03',.90,s.textColor||'#ffffff','left',s);
+ const hasSunQuiz=p.id==='sun'&&Array.isArray(window.PLANET_QUIZ?.sun)&&window.PLANET_QUIZ.sun.some(x=>x.q);
+ if(p.id!=='sun'||hasSunQuiz)button(uiRoot,'PLAY MINIGAME','.35 -.39 .035',.72,.19,()=>startQuiz(p),s.buttonColor||'#0e7490',s.buttonHoverColor||'#0891b2',s);
+ else txt(uiRoot,'ดวงอาทิตย์คงพฤติกรรมเดิม\n(ใส่คำถามใน data/quiz/sun.js เพื่อเปิดมินิเกม)','.31 -.36 .03',.82,'#bae6fd','center',s);
+ button(uiRoot,'ปิดการ์ด','-.56 -.51 .035',.48,.15,closeUI,s.closeButtonColor||'#334155',s.buttonHoverColor||'#0891b2',s);
 }
 function startQuiz(p){currentPlanet=p;quizState={index:0,answers:[],questions:(window.PLANET_QUIZ[p.id]||[])};if(!quizState.questions.length){showInfo(p);return;}renderQuestion();}
 function renderQuestion(){
- clearUI();const q=quizState.questions[quizState.index];basePanel(`${currentPlanet.name} · MINIGAME`,`คำถาม ${quizState.index+1} / ${quizState.questions.length}`);
- txt(uiRoot,q.q,'0 .20 .03',1.35,'#ffffff');
- q.options.forEach((opt,i)=>button(uiRoot,opt,`0 ${.015-i*.17} .035`,1.43,.135,()=>answerQuestion(i),'#164e63'));
- button(uiRoot,'ออกจากมินิเกม','0 -.53 .035',.85,.12,()=>showInfo(currentPlanet),'#334155');
+ const s=currentPlanet?.style||{};
+ clearUI();const q=quizState.questions[quizState.index];basePanel(`${currentPlanet.name||'ดาว'} · MINIGAME`,`คำถาม ${quizState.index+1} / ${quizState.questions.length}`,s);
+ txt(uiRoot,q.q||`รอเพิ่มคำถามข้อที่ ${quizState.index+1}`,'0 .20 .03',1.35,s.textColor||'#ffffff','center',s);
+ q.options.forEach((opt,i)=>button(uiRoot,opt||`ตัวเลือก ${String.fromCharCode(65+i)}`,`0 ${.015-i*.17} .035`,1.43,.135,()=>answerQuestion(i),s.buttonColor||'#164e63',s.buttonHoverColor||'#0891b2',s));
+ button(uiRoot,'ออกจากมินิเกม','0 -.53 .035',.85,.12,()=>showInfo(currentPlanet),s.closeButtonColor||'#334155',s.buttonHoverColor||'#0891b2',s);
 }
 function answerQuestion(selected){if(!quizState||quizState.answers[quizState.index])return;const q=quizState.questions[quizState.index];quizState.answers[quizState.index]={selected,correct:q.correct};renderFeedback();}
 function renderFeedback(){
+ const s=currentPlanet?.style||{};
  clearUI();const i=quizState.index,q=quizState.questions[i],a=quizState.answers[i],ok=a.selected===q.correct;
- basePanel(ok?'ตอบถูกต้อง':'คำตอบยังไม่ถูก',`คำถาม ${i+1} / ${quizState.questions.length}`);
- txt(uiRoot,`คำตอบของคุณ: ${q.options[a.selected]}`,'0 .20 .03',1.35,'#ffffff');
- txt(uiRoot,`เฉลย: ${q.options[q.correct]}`,'0 .06 .03',1.35,'#67e8f9');
- txt(uiRoot,q.explanation,'0 -.10 .03',1.35,'#dbeafe');
- button(uiRoot,i===quizState.questions.length-1?'ดูผลคะแนน':'ไปข้อถัดไป','0 -.43 .035',.95,.17,()=>{if(quizState.index<quizState.questions.length-1){quizState.index++;renderQuestion();}else renderResults();},'#0e7490');
+ const selText=q.options[a.selected]||`ตัวเลือก ${String.fromCharCode(65+a.selected)}`;
+ const corText=q.options[q.correct]||`ตัวเลือก ${String.fromCharCode(65+q.correct)}`;
+ basePanel(ok?'ตอบถูกต้อง':'คำตอบยังไม่ถูก',`คำถาม ${i+1} / ${quizState.questions.length}`,s);
+ txt(uiRoot,`คำตอบของคุณ: ${selText}`,'0 .20 .03',1.35,s.textColor||'#ffffff','center',s);
+ txt(uiRoot,`เฉลย: ${corText}`,'0 .06 .03',1.35,s.titleColor||'#67e8f9','center',s);
+ txt(uiRoot,q.explanation||'รอเพิ่มคำอธิบายเฉลย','0 -.10 .03',1.35,'#dbeafe','center',s);
+ button(uiRoot,i===quizState.questions.length-1?'ดูผลคะแนน':'ไปข้อถัดไป','0 -.43 .035',.95,.17,()=>{if(quizState.index<quizState.questions.length-1){quizState.index++;renderQuestion();}else renderResults();},s.buttonColor||'#0e7490',s.buttonHoverColor||'#0891b2',s);
 }
 function renderResults(){
+ const s=currentPlanet?.style||{};
  clearUI();const score=quizState.answers.reduce((s,a)=>s+(a.selected===a.correct?1:0),0);
- basePanel('ผลมินิเกม',`${currentPlanet.name} · คะแนน ${score} / ${quizState.questions.length}`);
- const review=quizState.questions.map((q,i)=>`${i+1}. ${quizState.answers[i].selected===q.correct?'ถูก':'ผิด'} · เฉลย ${q.options[q.correct]}`).join('\n');
- txt(uiRoot,review,'0 .06 .03',1.35,'#ffffff');
- button(uiRoot,'กลับสู่ระบบสุริยะ','0 -.46 .035',1.22,.17,closeUI,'#0e7490');
+ basePanel('ผลมินิเกม',`${currentPlanet.name||'ดาว'} · คะแนน ${score} / ${quizState.questions.length}`,s);
+ const review=quizState.questions.map((q,i)=>`${i+1}. ${quizState.answers[i].selected===q.correct?'ถูก':'ผิด'} · เฉลย ${q.options[q.correct]||`ตัวเลือก ${String.fromCharCode(65+q.correct)}`}`).join('\n');
+ txt(uiRoot,review,'0 .06 .03',1.35,s.textColor||'#ffffff','center',s);
+ button(uiRoot,'กลับสู่ระบบสุริยะ','0 -.46 .035',1.22,.17,closeUI,s.buttonColor||'#0e7490',s.buttonHoverColor||'#0891b2',s);
 }
 planets.forEach((p,i)=>{
+ const radius=p.radius||0.38;
+ const color=p.color||'#64748b';
+ const s=p.style||{};
  const angle=(-90+i*360/planets.length)*Math.PI/180;
  const x=Math.cos(angle)*4.2,z=Math.sin(angle)*4.2;
  const group=make('a-entity',{position:`${x} 1.7 ${z}`},exhibits);
- const sphere=make('a-sphere',{class:'selectable',radius:p.radius,color:p.color,segmentsWidth:28,segmentsHeight:20,animation:'property: rotation; to: 0 360 0; loop: true; dur: 110000; easing: linear'},group);
- if(p.id==='sun')sphere.setAttribute('material','shader: flat; color: #ffbe32');
- const highlight=make('a-sphere',{radius:p.radius*1.10,material:'shader: flat; color: #6cd7ff; opacity: 0.16; transparent: true; side: back',visible:false},group);
- if(p.id==='saturn')make('a-torus',{radius:p.radius*1.65,'radius-tubular':.045,'segments-radial':8,'segments-tubular':48,rotation:'70 0 0',color:'#cdb98d'},group);
- const label=make('a-entity',{position:`0 ${p.radius+.22} 0`,visible:false},group);
- txt(label, p.name, '0 0 0', 1.35, '#a5f3fc', 'center');
+ const sphere=make('a-sphere',{class:'selectable',radius:radius,color:color,segmentsWidth:28,segmentsHeight:20,animation:'property: rotation; to: 0 360 0; loop: true; dur: 110000; easing: linear'},group);
+ if(p.texture)sphere.setAttribute('material',`shader: standard; src: ${p.texture}; roughness: 0.8`);
+ else if(p.id==='sun')sphere.setAttribute('material',`shader: flat; color: ${color}`);
+ const highlight=make('a-sphere',{radius:radius*1.10,material:`shader: flat; color: ${s.highlightColor||'#6cd7ff'}; opacity: 0.16; transparent: true; side: back`,visible:false},group);
+ if(p.id==='saturn'||p.ringColor)make('a-torus',{radius:radius*1.65,'radius-tubular':.045,'segments-radial':8,'segments-tubular':48,rotation:'70 0 0',color:p.ringColor||'#cdb98d'},group);
+ const label=make('a-entity',{position:`0 ${radius+.22} 0`,visible:false},group);
+ txt(label, p.name||`ดาวดวงที่ ${i+1}`, '0 0 0', 1.35, s.titleColor||'#a5f3fc', 'center', s);
  label.setAttribute('look-at-camera','');
  sphere.addEventListener('mouseenter',()=>{highlight.setAttribute('visible',true);label.setAttribute('visible',true);});
  sphere.addEventListener('mouseleave',()=>{highlight.setAttribute('visible',false);label.setAttribute('visible',false);});
  sphere.addEventListener('click',()=>{if(!uiRoot.getAttribute('visible'))showInfo(p);});
- planetEntities.set(p.id,{sphere,group,label,highlight});
+ planetEntities.set(p.id||`planet-${i}`,{sphere,group,label,highlight});
 });
 AFRAME.registerComponent('look-at-camera',{tick:function(){const camera=document.querySelector('a-camera');if(camera)this.el.object3D.lookAt(camera.object3D.getWorldPosition(new THREE.Vector3()));}});
 </script>
