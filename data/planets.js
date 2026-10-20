@@ -11,3 +11,4 @@ window.PLANET_DATA = [
  {id:'uranus',name:'ดาวยูเรนัส',en:'Uranus',color:'#81d3d9',radius:.39,info:'ดาวเคราะห์น้ำแข็งยักษ์ที่มีแกนหมุนเอียงมาก',image:'assets/images/uranus.svg'},
  {id:'neptune',name:'ดาวเนปจูน',en:'Neptune',color:'#3e67d5',radius:.39,info:'ดาวเคราะห์ที่อยู่ไกลดวงอาทิตย์ที่สุด',image:'assets/images/neptune.svg'}
 ];
+// เทสๆนะ
