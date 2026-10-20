@@ -1,0 +1,421 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SOLAR ODYSSEY VR — Enhanced Prototype</title>
+<script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+<script src="data/planets.js"></script>
+<script src="data/quiz.js"></script>
+<style>
+  body { margin: 0; overflow: hidden; background: #000; }
+  #help {
+    position: fixed; top: 12px; left: 12px; color: #fff;
+    background: rgba(16, 24, 39, 0.85); padding: 12px 18px;
+    border-radius: 12px; font: 14px/1.5 system-ui, sans-serif;
+    z-index: 2; pointer-events: none; border: 1px solid rgba(34, 211, 238, 0.3);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
+  #help small { color: #b7c8e0; }
+  #help b { color: #22d3ee; }
+</style>
+</head>
+<body>
+
+<div id="help">
+  <b>SOLAR ODYSSEY VR · HTC VIVE Ready</b><br>
+  <small>
+    Desktop: ลากเมาส์มองรอบตัว · คลิกดาวเคราะห์เพื่อโต้ตอบ<br>
+    VR (HTC VIVE): ส่อง Laser Controller + กด Trigger เพื่อเลือก<br>
+    <span id="vr-status" style="color:#f59e0b;">สถานะ: รอการเชื่อมต่อ VR...</span>
+  </small>
+</div>
+
+<a-scene background="color: #000006" renderer="antialias: true; colorManagement: true" vr-mode-ui="enabled: true">
+  <a-entity id="stars"></a-entity>
+  <a-entity id="exhibits"></a-entity>
+  
+  <!-- Rig & Camera / HTC VIVE Controllers -->
+  <a-entity id="rig" position="0 0 0">
+    <a-camera position="0 1.6 0" look-controls="pointerLockEnabled: false" wasd-controls="enabled: false">
+      <a-cursor id="desktop-cursor" raycaster="objects: .selectable; far: 12" fuse="false" 
+                material="color: #22d3ee; shader: flat; opacity: 0.9; depthTest: false" 
+                geometry="primitive: ring; radiusInner: 0.008; radiusOuter: 0.016"></a-cursor>
+      <a-entity id="ui-root" position="0 0 -1.8" visible="false"></a-entity>
+    </a-camera>
+    
+    <!-- Left & Right Controllers for HTC VIVE / WebXR -->
+    <a-entity id="right-controller" laser-controls="hand: right" cursor="rayOrigin: entity; fuse: false" 
+              raycaster="objects: .selectable; far: 12; showLine: true" line="color: #22d3ee; opacity: 0.8"></a-entity>
+    <a-entity id="left-controller" laser-controls="hand: left" cursor="rayOrigin: entity; fuse: false" 
+              raycaster="objects: .selectable; far: 12; showLine: true" line="color: #22d3ee; opacity: 0.8"></a-entity>
+  </a-entity>
+
+  <!-- Lighting -->
+  <a-entity light="type: ambient; color: #ffffff; intensity: 0.85"></a-entity>
+  <a-entity light="type: directional; color: #ffffff; intensity: 0.9" position="-2 4 3"></a-entity>
+</a-scene>
+
+<script>
+const planets = window.PLANET_DATA;
+const scene = document.querySelector('a-scene');
+
+// VR State Listener (HTC VIVE / WebXR)
+scene.addEventListener('enter-vr', () => {
+  document.querySelector('#desktop-cursor').setAttribute('raycaster', 'enabled', false);
+  document.querySelector('#vr-status').textContent = 'สถานะ: เข้าสู่โหมด VR แล้ว (HTC VIVE Ready)';
+  document.querySelector('#vr-status').style.color = '#10b981';
+});
+scene.addEventListener('exit-vr', () => {
+  document.querySelector('#desktop-cursor').setAttribute('raycaster', 'enabled', true);
+  document.querySelector('#vr-status').textContent = 'สถานะ: Desktop View';
+  document.querySelector('#vr-status').style.color = '#f59e0b';
+});
+
+['left-controller','right-controller'].forEach(id => {
+  const controller = document.getElementById(id);
+  controller.addEventListener('controllerconnected', () => {
+    document.querySelector('#vr-status').textContent = 'เชื่อมต่อ Controller: ' + id;
+  });
+});
+
+const exhibits = document.querySelector('#exhibits');
+const starField = document.querySelector('#stars');
+
+// สร้างดาวส่องแสงบนท้องฟ้า
+let seed = 12987;
+function rand(){ seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; }
+for(let i = 0; i < 220; i++) {
+  const a = rand() * Math.PI * 2, h = (rand() - 0.5) * Math.PI * 0.9, distance = 38 + rand() * 16;
+  const star = document.createElement('a-sphere');
+  star.setAttribute('radius', 0.02 + rand() * 0.05);
+  star.setAttribute('position', `${Math.cos(h)*Math.sin(a)*distance} ${Math.sin(h)*distance + 1.6} ${-Math.cos(h)*Math.cos(a)*distance}`);
+  star.setAttribute('material', 'shader: flat; color: #b4c5eb; opacity: 0.85');
+  starField.appendChild(star);
+}
+
+function make(tag, attrs, parent){
+  const el = document.createElement(tag);
+  for (const [key, value] of Object.entries(attrs)) el.setAttribute(key, value);
+  parent.appendChild(el);
+  return el;
+}
+
+const uiRoot = document.querySelector('#ui-root');
+const planetEntities = new Map();
+let currentPlanet = null, quizState = null;
+
+function clearUI() { while (uiRoot.firstChild) uiRoot.removeChild(uiRoot.firstChild); }
+
+// ฟังก์ชัน Canvas Text Texture สำหรับภาษาไทย 100% ใน VR Space
+function txt(parent, value, pos, width, color = '#e7faff', align = 'center') {
+  const rawLines = String(value).split('\n');
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+  const fontSize = 42;
+  const lineHeight = fontSize * 1.38;
+  const maxWidth = 944;
+
+  canvas.width = 1024;
+  ctx.font = `bold ${fontSize}px "Sarabun", "Kanit", "Tahoma", system-ui, sans-serif`;
+
+  const lines = [];
+  rawLines.forEach(rawLine => {
+    if (ctx.measureText(rawLine).width <= maxWidth) {
+      lines.push(rawLine);
+    } else {
+      let current = '';
+      for (const ch of rawLine) {
+        if (ctx.measureText(current + ch).width > maxWidth) {
+          lines.push(current);
+          current = ch;
+        } else {
+          current += ch;
+        }
+      }
+      if (current) lines.push(current);
+    }
+  });
+
+  canvas.height = Math.max(96, Math.ceil(lines.length * lineHeight + 32));
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.font = `bold ${fontSize}px "Sarabun", "Kanit", "Tahoma", system-ui, sans-serif`;
+  ctx.fillStyle = color;
+  ctx.textBaseline = 'middle';
+  ctx.textAlign = align;
+
+  const x = align === 'left' ? 40 : align === 'right' ? canvas.width - 40 : canvas.width / 2;
+  const startY = (canvas.height - (lines.length - 1) * lineHeight) / 2;
+
+  lines.forEach((line, i) => {
+    ctx.fillText(line, x, startY + i * lineHeight);
+  });
+
+  const aspect = canvas.height / canvas.width;
+  const planeHeight = width * aspect;
+
+  let finalPos = pos;
+  if (align === 'left') {
+    const parts = pos.split(' ').map(Number);
+    parts[0] += width / 2;
+    finalPos = parts.join(' ');
+  }
+
+  const el = make('a-plane', {
+    position: finalPos,
+    width: width,
+    height: planeHeight,
+    material: 'shader: flat; transparent: true; side: double; depthWrite: false'
+  }, parent);
+
+  const applyTexture = () => {
+    const mesh = el.getObject3D('mesh');
+    if (mesh && mesh.material) {
+      const texture = new THREE.CanvasTexture(canvas);
+      texture.needsUpdate = true;
+      mesh.material.map = texture;
+      mesh.material.transparent = true;
+      mesh.material.needsUpdate = true;
+    }
+  };
+
+  if (el.getObject3D('mesh')) applyTexture();
+  else el.addEventListener('loaded', applyTexture, { once: true });
+
+  return el;
+}
+
+function button(parent, label, pos, width, height, fn, color='#155e75') {
+  const b = make('a-plane', {
+    class: 'selectable ui-button',
+    width: width,
+    height: height,
+    position: pos,
+    material: `shader: flat; color: ${color}; opacity: 0.96; side: double`
+  }, parent);
+  
+  txt(b, label, '0 0 0.012', width * 0.92, '#ffffff');
+  b.addEventListener('click', (e) => { e.stopPropagation(); fn(); });
+  b.addEventListener('mouseenter', () => b.setAttribute('material', 'shader: flat; color: #0891b2; opacity: 1; side: double'));
+  b.addEventListener('mouseleave', () => b.setAttribute('material', `shader: flat; color: ${color}; opacity: 0.96; side: double`));
+  return b;
+}
+
+function setPlanetSelection(on) {
+  planetEntities.forEach(({ sphere }) => {
+    if (on) sphere.classList.add('selectable');
+    else sphere.classList.remove('selectable');
+  });
+}
+
+function openUI() { uiRoot.setAttribute('visible', true); setPlanetSelection(false); }
+function closeUI() { 
+  clearUI(); 
+  uiRoot.setAttribute('visible', false); 
+  currentPlanet = null; 
+  quizState = null; 
+  setPlanetSelection(true); 
+}
+
+function basePanel(title, subtitle = '') {
+  make('a-plane', { width: 1.78, height: 1.22, position: '0 0 0', material: 'shader: flat; color: #071827; opacity: 0.94; side: double' }, uiRoot);
+  make('a-plane', { width: 1.78, height: 0.018, position: '0 .60 .008', material: 'shader: flat; color: #22d3ee; side: double' }, uiRoot);
+  make('a-plane', { width: 1.78, height: 0.018, position: '0 -.60 .008', material: 'shader: flat; color: #22d3ee; side: double' }, uiRoot);
+  txt(uiRoot, title, '0 .48 .02', 1.35, '#a5f3fc');
+  if (subtitle) txt(uiRoot, subtitle, '0 .34 .02', 1.25, '#c8e9f3');
+}
+
+// คลิกเพื่อหมุนดาว (Spin Planet Action)
+function triggerPlanetSpin(planetId) {
+  const pData = planetEntities.get(planetId);
+  if (!pData) return;
+  const sphere = pData.sphere;
+  
+  // เพิ่มความเร็วในการหมุนแบบสปิน 360 องศาแบบรวดเร็ว
+  sphere.removeAttribute('animation');
+  sphere.setAttribute('animation', 'property: rotation; to: 0 720 0; dur: 3000; easing: easeOutQuad');
+  
+  setTimeout(() => {
+    sphere.setAttribute('animation', 'property: rotation; to: 0 360 0; loop: true; dur: 90000; easing: linear');
+  }, 3100);
+}
+
+function showInfo(p) {
+  currentPlanet = p; openUI(); clearUI();
+  basePanel(p.name, `${p.en} · ข้อมูลดาราศาสตร์`);
+  
+  // 3D Preview ในการ์ด UI
+  const previewBox = make('a-entity', { position: '-.52 .05 .035' }, uiRoot);
+  const previewSphere = make('a-sphere', {
+    radius: 0.24, color: p.color, segmentsWidth: 24, segmentsHeight: 18,
+    material: `shader: standard; color: ${p.color}; roughness: 0.7`,
+    animation: 'property: rotation; to: 0 360 0; loop: true; dur: 12000; easing: linear'
+  }, previewBox);
+  
+  if (p.id === 'saturn') {
+    make('a-torus', { radius: 0.36, 'radius-tubular': 0.02, rotation: '70 0 0', color: '#cdb98d' }, previewBox);
+  }
+
+  // ข้อมูลดาว
+  txt(uiRoot, p.info, '-.05 .08 .03', 0.95, '#ffffff', 'left');
+  
+  // ปุ่มแอ็กชัน: สั่งหมุนดาวบนฉาก 3D
+  button(uiRoot, '🔄 สั่งดาวหมุน 360°', '-.52 -.36 .035', 0.58, 0.15, () => {
+    triggerPlanetSpin(p.id);
+  }, '#0284c7');
+
+  if (p.id !== 'sun') {
+    button(uiRoot, '🎮 เล่นมินิเกมตอบคำถาม', '.35 -.38 .035', 0.72, 0.17, () => startQuiz(p), '#0e7490');
+  } else {
+    txt(uiRoot, 'ดวงอาทิตย์เป็นดาวฤกษ์หลัก\nไม่มีมินิเกมในหน้านี้', '.31 -.36 .03', 0.82, '#bae6fd');
+  }
+
+  button(uiRoot, 'ปิดหน้าต่าง', '-.56 -.51 .035', 0.45, 0.13, closeUI, '#334155');
+}
+
+// --- ระบบควิซ & ตรวจคะแนน ---
+function startQuiz(p) {
+  currentPlanet = p;
+  quizState = { index: 0, answers: [], questions: (window.PLANET_QUIZ[p.id] || []) };
+  if (!quizState.questions.length) { showInfo(p); return; }
+  renderQuestion();
+}
+
+function renderQuestion() {
+  clearUI();
+  const q = quizState.questions[quizState.index];
+  basePanel(`${currentPlanet.name} · มินิเกม`, `คำถามที่ ${quizState.index + 1} / ${quizState.questions.length}`);
+  
+  txt(uiRoot, q.q, '0 .22 .03', 1.40, '#ffffff');
+  
+  q.options.forEach((opt, i) => {
+    button(uiRoot, `${i+1}. ${opt}`, `0 ${0.03 - i * 0.15} .035`, 1.45, 0.125, () => answerQuestion(i), '#164e63');
+  });
+  
+  button(uiRoot, 'ยกเลิก', '0 -.53 .035', 0.65, 0.11, () => showInfo(currentPlanet), '#334155');
+}
+
+function answerQuestion(selected) {
+  if (!quizState || quizState.answers[quizState.index] !== undefined) return;
+  const q = quizState.questions[quizState.index];
+  quizState.answers[quizState.index] = { selected, correct: q.correct };
+  renderFeedback();
+}
+
+function renderFeedback() {
+  clearUI();
+  const i = quizState.index;
+  const q = quizState.questions[i];
+  const a = quizState.answers[i];
+  const isCorrect = a.selected === q.correct;
+  
+  basePanel(
+    isCorrect ? '✅ ตอบถูกต้อง!' : '❌ ยังไม่ถูกต้อง',
+    `เฉลยคำถามข้อที่ ${i + 1}`
+  );
+  
+  txt(uiRoot, `คำถาม: ${q.q}`, '0 .25 .03', 1.35, '#cbd5e1');
+  txt(uiRoot, `คำตอบของคุณ: ${q.options[a.selected]}`, '0 .11 .03', 1.35, isCorrect ? '#4ade80' : '#f87171');
+  txt(uiRoot, `คำตอบที่ถูกต้อง: ${q.options[q.correct]}`, '0 -.02 .03', 1.35, '#38bdf8');
+  txt(uiRoot, `💡 ${q.explanation}`, '0 -.16 .03', 1.35, '#e2e8f0');
+  
+  const isLast = i === quizState.questions.length - 1;
+  button(uiRoot, isLast ? '🏆 ดูสรุปผลคะแนน' : 'ข้อถัดไป ➔', '0 -.44 .035', 0.95, 0.16, () => {
+    if (!isLast) { quizState.index++; renderQuestion(); }
+    else { renderResults(); }
+  }, '#0e7490');
+}
+
+function renderResults() {
+  clearUI();
+  const total = quizState.questions.length;
+  const score = quizState.answers.reduce((acc, a) => acc + (a.selected === a.correct ? 1 : 0), 0);
+  const percent = Math.round((score / total) * 100);
+  
+  let grade = 'นักสำรวจฝึกหัด 🚀';
+  if (percent === 100) grade = 'ผู้เชี่ยวชาญอวกาศระดับสูง 🌟';
+  else if (percent >= 50) grade = 'นักดาราศาสตร์ผ่านการทดสอบ 🛰️';
+
+  basePanel('🏆 สรุปผลการทดสอบ', `${currentPlanet.name} · ${grade}`);
+  
+  txt(uiRoot, `คุณทำได้ ${score} / ${total} คะแนน (${percent}%)`, '0 .18 .03', 1.35, '#38bdf8');
+  
+  const summaryText = quizState.questions.map((q, idx) => {
+    const ok = quizState.answers[idx].selected === q.correct;
+    return `ข้อ ${idx+1}: ${ok ? 'ถูกต้อง ✅' : 'ผิด ❌'} (เฉลย: ${q.options[q.correct]})`;
+  }).join('\n');
+  
+  txt(uiRoot, summaryText, '0 -.04 .03', 1.30, '#ffffff');
+  
+  button(uiRoot, 'เล่นใหม่อีกครั้ง', '-.38 -.46 .035', 0.68, 0.15, () => startQuiz(currentPlanet), '#0284c7');
+  button(uiRoot, 'กลับสู่ระบบสุริยะ', '.38 -.46 .035', 0.68, 0.15, closeUI, '#334155');
+}
+
+// สร้างดาวเคราะห์ในฉาก 3D
+planets.forEach((p, i) => {
+  const angle = (-90 + i * (360 / planets.length)) * Math.PI / 180;
+  const dist = 4.3;
+  const x = Math.cos(angle) * dist, z = Math.sin(angle) * dist;
+  
+  const group = make('a-entity', { position: `${x} 1.6 ${z}` }, exhibits);
+  
+  const sphere = make('a-sphere', {
+    class: 'selectable',
+    radius: p.radius,
+    color: p.color,
+    segmentsWidth: 28,
+    segmentsHeight: 20,
+    animation: 'property: rotation; to: 0 360 0; loop: true; dur: 90000; easing: linear'
+  }, group);
+  
+  if (p.id === 'sun') sphere.setAttribute('material', 'shader: flat; color: #ffbe32');
+  
+  const highlight = make('a-sphere', {
+    radius: p.radius * 1.12,
+    material: 'shader: flat; color: #38bdf8; opacity: 0.22; transparent: true; side: back',
+    visible: false
+  }, group);
+  
+  if (p.id === 'saturn') {
+    make('a-torus', {
+      radius: p.radius * 1.65,
+      'radius-tubular': 0.04,
+      'segments-radial': 8,
+      'segments-tubular': 48,
+      rotation: '70 0 0',
+      color: '#cdb98d'
+    }, group);
+  }
+  
+  const label = make('a-entity', { position: `0 ${p.radius + 0.24} 0`, visible: false }, group);
+  txt(label, p.name, '0 0 0', 1.35, '#a5f3fc', 'center');
+  label.setAttribute('look-at-camera', '');
+
+  // Events โต้ตอบ (เมาส์ & HTC VIVE Laser)
+  sphere.addEventListener('mouseenter', () => {
+    highlight.setAttribute('visible', true);
+    label.setAttribute('visible', true);
+  });
+  sphere.addEventListener('mouseleave', () => {
+    highlight.setAttribute('visible', false);
+    label.setAttribute('visible', false);
+  });
+  
+  sphere.addEventListener('click', () => {
+    triggerPlanetSpin(p.id); // คลิกแล้วดาวหมุนสปิน 360°
+    if (!uiRoot.getAttribute('visible')) {
+      showInfo(p);
+    }
+  });
+
+  planetEntities.set(p.id, { sphere, group, label, highlight });
+});
+
+AFRAME.registerComponent('look-at-camera', {
+  tick: function () {
+    const camera = document.querySelector('a-camera');
+    if (camera) this.el.object3D.lookAt(camera.object3D.getWorldPosition(new THREE.Vector3()));
+  }
+});
+</script>
+</body>
+</html>
