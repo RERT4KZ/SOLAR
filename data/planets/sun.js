@@ -50,7 +50,7 @@ window.PLANET_DATA.push({
   color: '#ffbe32',
   radius: 1.15,
   image: '',
-  texture: 'assets/images/2k_sun.jpg',
+  texture: 'assets/images/sun.jpg',
 
   // --- 3. ปรับแต่งสไตล์เฉพาะของดาวดวงนี้ (เว้นว่างไว้หากต้องการใช้ค่ามาตรฐานกลาง) ---
   style: {
