@@ -43,15 +43,15 @@ window.PLANET_DATA.push({
   style: {
     fontFamily: '',
     fontSize: 36,
-    panelBgColor: '#121417',       // พื้นหลังสีเทาเข้มเกือบดำ (Charcoal Dark Gray)
-    panelBorderColor: '#e2e8f0',   // ขอบการ์ดสีขาวเงินสว่าง (Silver White)
+    panelBgColor: '#0a0b0e',       // พื้นหลังสีดำออบซิเดียนลึกสนิท (Obsidian Black)
+    panelBorderColor: '#f1f5f9',   // ขอบการ์ดสีเงินไทเทเนียมสว่างคมกริบ (Titanium Silver)
     titleColor: '#ffffff',         // หัวข้อชื่อดาวสีขาวบริสุทธิ์
-    subtitleColor: '#cbd5e1',      // ชื่อภาษาอังกฤษสีเทาเงินสว่าง
+    subtitleColor: '#94a3b8',      // ชื่อภาษาอังกฤษสีเงิน Slate
     textColor: '#ffffff',          // ข้อความเนื้อหาสีขาวคมชัด
-    buttonColor: '#334155',        // ปุ่มมินิเกมสีเทากลาง (Slate Gray)
-    buttonHoverColor: '#64748b',   // สีปุ่มเมื่อชี้เมาส์เปลี่ยนเป็นสีเทาสว่าง
-    closeButtonColor: '#27272a',   // ปุ่มปิดสีเทาเข้ม
-    highlightColor: '#f8fafc'      // แสงเรืองรองสีขาวเงินรอบดาว
+    buttonColor: '#262930',        // ปุ่มมินิเกมสีเทาดำไทเทเนียมเข้ม
+    buttonHoverColor: '#4b5563',   // สีปุ่มเมื่อชี้เมาส์สว่างเป็นเทาเงิน
+    closeButtonColor: '#181a1f',   // ปุ่มปิดสีคาร์บอนดำ
+    highlightColor: '#ffffff'      // แสงเรืองรองสีเงินขาวสว่างรอบดาว
   },
 
   // --- 4. ตั้งค่าการ์ดข้อมูลแยกอิสระ (แก้ไขเฉพาะดาวดวงนี้ได้โดยไม่กระทบดาวดวงอื่น) ---
@@ -62,8 +62,8 @@ window.PLANET_DATA.push({
     rotation: '0 0 0',
     distance: 1.8,
     layout: 'horizontal',
-    background: { color: '#121417', opacity: 0.95, image: '' },
-    border: { style: 'top-bottom', color: '#e2e8f0', thickness: 0.018 },
+    background: { color: '#0a0b0e', opacity: 0.96, image: '' },
+    border: { style: 'top-bottom', color: '#f1f5f9', thickness: 0.018 },
     header: { show: true, titlePos: '0 0.45 0.02', subtitlePos: '0 0.32 0.02', showDivider: false },
     media: { show: true, show3D: true, position: '-0.48 0.02 0.035', modelRadius: 0.22, showCaption: true },
     content: { position: '-0.10 0.06 0.03', width: 0.86, maxHeight: 0.50, fontSize: 36, lineHeight: 1.36, align: 'left', bullet: '• ' },
@@ -71,8 +71,8 @@ window.PLANET_DATA.push({
     decorations: [],
     buttonLayout: { mode: 'custom', position: '0 -0.42 0.035', spacing: 0.06 },
     buttons: [
-      { id: 'quiz', enabled: true, label: 'PLAY MINIGAME', action: 'quiz', position: '0.32 -0.37 0.035', width: 0.70, height: 0.18, color: '#334155', hoverColor: '#64748b', textColor: '#ffffff', fontSize: 36 },
-      { id: 'close', enabled: true, label: 'ปิดการ์ด', action: 'close', position: '-0.50 -0.46 0.035', width: 0.46, height: 0.14, color: '#27272a', hoverColor: '#64748b', textColor: '#ffffff', fontSize: 36 }
+      { id: 'quiz', enabled: true, label: 'PLAY MINIGAME', action: 'quiz', position: '0.32 -0.37 0.035', width: 0.70, height: 0.18, color: '#262930', hoverColor: '#4b5563', textColor: '#ffffff', fontSize: 36 },
+      { id: 'close', enabled: true, label: 'ปิดการ์ด', action: 'close', position: '-0.50 -0.46 0.035', width: 0.46, height: 0.14, color: '#181a1f', hoverColor: '#4b5563', textColor: '#ffffff', fontSize: 36 }
     ]
   }
 });
