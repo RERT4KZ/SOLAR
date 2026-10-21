@@ -133,9 +133,9 @@ window.PLANET_DATA.push({
         position: { x: -0.22, y: -0.49, z: 0.03 },
         width: 0.64,
         height: 0.13,
-        color: '#f74a00',
+        color: '#59a7eb',
         hoverColor: '#32f30b',
-        textColor: '#0a0909',
+        textColor: '#6200f4',
         fontSize: 78
       },
       {
@@ -145,9 +145,9 @@ window.PLANET_DATA.push({
         position: { x: 0.38, y: -0.49, z: 0.03 },
         width: 0.42,
         height: 0.13,
-        color: '#0cc935',
-        hoverColor: '#287838',
-        textColor: '#ff3c00',
+        color: '#06a6eb',
+        hoverColor: '#ef0c0c',
+        textColor: '#080115',
         fontSize: 78
       }
     ]
