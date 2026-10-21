@@ -7,7 +7,7 @@
 //   name: 'ดาวพฤหัสบดี'
 //   en: 'Jupiter'
 //   color: '#d6a37c'
-//   radius: 0.54
+//   radius: 0.68
 //   info: 'ดาวเคราะห์ที่ใหญ่ที่สุดในระบบสุริยะ'
 //   image: 'assets/images/jupiter.svg'
 //
@@ -41,7 +41,7 @@ window.PLANET_DATA.push({
 
   // --- 2. ตั้งค่าโมเดล 3D และรูปภาพประกอบ ---
   color: '',
-  radius: 0,
+  radius: 0.68,
   image: '',
   texture: '',
 

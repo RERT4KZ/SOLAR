@@ -7,7 +7,7 @@
 //   name: 'ดาวพุธ'
 //   en: 'Mercury'
 //   color: '#a7a5a1'
-//   radius: 0.30
+//   radius: 0.14
 //   info: 'ดาวเคราะห์ที่อยู่ใกล้ดวงอาทิตย์ที่สุด'
 //   image: 'assets/images/mercury.svg'
 //
@@ -41,7 +41,7 @@ window.PLANET_DATA.push({
 
   // --- 2. ตั้งค่าโมเดล 3D และรูปภาพประกอบ ---
   color: '',
-  radius: 0,
+  radius: 0.14,
   image: '',
   texture: '',
 

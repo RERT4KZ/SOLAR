@@ -7,7 +7,7 @@
 //   name: 'โลก'
 //   en: 'Earth'
 //   color: '#327ed7'
-//   radius: 0.40
+//   radius: 0.25
 //   info: 'ดาวเคราะห์ที่เป็นบ้านของเรา'
 //   image: 'assets/images/earth.svg'
 //
@@ -41,7 +41,7 @@ window.PLANET_DATA.push({
 
   // --- 2. ตั้งค่าโมเดล 3D และรูปภาพประกอบ ---
   color: '',
-  radius: 0,
+  radius: 0.25,
   image: '',
   texture: '',
 

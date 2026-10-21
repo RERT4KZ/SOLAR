@@ -25,23 +25,28 @@
 <style>body{margin:0}#help{position:fixed;top:12px;left:12px;color:white;background:#101827c9;padding:12px 16px;border-radius:10px;font:14px system-ui;z-index:2;pointer-events:none}#help small{color:#b7c8e0}</style>
 </head>
 <body>
-<div id="help"><b>SOLAR ODYSSEY VR · Modular Prototype 05</b><br><small>Desktop: ลากเมาส์เพื่อมอง · คลิกดาว/ปุ่ม<br>VR: ใช้วิธีเข้า VR เดิม · Controller + Trigger<br>ข้อมูลและคำถามเป็นตัวอย่างชั่วคราว<br><span id="vr-status">สถานะ: รอเข้า VR</span></small></div>
-<a-scene background="color: #000006" renderer="antialias: true; colorManagement: true" vr-mode-ui="enabled: true">
+<div id="help"><b>SOLAR ODYSSEY VR · Modular Prototype 05</b><br><small>Desktop: ลากเมาส์เพื่อมอง · คลิกดาว/ปุ่ม<br>VR: มุมมองเหนือดวงอาทิตย์ เห็นวงโคจรรอบตัว · Controller + Trigger<br>คลิกที่ดาวเพื่อหยุดวงโคจรชั่วคราวและเปิดการ์ดตรงหน้า<br><span id="vr-status">สถานะ: รอเข้า VR</span></small></div>
+<a-scene background="color: #000006" renderer="antialias: true; colorManagement: true" xr-mode-ui="enabled: true" vr-mode-ui="enabled: true">
 <a-entity id="stars"></a-entity>
-<a-entity id="exhibits"></a-entity>
-<a-entity id="rig" position="0 0 0">
+
+<!-- ระบบสุริยะและวงโคจร วางที่จุดศูนย์กลาง (0, 0.7, 0) ใต้ตำแหน่งสายตาผู้เล่น -->
+<a-entity id="exhibits" position="0 0.7 0"></a-entity>
+
+<!-- ผู้เล่นอยู่ตรงกลางเหนือดวงอาทิตย์ (ระดับสายตารวม 1.4 + 1.6 = 3.0 เมตร) -->
+<a-entity id="rig" position="0 1.4 0">
   <a-camera position="0 1.6 0" look-controls="pointerLockEnabled: false" wasd-controls="enabled: false">
-    <a-cursor id="desktop-cursor" raycaster="objects: .selectable; far: 12" fuse="false" material="color: #ffffff; shader: flat; opacity: 1; depthTest: false" geometry="primitive: ring; radiusInner: 0.010; radiusOuter: 0.020"></a-cursor>
+    <a-cursor id="desktop-cursor" raycaster="objects: .selectable; far: 25" fuse="false" material="color: #ffffff; shader: flat; opacity: 1; depthTest: false" geometry="primitive: ring; radiusInner: 0.010; radiusOuter: 0.020"></a-cursor>
+    <!-- การ์ด UI ผูกติดกับกล้อง แสดงตรงหน้าผู้เล่นและขยับตามเมื่อหันหน้าเสมอ -->
     <a-entity id="ui-root" position="0 0 -1.8" visible="false"></a-entity>
   </a-camera>
-  <a-entity id="right-controller" laser-controls="hand: right" cursor="rayOrigin: entity; fuse: false" raycaster="objects: .selectable; far: 12; showLine: true" line="color: #81d8ff; opacity: 0.8"></a-entity>
-  <a-entity id="left-controller" laser-controls="hand: left" cursor="rayOrigin: entity; fuse: false" raycaster="objects: .selectable; far: 12; showLine: true" line="color: #81d8ff; opacity: 0.8"></a-entity>
+  <a-entity id="right-controller" laser-controls="hand: right" cursor="rayOrigin: entity; fuse: false" raycaster="objects: .selectable; far: 25; showLine: true" line="color: #81d8ff; opacity: 0.8"></a-entity>
+  <a-entity id="left-controller" laser-controls="hand: left" cursor="rayOrigin: entity; fuse: false" raycaster="objects: .selectable; far: 25; showLine: true" line="color: #81d8ff; opacity: 0.8"></a-entity>
 </a-entity>
 <a-entity light="type: ambient; color: #ffffff; intensity: 0.95"></a-entity>
 <a-entity light="type: directional; color: #ffffff; intensity: 0.8" position="-2 4 3"></a-entity>
 </a-scene>
 <script>
-const planets = window.PLANET_DATA;
+const planets = window.PLANET_DATA || [];
 const scene = document.querySelector('a-scene');
 // Camera gaze is for desktop only. In VR, selection is made with the wand laser.
 scene.addEventListener('enter-vr', () => {
@@ -76,6 +81,8 @@ function make(tag,attrs,parent){const el=document.createElement(tag);for(const [
 const uiRoot=document.querySelector('#ui-root');
 const planetEntities=new Map();
 let currentPlanet=null, quizState=null;
+let isOrbitPaused = false;
+
 function clearUI(){while(uiRoot.firstChild)uiRoot.removeChild(uiRoot.firstChild);}
 
 // ฟังก์ชันวาดข้อความด้วย HTML5 Canvas เพื่อรองรับภาษาไทย 100% ใน A-Frame
@@ -170,8 +177,19 @@ function button(parent,label,pos,width,height,fn,color='#155e75',hoverColor='#08
  return b;
 }
 function setPlanetSelection(on){planetEntities.forEach(({sphere})=>on?sphere.classList.add('selectable'):sphere.classList.remove('selectable'));}
-function openUI(){uiRoot.setAttribute('visible',true);setPlanetSelection(false);}
-function closeUI(){clearUI();uiRoot.setAttribute('visible',false);currentPlanet=null;quizState=null;setPlanetSelection(true);}
+function openUI(){
+ isOrbitPaused = true; // หยุดหมุนวงโคจรชั่วคราวเมื่อการ์ดเปิด
+ uiRoot.setAttribute('visible',true);
+ setPlanetSelection(false);
+}
+function closeUI(){
+ clearUI();
+ uiRoot.setAttribute('visible',false);
+ currentPlanet=null;
+ quizState=null;
+ isOrbitPaused = false; // กลับมาหมุนวงโคจรต่อเมื่อปิดการ์ด
+ setPlanetSelection(true);
+}
 function basePanel(title,subtitle='',style={}){
  const bg=style.panelBgColor||'#071827';
  const border=style.panelBorderColor||'#22d3ee';
@@ -234,26 +252,132 @@ function renderResults(){
  txt(uiRoot,review,'0 .06 .03',1.35,s.textColor||'#ffffff','center',s);
  button(uiRoot,'กลับสู่ระบบสุริยะ','0 -.46 .035',1.22,.17,closeUI,s.buttonColor||'#0e7490',s.buttonHoverColor||'#0891b2',s);
 }
-planets.forEach((p,i)=>{
- const radius=p.radius||0.38;
- const color=p.color||'#64748b';
- const s=p.style||{};
- const angle=(-90+i*360/planets.length)*Math.PI/180;
- const x=Math.cos(angle)*4.2,z=Math.sin(angle)*4.2;
- const group=make('a-entity',{position:`${x} 1.7 ${z}`},exhibits);
- const sphere=make('a-sphere',{class:'selectable',radius:radius,color:color,segmentsWidth:28,segmentsHeight:20,animation:'property: rotation; to: 0 360 0; loop: true; dur: 110000; easing: linear'},group);
- if(p.texture)sphere.setAttribute('material',`shader: standard; src: ${p.texture}; roughness: 0.8`);
- else if(p.id==='sun')sphere.setAttribute('material',`shader: flat; color: ${color}`);
- const highlight=make('a-sphere',{radius:radius*1.10,material:`shader: flat; color: ${s.highlightColor||'#6cd7ff'}; opacity: 0.16; transparent: true; side: back`,visible:false},group);
- if(p.id==='saturn'||p.ringColor)make('a-torus',{radius:radius*1.65,'radius-tubular':.045,'segments-radial':8,'segments-tubular':48,rotation:'70 0 0',color:p.ringColor||'#cdb98d'},group);
- const label=make('a-entity',{position:`0 ${radius+.22} 0`,visible:false},group);
- txt(label, p.name||`ดาวดวงที่ ${i+1}`, '0 0 0', 1.35, s.titleColor||'#a5f3fc', 'center', s);
- label.setAttribute('look-at-camera','');
- sphere.addEventListener('mouseenter',()=>{highlight.setAttribute('visible',true);label.setAttribute('visible',true);});
- sphere.addEventListener('mouseleave',()=>{highlight.setAttribute('visible',false);label.setAttribute('visible',false);});
- sphere.addEventListener('click',()=>{if(!uiRoot.getAttribute('visible'))showInfo(p);});
- planetEntities.set(p.id||`planet-${i}`,{sphere,group,label,highlight});
+
+// สเกลขนาดดาวเปรียบเทียบที่สมจริงแต่คลิกง่ายใน VR และระยะวงโคจร/ความเร็วโคจรที่นุ่มนวลไม่เวียนหัว
+const REALISTIC_SCALES = {
+  sun:     { radius: 1.15, orbitRadius: 0,    orbitSpeed: 0 },
+  mercury: { radius: 0.14, orbitRadius: 2.2,  orbitSpeed: 0.14 },
+  venus:   { radius: 0.24, orbitRadius: 3.0,  orbitSpeed: 0.11 },
+  earth:   { radius: 0.25, orbitRadius: 3.9,  orbitSpeed: 0.09 },
+  mars:    { radius: 0.18, orbitRadius: 4.8,  orbitSpeed: 0.075 },
+  jupiter: { radius: 0.68, orbitRadius: 6.2,  orbitSpeed: 0.055 },
+  saturn:  { radius: 0.56, orbitRadius: 7.8,  orbitSpeed: 0.042 },
+  uranus:  { radius: 0.38, orbitRadius: 9.2,  orbitSpeed: 0.032 },
+  neptune: { radius: 0.36, orbitRadius: 10.5, orbitSpeed: 0.025 }
+};
+const PLANET_ORDER = ['sun', 'mercury', 'venus', 'earth', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune'];
+
+// เอฟเฟกต์หมุนดาว 2 รอบเมื่อคลิกเลือก
+function triggerSpin(el) {
+  el.removeAttribute('animation__spin');
+  el.setAttribute('animation__spin', 'property: rotation; to: 0 720 0; dur: 2500; easing: easeOutQuad');
+}
+
+planets.forEach((p, i) => {
+  const fallbackKey = PLANET_ORDER[i] || `planet-${i}`;
+  const id = p.id || fallbackKey;
+  const isSun = (i === 0 || p.id === 'sun');
+  const s = p.style || {};
+  const color = p.color || (isSun ? '#ffbe32' : '#64748b');
+
+  const scaleDef = REALISTIC_SCALES[id] || REALISTIC_SCALES[fallbackKey] || {
+    radius: isSun ? 1.15 : 0.30,
+    orbitRadius: isSun ? 0 : 2.2 + i * 1.0,
+    orbitSpeed: isSun ? 0 : Math.max(0.02, 0.14 - i * 0.012)
+  };
+
+  const radius = (typeof p.radius === 'number' && p.radius > 0) ? p.radius : scaleDef.radius;
+  const orbitRadius = isSun ? 0 : ((typeof p.orbitRadius === 'number' && p.orbitRadius > 0) ? p.orbitRadius : scaleDef.orbitRadius);
+  const orbitSpeed = isSun ? 0 : ((typeof p.orbitSpeed === 'number') ? p.orbitSpeed : scaleDef.orbitSpeed);
+
+  // วาดเส้นวงโคจรสำหรับดาวที่มี orbitRadius > 0
+  if (orbitRadius > 0) {
+    make('a-ring', {
+      'radius-inner': orbitRadius - 0.012,
+      'radius-outer': orbitRadius + 0.012,
+      rotation: '90 0 0',
+      material: 'shader: flat; color: #38bdf8; opacity: 0.25; transparent: true; side: double'
+    }, exhibits);
+  }
+
+  // ดวงอาทิตย์ (i === 0 หรือ p.id === 'sun') วางที่พิกัดศูนย์กลาง 0 0 0 เสมอ ส่วนดาวอื่นสุ่มมุมเริ่มต้นรอบวงโคจร
+  const initAngle = isSun ? 0 : Math.random() * Math.PI * 2;
+  const x = isSun ? 0 : Math.cos(initAngle) * orbitRadius;
+  const z = isSun ? 0 : Math.sin(initAngle) * orbitRadius;
+
+  const group = make('a-entity', { position: isSun ? '0 0 0' : `${x} 0 ${z}` }, exhibits);
+
+  const sphere = make('a-sphere', {
+    class: 'selectable',
+    radius: radius,
+    color: color,
+    segmentsWidth: 28,
+    segmentsHeight: 20
+  }, group);
+
+  if (p.texture) sphere.setAttribute('material', `shader: standard; src: ${p.texture}; roughness: 0.8`);
+  else if (isSun) sphere.setAttribute('material', `shader: flat; color: ${color}`);
+  else sphere.setAttribute('material', `shader: standard; color: ${color}; roughness: 0.7`);
+
+  const highlight = make('a-sphere', {
+    radius: radius * 1.10,
+    material: `shader: flat; color: ${s.highlightColor || '#6cd7ff'}; opacity: 0.16; transparent: true; side: back`,
+    visible: false
+  }, group);
+
+  if (id === 'saturn' || fallbackKey === 'saturn' || p.ringColor) {
+    make('a-torus', {
+      radius: radius * 1.65,
+      'radius-tubular': 0.045,
+      'segments-radial': 8,
+      'segments-tubular': 48,
+      rotation: '70 0 0',
+      color: p.ringColor || '#cdb98d'
+    }, group);
+  }
+
+  const label = make('a-entity', { position: `0 ${radius + 0.22} 0`, visible: false }, group);
+  txt(label, p.name || `ดาวดวงที่ ${i + 1}`, '0 0 0', 1.35, s.titleColor || '#a5f3fc', 'center', s);
+  label.setAttribute('look-at-camera', '');
+
+  sphere.addEventListener('mouseenter', () => {
+    highlight.setAttribute('visible', true);
+    label.setAttribute('visible', true);
+  });
+  sphere.addEventListener('mouseleave', () => {
+    highlight.setAttribute('visible', false);
+    label.setAttribute('visible', false);
+  });
+  sphere.addEventListener('click', () => {
+    triggerSpin(sphere);
+    if (!uiRoot.getAttribute('visible')) showInfo(p);
+  });
+
+  planetEntities.set(p.id ? `${p.id}-${i}` : `planet-${i}`, {
+    sphere, group, label, highlight,
+    data: p, orbitRadius, orbitSpeed, angle: initAngle
+  });
 });
+
+// ลูปคำนวณการหมุนวงโคจรและการหมุนรอบตัวเองผ่าน A-Frame tick เพื่อให้ทำงานในโหมด WebXR / แว่น VR ได้ 100%
+AFRAME.registerComponent('solar-orbits', {
+  tick: function (time, timeDelta) {
+    const dt = Math.min((timeDelta || 16) / 1000, 0.1);
+    planetEntities.forEach((item) => {
+      if (!isOrbitPaused && item.orbitRadius > 0 && item.group.object3D) {
+        item.angle += item.orbitSpeed * dt;
+        const x = Math.cos(item.angle) * item.orbitRadius;
+        const z = Math.sin(item.angle) * item.orbitRadius;
+        item.group.object3D.position.set(x, 0, z);
+      }
+      if (item.sphere.object3D) {
+        item.sphere.object3D.rotation.y += dt * 0.5;
+      }
+    });
+  }
+});
+exhibits.setAttribute('solar-orbits', '');
+
 AFRAME.registerComponent('look-at-camera',{tick:function(){const camera=document.querySelector('a-camera');if(camera)this.el.object3D.lookAt(camera.object3D.getWorldPosition(new THREE.Vector3()));}});
 </script>
 </body></html>

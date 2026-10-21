@@ -7,7 +7,7 @@
 //   name: 'ดาวอังคาร'
 //   en: 'Mars'
 //   color: '#c65b3d'
-//   radius: 0.34
+//   radius: 0.18
 //   info: 'ดาวเคราะห์สีแดงจากเหล็กออกไซด์'
 //   image: 'assets/images/mars.svg'
 //
@@ -41,7 +41,7 @@ window.PLANET_DATA.push({
 
   // --- 2. ตั้งค่าโมเดล 3D และรูปภาพประกอบ ---
   color: '',
-  radius: 0,
+  radius: 0.18,
   image: '',
   texture: '',
 

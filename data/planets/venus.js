@@ -7,7 +7,7 @@
 //   name: 'ดาวศุกร์'
 //   en: 'Venus'
 //   color: '#e7bd7b'
-//   radius: 0.38
+//   radius: 0.24
 //   info: 'ดาวเคราะห์ที่มีพื้นผิวร้อนที่สุด'
 //   image: 'assets/images/venus.svg'
 //
@@ -41,7 +41,7 @@ window.PLANET_DATA.push({
 
   // --- 2. ตั้งค่าโมเดล 3D และรูปภาพประกอบ ---
   color: '',
-  radius: 0,
+  radius: 0.24,
   image: '',
   texture: '',
 

@@ -7,7 +7,7 @@
 //   name: 'ดาวเนปจูน'
 //   en: 'Neptune'
 //   color: '#3e67d5'
-//   radius: 0.39
+//   radius: 0.36
 //   info: 'ดาวเคราะห์ที่อยู่ไกลดวงอาทิตย์ที่สุด'
 //   image: 'assets/images/neptune.svg'
 //
@@ -41,7 +41,7 @@ window.PLANET_DATA.push({
 
   // --- 2. ตั้งค่าโมเดล 3D และรูปภาพประกอบ ---
   color: '',
-  radius: 0,
+  radius: 0.36,
   image: '',
   texture: '',
 

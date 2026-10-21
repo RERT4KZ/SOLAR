@@ -7,7 +7,7 @@
 //   name: 'ดาวยูเรนัส'
 //   en: 'Uranus'
 //   color: '#81d3d9'
-//   radius: 0.39
+//   radius: 0.38
 //   info: 'ดาวเคราะห์น้ำแข็งยักษ์ที่มีแกนหมุนเอียงมาก'
 //   image: 'assets/images/uranus.svg'
 //
@@ -41,7 +41,7 @@ window.PLANET_DATA.push({
 
   // --- 2. ตั้งค่าโมเดล 3D และรูปภาพประกอบ ---
   color: '',
-  radius: 0,
+  radius: 0.38,
   image: '',
   texture: '',
 

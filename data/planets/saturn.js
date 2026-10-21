@@ -7,7 +7,7 @@
 //   name: 'ดาวเสาร์'
 //   en: 'Saturn'
 //   color: '#ddc38e'
-//   radius: 0.44
+//   radius: 0.56
 //   info: 'ดาวเคราะห์ที่มีระบบวงแหวนเด่นชัด'
 //   image: 'assets/images/saturn.svg'
 //   ringColor: '#cdb98d' (สีวงแหวนดาวเสาร์)
@@ -42,7 +42,7 @@ window.PLANET_DATA.push({
 
   // --- 2. ตั้งค่าโมเดล 3D และรูปภาพประกอบ ---
   color: '',
-  radius: 0,
+  radius: 0.56,
   image: '',
   texture: '',
   ringColor: '', // เฉพาะดาวที่มีวงแหวน เช่น '#cdb98d'

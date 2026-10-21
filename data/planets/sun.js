@@ -7,7 +7,7 @@
 //   name: 'ดวงอาทิตย์'
 //   en: 'Sun'
 //   color: '#ffbe32'
-//   radius: 0.58
+//   radius: 1.15
 //   info: 'ดาวฤกษ์ที่เป็นศูนย์กลางของระบบสุริยะ'
 //   image: 'assets/images/sun.svg'
 //
@@ -41,7 +41,7 @@ window.PLANET_DATA.push({
 
   // --- 2. ตั้งค่าโมเดล 3D และรูปภาพประกอบ ---
   color: '',
-  radius: 0,
+  radius: 1.15,
   image: '',
   texture: '',
 
