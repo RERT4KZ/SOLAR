@@ -49,7 +49,7 @@ window.PLANET_DATA.push({
   // --- 3. ปรับแต่งสไตล์เฉพาะของดาวดวงนี้ (เว้นว่างไว้หากต้องการใช้ค่ามาตรฐานกลาง) ---
   style: {
     fontFamily: '',
-    fontSize: 36,
+    fontSize: 26,
     panelBgColor: '#1a0c13',       // พื้นหลังสีดำเหลือบกุหลาบเข้ม (Rose Obsidian)
     panelBorderColor: '#fb7185',   // ขอบการ์ดสีโรสโกลด์ / ชมพูพีชสว่าง (Rose Gold)
     titleColor: '#ffe4e6',         // หัวข้อสีขาวประกายชมพูโรส
