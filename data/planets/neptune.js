@@ -44,8 +44,8 @@ window.PLANET_DATA.push({
   // --- 2. ตั้งค่าโมเดล 3D และรูปภาพประกอบ ---
   color: "#3e67d5",
   radius: 0.39,
-  image: "assets/images/neptune.svg",
-  texture: 'assets/images/2k_neptune.jpg',
+  image: ",
+  texture: '"assets/images/neptune.jpg',
 
   // --- 3. ปรับแต่งสไตล์เฉพาะของดาวดวงนี้ (เว้นว่างไว้หากต้องการใช้ค่ามาตรฐานกลาง) ---
   style: {
