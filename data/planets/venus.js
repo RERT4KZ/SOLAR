@@ -44,20 +44,20 @@ window.PLANET_DATA.push({
   color: '#e7bd7b',
   radius: 0.38,
   image: '',
-  texture: 'assets/images/venus.jpg',
+  texture: 'assets/textures/venus.jpg',
 
   // --- 3. ปรับแต่งสไตล์เฉพาะของดาวดวงนี้ (เว้นว่างไว้หากต้องการใช้ค่ามาตรฐานกลาง) ---
   style: {
     fontFamily: '',
     fontSize: 36,
-    panelBgColor: '',
-    panelBorderColor: '',
-    titleColor: '',
-    subtitleColor: '',
-    textColor: '',
-    buttonColor: '',
-    buttonHoverColor: '',
-    closeButtonColor: '',
-    highlightColor: ''
+    panelBgColor: '#180e07',       // พื้นหลังสีน้ำตาลทองดำอบอุ่น
+    panelBorderColor: '#f59e0b',   // ขอบการ์ดสีทองอำพันเรืองรอง
+    titleColor: '#fef08a',         // หัวข้อสีทองอร่ามสว่างไสว
+    subtitleColor: '#fed7aa',      // ชื่อภาษาอังกฤษสีแชมเปญทองอ่อน
+    textColor: '#fffbeb',          // ข้อความเนื้อหาสีขาวครีมไอวอรี่
+    buttonColor: '#854d0e',        // ปุ่มมินิเกมสีบรอนซ์ทองเข้ม
+    buttonHoverColor: '#d97706',   // สีปุ่มเมื่อชี้เมาส์
+    closeButtonColor: '#442312',   // ปุ่มปิดสีน้ำตาลไหม้
+    highlightColor: '#fde047'      // แสงเรืองรองสีทองรอบดาว
   }
 });
