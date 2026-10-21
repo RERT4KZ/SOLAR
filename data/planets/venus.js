@@ -62,24 +62,93 @@ window.PLANET_DATA.push({
   },
 
   // --- 4. ตั้งค่าการ์ดข้อมูลแยกอิสระ (แก้ไขเฉพาะดาวดวงนี้ได้โดยไม่กระทบดาวดวงอื่น) ---
+  // ดาวศุกร์ใช้ธีม Empress Rose Gold / Celestial Romance อัญมณีโรสโกลด์ นุ่มนวล เปล่งประกายแห่งเทพีวีนัส
   card: {
-    width: 1.68,
-    height: 1.16,
-    position: '0 0 0',
-    rotation: '0 0 0',
-    distance: 1.8,
+    width: 1.94,
+    height: 1.38,
     layout: 'horizontal',
-    background: { color: '#1a0c13', opacity: 0.96, image: '' },
-    border: { style: 'full', color: '#fb7185', thickness: 0.024 },
-    header: { show: true, titlePos: '0 0.45 0.02', subtitlePos: '0 0.32 0.02', showDivider: false },
-    media: { show: true, show3D: true, position: '-0.48 0.02 0.035', modelRadius: 0.23, showCaption: true },
-    content: { position: '-0.10 0.06 0.03', width: 0.86, maxHeight: 0.50, fontSize: 36, lineHeight: 1.36, align: 'left', bullet: '• ' },
-    sections: [],
-    decorations: [],
-    buttonLayout: { mode: 'custom', position: '0 -0.42 0.035', spacing: 0.06 },
+    position: { x: 0, y: 0, z: 0 },
+    distance: 0,
+    rotation: { x: 0, y: 0, z: 0 },
+    background: {
+      color: '#150810',
+      opacity: 0.96,
+      image: '',
+      outerGlow: true,
+      outerGlowColor: '#f43f5e',
+      outerGlowOpacity: 0.24
+    },
+    border: {
+      style: 'corners',
+      color: '#fb7185',
+      thickness: 0.024,
+      opacity: 0.95,
+      cornerSize: 0.22,
+      cornerColor: '#fda4af'
+    },
+    header: {
+      titlePos: { x: 0, y: 0.54, z: 0.02 },
+      subtitlePos: { x: 0, y: 0.42, z: 0.02 },
+      titleWidth: 1.50,
+      subtitleWidth: 1.30,
+      titleFontSize: 46,
+      subtitleFontSize: 38,
+      titleColor: '#fff1f2',
+      subtitleColor: '#fecdd3',
+      align: 'center',
+      showDivider: true,
+      dividerY: 0.35,
+      dividerColor: '#fb7185'
+    },
+    media: {
+      show: true,
+      position: { x: -0.54, y: -0.02, z: 0.035 },
+      show3D: true,
+      modelRadius: 0.24,
+      modelOffset: { x: 0, y: 0.06, z: 0.04 },
+      frameColor: '#fb7185',
+      showImage: false,
+      showCaption: true,
+      captionColor: '#fecdd3',
+      captionPos: { x: 0, y: -0.34, z: 0.02 }
+    },
+    content: {
+      position: { x: 0.18, y: -0.02, z: 0.02 },
+      width: 0.98,
+      maxHeight: 0.60,
+      fontSize: 32,
+      lineHeight: 40,
+      align: 'left',
+      bulletPrefix: '✦ ',
+      includeInfo: true,
+      includeFacts: true
+    },
+    buttonLayout: 'custom',
     buttons: [
-      { id: 'quiz', enabled: true, label: 'PLAY MINIGAME', action: 'quiz', position: '0.32 -0.37 0.035', width: 0.70, height: 0.18, color: '#881337', hoverColor: '#e11d48', textColor: '#ffffff', fontSize: 36 },
-      { id: 'close', enabled: true, label: 'ปิดการ์ด', action: 'close', position: '-0.50 -0.46 0.035', width: 0.46, height: 0.14, color: '#3f1d28', hoverColor: '#e11d48', textColor: '#ffffff', fontSize: 36 }
+      {
+        id: 'quiz',
+        label: 'ท้าทายควิซดาวศุกร์',
+        action: 'quiz',
+        position: { x: -0.22, y: -0.52, z: 0.035 },
+        width: 0.66,
+        height: 0.13,
+        color: '#9f1239',
+        hoverColor: '#e11d48',
+        textColor: '#fff1f2',
+        fontSize: 36
+      },
+      {
+        id: 'close',
+        label: 'กลับสู่ระบบสุริยะ',
+        action: 'close',
+        position: { x: 0.40, y: -0.52, z: 0.035 },
+        width: 0.46,
+        height: 0.13,
+        color: '#2a0e1b',
+        hoverColor: '#4c0519',
+        textColor: '#fecdd3',
+        fontSize: 36
+      }
     ]
   }
 });
