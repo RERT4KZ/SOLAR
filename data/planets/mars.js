@@ -62,24 +62,96 @@ window.PLANET_DATA.push({
   },
 
   // --- 4. ตั้งค่าการ์ดข้อมูลแยกอิสระ (แก้ไขเฉพาะดาวดวงนี้ได้โดยไม่กระทบดาวดวงอื่น) ---
+  // ดาวอังคารใช้ธีมสีแดงคริมสัน-อำพัน พร้อมแสงเรืองรองสีส้มแดง รองรับข้อมูล 10 รายการ
   card: {
-    width: 1.86,
-    height: 1.40,
-    position: '0 0 0',
-    rotation: '0 0 0',
-    distance: 1.8,
+    width: 2.02,
+    height: 1.48,
     layout: 'horizontal',
-    background: { color: '#1a0b08', opacity: 0.95, image: '' },
-    border: { style: 'corners', color: '#ea580c', thickness: 0.018, cornerSize: 0.15, cornerColor: '#fb923c' },
-    header: { show: true, titlePos: '0 0.56 0.02', subtitlePos: '0 0.43 0.02', titleColor: '#fed7aa', subtitleColor: '#fdba74', showDivider: true, dividerColor: '#ea580c', dividerY: 0.36 },
-    media: { show: true, show3D: true, position: '-0.55 0.02 0.035', modelRadius: 0.25, frameColor: '#ea580c', showCaption: true, captionColor: '#fdba74' },
-    content: { position: '-0.16 0.04 0.03', width: 1.00, maxHeight: 0.64, fontSize: 32, lineHeight: 1.32, align: 'left', bullet: '• ' },
-    sections: [],
-    decorations: [],
-    buttonLayout: { mode: 'custom', position: '0 -0.52 0.035', spacing: 0.06 },
+    position: { x: 0, y: 0, z: 0 },
+    distance: 0,
+    rotation: { x: 0, y: 0, z: 0 },
+    background: {
+      color: '#1a0a06',
+      opacity: 0.96,
+      image: '',
+      outerGlow: true,
+      outerGlowColor: '#c2410c',
+      outerGlowOpacity: 0.16
+    },
+    border: {
+      style: 'corners',
+      color: '#ea580c',
+      thickness: 0.022,
+      opacity: 0.9,
+      cornerSize: 0.18,
+      cornerColor: '#fb923c'
+    },
+    header: {
+      titlePos: { x: 0, y: 0.58, z: 0.02 },
+      subtitlePos: { x: 0, y: 0.47, z: 0.02 },
+      titleWidth: 1.50,
+      subtitleWidth: 1.30,
+      titleFontSize: 46,
+      subtitleFontSize: 38,
+      titleColor: '#fed7aa',
+      subtitleColor: '#fdba74',
+      align: 'center',
+      showDivider: true,
+      dividerY: 0.40,
+      dividerColor: '#ea580c'
+    },
+    media: {
+      show: true,
+      position: { x: -0.58, y: 0.0, z: 0.03 },
+      show3D: true,
+      modelRadius: 0.23,
+      modelOffset: { x: 0, y: 0.08, z: 0.04 },
+      frameColor: '#ea580c',
+      showImage: true,
+      imageWidth: 0.42,
+      imageHeight: 0.26,
+      imageOffset: { x: 0, y: -0.22, z: 0.01 },
+      showCaption: true,
+      captionColor: '#fdba74',
+      captionPos: { x: 0, y: -0.38, z: 0.02 }
+    },
+    content: {
+      position: { x: 0.22, y: -0.02, z: 0.02 },
+      width: 1.04,
+      maxHeight: 0.76,
+      fontSize: 32,
+      lineHeight: 40,
+      align: 'left',
+      bulletPrefix: '• ',
+      includeInfo: true,
+      includeFacts: true
+    },
+    buttonLayout: 'custom',
     buttons: [
-      { id: 'quiz', enabled: true, label: 'PLAY MINIGAME', action: 'quiz', position: '0.35 -0.52 0.035', width: 0.72, height: 0.18, color: '#9a3412', hoverColor: '#ea580c', textColor: '#ffffff', fontSize: 38 },
-      { id: 'close', enabled: true, label: 'ปิดการ์ด', action: 'close', position: '-0.56 -0.54 0.035', width: 0.48, height: 0.15, color: '#334155', hoverColor: '#475569', textColor: '#ffffff', fontSize: 38 }
+      {
+        id: 'quiz',
+        label: 'เริ่มมินิเกมคำถาม',
+        action: 'quiz',
+        position: { x: -0.24, y: -0.58, z: 0.03 },
+        width: 0.68,
+        height: 0.13,
+        color: '#9a3412',
+        hoverColor: '#ea580c',
+        textColor: '#ffffff',
+        fontSize: 38
+      },
+      {
+        id: 'close',
+        label: 'ปิดหน้าต่าง',
+        action: 'close',
+        position: { x: 0.40, y: -0.58, z: 0.03 },
+        width: 0.44,
+        height: 0.13,
+        color: '#3b2013',
+        hoverColor: '#5c3520',
+        textColor: '#fed7aa',
+        fontSize: 38
+      }
     ]
   }
 });
