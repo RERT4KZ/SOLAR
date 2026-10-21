@@ -60,5 +60,99 @@ window.PLANET_DATA.push({
     buttonHoverColor: '',
     closeButtonColor: '',
     highlightColor: ''
+  },
+
+  // --- 4. ตั้งค่าโครงสร้าง ขนาด ตำแหน่ง และปุ่มของการ์ดข้อมูลแยกอิสระ (Independent Card Config) ---
+  // ดาวเสาร์ใช้การ์ดแนวกว้างพิเศษ (Wide Card) เพื่อรองรับการแสดงผลวงแหวนและภาพขนาดใหญ่
+  card: {
+    width: 2.06,
+    height: 1.26,
+    layout: 'horizontal',
+    position: { x: 0, y: 0, z: 0 },
+    distance: 0,
+    rotation: { x: 0, y: 0, z: 0 },
+    background: {
+      color: '#1b1811',
+      opacity: 0.95,
+      image: '',
+      outerGlow: true,
+      outerGlowColor: '#eab308',
+      outerGlowOpacity: 0.14
+    },
+    border: {
+      style: 'corners',
+      color: '#fde047',
+      thickness: 0.022,
+      opacity: 0.9,
+      cornerSize: 0.18
+    },
+    header: {
+      titlePos: { x: 0, y: 0.48, z: 0.02 },
+      subtitlePos: { x: 0, y: 0.38, z: 0.02 },
+      titleWidth: 1.55,
+      subtitleWidth: 1.35,
+      titleFontSize: 46,
+      subtitleFontSize: 38,
+      titleColor: '#fef08a',
+      subtitleColor: '#fde68a',
+      align: 'center',
+      showDivider: true,
+      dividerY: 0.31,
+      dividerColor: '#eab308'
+    },
+    media: {
+      show: true,
+      position: { x: -0.58, y: 0.0, z: 0.03 },
+      show3D: true,
+      modelRadius: 0.21,
+      modelOffset: { x: 0, y: 0.10, z: 0.05 },
+      ringRadius: 0.33,
+      ringTube: 0.018,
+      ringColor: '#cdb98d',
+      showImage: true,
+      imageWidth: 0.48,
+      imageHeight: 0.28,
+      imageOffset: { x: 0, y: -0.21, z: 0.01 },
+      showCaption: true,
+      captionPos: { x: 0, y: -0.39, z: 0.02 }
+    },
+    content: {
+      position: { x: 0.28, y: -0.01, z: 0.02 },
+      width: 1.08,
+      maxHeight: 0.60,
+      fontSize: 38,
+      lineHeight: 50,
+      align: 'left',
+      bulletPrefix: '• ',
+      includeInfo: true,
+      includeFacts: true
+    },
+    buttonLayout: 'custom',
+    buttons: [
+      {
+        id: 'quiz',
+        label: 'เริ่มมินิเกมคำถาม',
+        action: 'quiz',
+        position: { x: -0.25, y: -0.48, z: 0.03 },
+        width: 0.68,
+        height: 0.13,
+        color: '#a16207',
+        hoverColor: '#ca8a04',
+        textColor: '#ffffff',
+        fontSize: 38
+      },
+      {
+        id: 'close',
+        label: 'ปิดหน้าต่าง',
+        action: 'close',
+        position: { x: 0.42, y: -0.48, z: 0.03 },
+        width: 0.44,
+        height: 0.13,
+        color: '#3f3826',
+        hoverColor: '#574e35',
+        textColor: '#fef08a',
+        fontSize: 38
+      }
+    ]
   }
 });

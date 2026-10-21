@@ -60,7 +60,96 @@ window.PLANET_DATA.push({
     buttonHoverColor: '',
     closeButtonColor: '',
     highlightColor: ''
+  },
+
+  // --- 4. ตั้งค่าโครงสร้าง ขนาด ตำแหน่ง และปุ่มของการ์ดข้อมูลแยกอิสระ (Independent Card Config) ---
+  // ดาวเนปจูนใช้ธีมสีน้ำเงินเข้มแห่งห้วงอวกาศลึก พร้อมกรอบเรืองแสงสีคราม
+  card: {
+    width: 1.84,
+    height: 1.28,
+    layout: 'horizontal',
+    position: { x: 0, y: 0, z: 0 },
+    distance: 0,
+    rotation: { x: 0, y: 0, z: 0 },
+    background: {
+      color: '#07122b',
+      opacity: 0.95,
+      image: '',
+      outerGlow: true,
+      outerGlowColor: '#3b82f6',
+      outerGlowOpacity: 0.18
+    },
+    border: {
+      style: 'frame',
+      color: '#60a5fa',
+      thickness: 0.022,
+      opacity: 0.9,
+      cornerSize: 0.15
+    },
+    header: {
+      titlePos: { x: 0, y: 0.49, z: 0.02 },
+      subtitlePos: { x: 0, y: 0.39, z: 0.02 },
+      titleWidth: 1.4,
+      subtitleWidth: 1.25,
+      titleFontSize: 46,
+      subtitleFontSize: 38,
+      titleColor: '#93c5fd',
+      subtitleColor: '#dbeafe',
+      align: 'center',
+      showDivider: true,
+      dividerY: 0.32,
+      dividerColor: '#3b82f6'
+    },
+    media: {
+      show: true,
+      position: { x: -0.50, y: 0.0, z: 0.03 },
+      show3D: true,
+      modelRadius: 0.21,
+      modelOffset: { x: 0, y: 0.08, z: 0.04 },
+      showImage: true,
+      imageWidth: 0.38,
+      imageHeight: 0.24,
+      imageOffset: { x: 0, y: -0.22, z: 0.01 },
+      showCaption: true,
+      captionPos: { x: 0, y: -0.38, z: 0.02 }
+    },
+    content: {
+      position: { x: 0.23, y: -0.01, z: 0.02 },
+      width: 0.98,
+      maxHeight: 0.60,
+      fontSize: 36,
+      lineHeight: 46,
+      align: 'left',
+      bulletPrefix: '• ',
+      includeInfo: true,
+      includeFacts: true
+    },
+    buttonLayout: 'custom',
+    buttons: [
+      {
+        id: 'quiz',
+        label: 'เริ่มมินิเกมคำถาม',
+        action: 'quiz',
+        position: { x: -0.22, y: -0.49, z: 0.03 },
+        width: 0.64,
+        height: 0.13,
+        color: '#1d4ed8',
+        hoverColor: '#2563eb',
+        textColor: '#ffffff',
+        fontSize: 38
+      },
+      {
+        id: 'close',
+        label: 'ปิดหน้าต่าง',
+        action: 'close',
+        position: { x: 0.38, y: -0.49, z: 0.03 },
+        width: 0.42,
+        height: 0.13,
+        color: '#1e293b',
+        hoverColor: '#334155',
+        textColor: '#93c5fd',
+        fontSize: 38
+      }
+    ]
   }
 });
-
-

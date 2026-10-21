@@ -11,18 +11,12 @@
 //   info: 'ดาวเคราะห์ที่อยู่ใกล้ดวงอาทิตย์ที่สุด'
 //   image: 'assets/images/mercury.svg'
 //
-// [มาตรฐานดีไซน์กลางที่ใช้เหมือนกันทั้งโปรเจกต์ (หากเว้นว่าง ระบบจะใช้ค่าเหล่านี้)]
-//   - ฟอนต์หลัก (fontFamily)     : '"Sarabun", "Kanit", "Tahoma", system-ui, sans-serif'
-//   - ขนาดฟอนต์ (fontSize)       : 42 (px บน Canvas 1024px)
-//   - ขนาดแผงการ์ด UI            : กว้าง 1.78 เมตร x สูง 1.22 เมตร
-//   - สีพื้นหลังการ์ด (panelBgColor): '#071827' (ความโปร่งใส opacity 0.94)
-//   - สีเส้นขอบการ์ด (panelBorderColor): '#22d3ee'
-//   - สีหัวข้อชื่อดาว (titleColor) : '#a5f3fc' (ขนาดกว้าง 1.35)
-//   - สีชื่อภาษาอังกฤษ (subtitleColor): '#c8e9f3' (ขนาดกว้าง 1.25)
-//   - สีข้อความเนื้อหา (textColor) : '#ffffff' (ขนาดกว้าง 0.90, จัดชิดซ้าย)
-//   - สีปุ่มมินิเกม (buttonColor)  : '#0e7490' (เมื่อชี้เมาส์: '#0891b2')
-//   - สีปุ่มปิดการ์ด (closeButtonColor): '#334155'
-//   - สีเรืองแสงรอบดาว (highlightColor): '#6cd7ff'
+// [คู่มือการปรับแต่งการ์ดข้อมูลแยกอิสระ (หมวด card ด้านล่าง)]
+//   1. ขนาดการ์ด         : ปรับที่ card.width (ความกว้าง) และ card.height (ความสูง)
+//   2. ตำแหน่งและการหมุน : ปรับที่ card.position ('x y z'), card.distance (ระยะห่าง), card.rotation ('rx ry rz')
+//   3. โครงสร้างและดีไซน์ : ปรับที่ card.layout ('horizontal' | 'vertical' | 'custom'),
+//                          card.background, card.border, card.header, card.media, card.content, card.sections, card.decorations
+//   4. ปุ่มกด (Buttons)  : เพิ่ม/ลบ/ย้ายตำแหน่ง/เปลี่ยนขนาดและสีปุ่มได้ที่อาเรย์ card.buttons
 // ============================================================================
 
 window.PLANET_DATA = window.PLANET_DATA || [];
@@ -58,5 +52,27 @@ window.PLANET_DATA.push({
     buttonHoverColor: '#64748b',   // สีปุ่มเมื่อชี้เมาส์เปลี่ยนเป็นสีเทาสว่าง
     closeButtonColor: '#27272a',   // ปุ่มปิดสีเทาเข้ม
     highlightColor: '#f8fafc'      // แสงเรืองรองสีขาวเงินรอบดาว
+  },
+
+  // --- 4. ตั้งค่าการ์ดข้อมูลแยกอิสระ (แก้ไขเฉพาะดาวดวงนี้ได้โดยไม่กระทบดาวดวงอื่น) ---
+  card: {
+    width: 1.68,
+    height: 1.16,
+    position: '0 0 0',
+    rotation: '0 0 0',
+    distance: 1.8,
+    layout: 'horizontal',
+    background: { color: '#121417', opacity: 0.95, image: '' },
+    border: { style: 'top-bottom', color: '#e2e8f0', thickness: 0.018 },
+    header: { show: true, titlePos: '0 0.45 0.02', subtitlePos: '0 0.32 0.02', showDivider: false },
+    media: { show: true, show3D: true, position: '-0.48 0.02 0.035', modelRadius: 0.22, showCaption: true },
+    content: { position: '-0.10 0.06 0.03', width: 0.86, maxHeight: 0.50, fontSize: 36, lineHeight: 1.36, align: 'left', bullet: '• ' },
+    sections: [],
+    decorations: [],
+    buttonLayout: { mode: 'custom', position: '0 -0.42 0.035', spacing: 0.06 },
+    buttons: [
+      { id: 'quiz', enabled: true, label: 'PLAY MINIGAME', action: 'quiz', position: '0.32 -0.37 0.035', width: 0.70, height: 0.18, color: '#334155', hoverColor: '#64748b', textColor: '#ffffff', fontSize: 36 },
+      { id: 'close', enabled: true, label: 'ปิดการ์ด', action: 'close', position: '-0.50 -0.46 0.035', width: 0.46, height: 0.14, color: '#27272a', hoverColor: '#64748b', textColor: '#ffffff', fontSize: 36 }
+    ]
   }
 });

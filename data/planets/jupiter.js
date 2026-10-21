@@ -58,5 +58,95 @@ window.PLANET_DATA.push({
     buttonHoverColor: '',
     closeButtonColor: '',
     highlightColor: ''
+  },
+
+  // --- 4. ตั้งค่าโครงสร้าง ขนาด ตำแหน่ง และปุ่มของการ์ดข้อมูลแยกอิสระ (Independent Card Config) ---
+  card: {
+    width: 1.94,
+    height: 1.30,
+    layout: 'horizontal',
+    position: { x: 0, y: 0, z: 0 },
+    distance: 0,
+    rotation: { x: 0, y: 0, z: 0 },
+    background: {
+      color: '#1c1410',
+      opacity: 0.95,
+      image: '',
+      outerGlow: true,
+      outerGlowColor: '#d97706',
+      outerGlowOpacity: 0.14
+    },
+    border: {
+      style: 'frame',
+      color: '#f59e0b',
+      thickness: 0.022,
+      opacity: 0.9,
+      cornerSize: 0.14
+    },
+    header: {
+      titlePos: { x: 0, y: 0.50, z: 0.02 },
+      subtitlePos: { x: 0, y: 0.40, z: 0.02 },
+      titleWidth: 1.5,
+      subtitleWidth: 1.3,
+      titleFontSize: 46,
+      subtitleFontSize: 38,
+      titleColor: '#fde68a',
+      subtitleColor: '#fcd34d',
+      align: 'center',
+      showDivider: true,
+      dividerY: 0.33,
+      dividerColor: '#f59e0b'
+    },
+    media: {
+      show: true,
+      position: { x: -0.54, y: 0.0, z: 0.03 },
+      show3D: true,
+      modelRadius: 0.24,
+      modelOffset: { x: 0, y: 0.08, z: 0.05 },
+      showImage: true,
+      imageWidth: 0.42,
+      imageHeight: 0.26,
+      imageOffset: { x: 0, y: -0.22, z: 0.01 },
+      showCaption: true,
+      captionPos: { x: 0, y: -0.39, z: 0.02 }
+    },
+    content: {
+      position: { x: 0.26, y: -0.01, z: 0.02 },
+      width: 1.04,
+      maxHeight: 0.62,
+      fontSize: 38,
+      lineHeight: 50,
+      align: 'left',
+      bulletPrefix: '• ',
+      includeInfo: true,
+      includeFacts: true
+    },
+    buttonLayout: 'custom',
+    buttons: [
+      {
+        id: 'quiz',
+        label: 'เริ่มมินิเกมคำถาม',
+        action: 'quiz',
+        position: { x: -0.24, y: -0.50, z: 0.03 },
+        width: 0.66,
+        height: 0.13,
+        color: '#b45309',
+        hoverColor: '#d97706',
+        textColor: '#ffffff',
+        fontSize: 38
+      },
+      {
+        id: 'close',
+        label: 'ปิดหน้าต่าง',
+        action: 'close',
+        position: { x: 0.40, y: -0.50, z: 0.03 },
+        width: 0.44,
+        height: 0.13,
+        color: '#3f2e21',
+        hoverColor: '#574130',
+        textColor: '#fde68a',
+        fontSize: 38
+      }
+    ]
   }
 });
