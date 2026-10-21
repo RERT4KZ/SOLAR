@@ -44,8 +44,8 @@ window.PLANET_DATA.push({
   // --- 2. ตั้งค่าโมเดล 3D และรูปภาพประกอบ ---
   color: "#81d3d9",
   radius: 0.39,
-  image: "assets/images/uranus.svg",
-  texture: 'assets/images/2k_uranus.jpg',
+  image: "",
+  texture: 'assets/images/uranus.jpg',
 
   // --- 3. ปรับแต่งสไตล์เฉพาะของดาวดวงนี้ (เว้นว่างไว้หากต้องการใช้ค่ามาตรฐานกลาง) ---
   style: {
