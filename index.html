@@ -52,12 +52,15 @@
     cursor: pointer;
   }
   #exit-vr-btn:hover { background: #0891b2; }
+  .a-canvas, .a-canvas.a-grab-cursor, .a-canvas.a-grab-cursor:hover, .a-canvas.a-grab-cursor:active {
+    cursor: default !important;
+  }
 </style>
 </head>
 <body>
 <div id="help"><b>SOLAR ODYSSEY VR · Modular Prototype 05</b><br><small>Desktop: ลากเมาส์เพื่อมอง · คลิกดาว/ปุ่ม<br>VR: มุมมองเหนือดวงอาทิตย์ เห็นวงโคจรรอบตัว · Controller + Trigger<br>คลิกที่ดาวเพื่อหยุดวงโคจรชั่วคราวและเปิดการ์ดตรงหน้า<br><span id="vr-status">สถานะ: รอเข้า VR</span></small></div>
 <button id="exit-vr-btn" type="button">ออกจากโหมด VR (ESC)</button>
-<a-scene background="color: #000006" renderer="antialias: true; colorManagement: true" xr-mode-ui="enabled: true; enterVREnabled: true; cardboardModeEnabled: true">
+<a-scene background="color: #000006" renderer="antialias: true; colorManagement: true" xr-mode-ui="enabled: true; enterVREnabled: true; cardboardModeEnabled: true" cursor="rayOrigin: mouse; fuse: false" raycaster="objects: .selectable; far: 25">
 <a-entity id="stars"></a-entity>
 
 <!-- ระบบสุริยะและวงโคจร วางที่จุดศูนย์กลาง (0, 0.7, 0) ใต้ตำแหน่งสายตาผู้เล่น -->
@@ -66,7 +69,7 @@
 <!-- ผู้เล่นอยู่ตรงกลางเหนือดวงอาทิตย์ (ระดับสายตารวม 1.4 + 1.6 = 3.0 เมตร) -->
 <a-entity id="rig" position="0 1.4 0">
   <a-camera position="0 1.6 0" look-controls="pointerLockEnabled: false" wasd-controls="enabled: false">
-    <a-cursor id="desktop-cursor" raycaster="objects: .selectable; far: 25" fuse="false" material="color: #ffffff; shader: flat; opacity: 1; depthTest: false" geometry="primitive: ring; radiusInner: 0.010; radiusOuter: 0.020"></a-cursor>
+    <a-cursor id="desktop-cursor" raycaster="objects: .selectable; far: 25; enabled: false" fuse="false" visible="false" material="color: #ffffff; shader: flat; opacity: 1; depthTest: false" geometry="primitive: ring; radiusInner: 0.010; radiusOuter: 0.020"></a-cursor>
     <!-- การ์ด UI ผูกติดกับกล้อง แสดงตรงหน้าผู้เล่นและขยับตามเมื่อหันหน้าเสมอ -->
     <a-entity id="ui-root" position="0 0 -1.8" visible="false"></a-entity>
   </a-camera>
@@ -188,16 +191,34 @@ let hasVRController = false;
   setTimeout(bindVRButton, 500);
 })();
 
-// Camera gaze is for desktop or headset-less VR mode. In VR with controller, selection is made with the wand laser.
-scene.addEventListener('enter-vr', () => {
-  if (hasVRController) {
-    document.querySelector('#desktop-cursor').setAttribute('raycaster', 'enabled', false);
+// Desktop uses mouse raycaster (`rayOrigin: mouse` on `a-scene`) so the normal OS pointer can click planets, cards, and quiz buttons anywhere on screen without locking or hiding the cursor.
+// In VR mode: if a VR controller is connected, wand lasers handle selection; if headset-less VR is used, the center gaze ring (`#desktop-cursor`) is enabled.
+const desktopCursor = document.querySelector('#desktop-cursor');
+function syncInputMode(inVR) {
+  if (inVR) {
+    scene.setAttribute('raycaster', 'enabled', false);
+    if (desktopCursor) {
+      desktopCursor.setAttribute('visible', !hasVRController);
+      desktopCursor.setAttribute('raycaster', 'enabled', !hasVRController);
+    }
+  } else {
+    if (document.pointerLockElement && document.exitPointerLock) {
+      try { document.exitPointerLock(); } catch (e) {}
+    }
+    scene.setAttribute('raycaster', 'enabled', true);
+    if (desktopCursor) {
+      desktopCursor.setAttribute('visible', false);
+      desktopCursor.setAttribute('raycaster', 'enabled', false);
+    }
   }
+}
+scene.addEventListener('enter-vr', () => {
+  syncInputMode(true);
   exitVrBtn.style.display = 'block';
   document.querySelector('#vr-status').textContent = 'สถานะ: เข้าสู่ VR แล้ว';
 });
 scene.addEventListener('exit-vr', () => {
-  document.querySelector('#desktop-cursor').setAttribute('raycaster', 'enabled', true);
+  syncInputMode(false);
   exitVrBtn.style.display = 'none';
   document.querySelector('#vr-status').textContent = 'สถานะ: Desktop';
 });
@@ -205,10 +226,12 @@ scene.addEventListener('exit-vr', () => {
   const controller = document.getElementById(id);
   controller.addEventListener('controllerconnected', () => {
     hasVRController = true;
-    document.querySelector('#desktop-cursor').setAttribute('raycaster', 'enabled', false);
+    if (scene.is && scene.is('vr-mode')) syncInputMode(true);
     document.querySelector('#vr-status').textContent = 'Controller เชื่อมต่อ: ' + id;
   });
   controller.addEventListener('controllerdisconnected', () => {
+    hasVRController = false;
+    if (scene.is && scene.is('vr-mode')) syncInputMode(true);
     document.querySelector('#vr-status').textContent = 'Controller หลุดการเชื่อมต่อ: ' + id;
   });
 });
@@ -374,11 +397,18 @@ function button(parent,label,pos,width,height,fn,color='#155e75',hoverColor='#08
  b.addEventListener('mouseleave',()=>b.setAttribute('material',`shader: flat; color:${color}; opacity:${opacity}; side:double`));
  return b;
 }
-function setPlanetSelection(on){planetEntities.forEach(({sphere})=>on?sphere.classList.add('selectable'):sphere.classList.remove('selectable'));}
+function refreshRaycasters(){
+  [scene, document.querySelector('#desktop-cursor'), document.getElementById('right-controller'), document.getElementById('left-controller')].forEach(el => {
+    const rc = el && el.components && el.components.raycaster;
+    if (rc && typeof rc.refreshObjects === 'function') rc.refreshObjects();
+  });
+}
+function setPlanetSelection(on){planetEntities.forEach(({sphere})=>on?sphere.classList.add('selectable'):sphere.classList.remove('selectable'));refreshRaycasters();}
 function openUI(){
  isOrbitPaused = true; // หยุดหมุนวงโคจรชั่วคราวเมื่อการ์ดเปิด
  uiRoot.setAttribute('visible',true);
  setPlanetSelection(false);
+ setTimeout(refreshRaycasters, 0);
 }
 function closeUI(){
  clearUI();
@@ -387,6 +417,7 @@ function closeUI(){
  quizState=null;
  isOrbitPaused = false; // กลับมาหมุนวงโคจรต่อเมื่อปิดการ์ด
  setPlanetSelection(true);
+ setTimeout(refreshRaycasters, 0);
 }
 
 // วาดแผงการ์ดพื้นฐาน รองรับการกำหนดขนาด พื้นหลัง ขอบ มุมตกแต่ง และตำแหน่งหัวข้อแยกแต่ละดวงดาว
@@ -814,6 +845,7 @@ function showInfo(p){
  const previewSphere = planetImage(p, cardContainer, cardCfg);
  renderCardContent(p, cardContainer, cardCfg);
  renderCardButtons(p, cardContainer, cardCfg, previewSphere);
+ setTimeout(refreshRaycasters, 0);
 }
 function startQuiz(p){
  currentPlanet=p;
@@ -828,6 +860,7 @@ function renderQuestion(){
  txt(uiRoot,q.q||`รอเพิ่มคำถามข้อที่ ${quizState.index+1}`,'0 .20 .03',1.35,s.textColor||'#ffffff','center',s);
  q.options.forEach((opt,i)=>button(uiRoot,opt||`ตัวเลือก ${String.fromCharCode(65+i)}`,`0 ${.015-i*.17} .035`,1.43,.135,()=>answerQuestion(i),s.buttonColor||'#164e63',s.buttonHoverColor||'#0891b2',s));
  button(uiRoot,'ออกจากมินิเกม','0 -.53 .035',.85,.12,()=>showInfo(currentPlanet),s.closeButtonColor||'#334155',s.buttonHoverColor||'#0891b2',s);
+ setTimeout(refreshRaycasters, 0);
 }
 function answerQuestion(selected){if(!quizState||quizState.answers[quizState.index])return;const q=quizState.questions[quizState.index];quizState.answers[quizState.index]={selected,correct:q.correct};renderFeedback();}
 function renderFeedback(){
@@ -840,6 +873,7 @@ function renderFeedback(){
  txt(uiRoot,`เฉลย: ${corText}`,'0 .06 .03',1.35,s.titleColor||'#67e8f9','center',s);
  txt(uiRoot,q.explanation||'รอเพิ่มคำอธิบายเฉลย','0 -.10 .03',1.35,'#dbeafe','center',s);
  button(uiRoot,i===quizState.questions.length-1?'ดูผลคะแนน':'ไปข้อถัดไป','0 -.43 .035',.95,.17,()=>{if(quizState.index<quizState.questions.length-1){quizState.index++;renderQuestion();}else renderResults();},s.buttonColor||'#0e7490',s.buttonHoverColor||'#0891b2',s);
+ setTimeout(refreshRaycasters, 0);
 }
 function renderResults(){
  const s=currentPlanet?.style||{};
@@ -848,6 +882,7 @@ function renderResults(){
  const review=quizState.questions.map((q,i)=>`${i+1}. ${quizState.answers[i].selected===q.correct?'ถูก':'ผิด'} · เฉลย ${q.options[q.correct]||`ตัวเลือก ${String.fromCharCode(65+q.correct)}`}`).join('\n');
  txt(uiRoot,review,'0 .06 .03',1.35,s.textColor||'#ffffff','center',s);
  button(uiRoot,'กลับสู่ระบบสุริยะ','0 -.46 .035',1.22,.17,closeUI,s.buttonColor||'#0e7490',s.buttonHoverColor||'#0891b2',s);
+ setTimeout(refreshRaycasters, 0);
 }
 
 // สเกลขนาดดาวเปรียบเทียบที่สมจริงแต่คลิกง่ายใน VR และระยะวงโคจร/ความเร็วโคจรที่นุ่มนวลไม่เวียนหัว
@@ -948,7 +983,8 @@ planets.forEach((p, i) => {
   });
   sphere.addEventListener('click', () => {
     triggerSpin(sphere);
-    if (!uiRoot.getAttribute('visible')) showInfo(p);
+    const isUiOpen = uiRoot.getAttribute('visible') === true || uiRoot.getAttribute('visible') === 'true';
+    if (!isUiOpen) showInfo(p);
   });
 
   planetEntities.set(p.id ? `${p.id}-${i}` : `planet-${i}`, {
