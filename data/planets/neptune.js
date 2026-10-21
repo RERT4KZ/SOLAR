@@ -133,8 +133,8 @@ window.PLANET_DATA.push({
         position: { x: -0.22, y: -0.49, z: 0.03 },
         width: 0.64,
         height: 0.13,
-        color: '#4c77ee',
-        hoverColor: '#648fed',
+        color: '#e2632d',
+        hoverColor: '#64ed82',
         textColor: '#ffffff',
         fontSize: 38
       },
