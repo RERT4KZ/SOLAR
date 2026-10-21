@@ -53,18 +53,19 @@ window.PLANET_DATA.push({
   ringColor: '#cdb98d', // เฉพาะดาวที่มีวงแหวน เช่น '#cdb98d'
 
   // --- 3. ปรับแต่งสไตล์เฉพาะของดาวดวงนี้ (เว้นว่างไว้หากต้องการใช้ค่ามาตรฐานกลาง) ---
+  // ค่าชุดนี้มีผลกับหน้ามินิเกมด้วย: fontSize 26 ทำให้โจทย์/ตัวเลือกไม่ล้นกรอบ (ดาวอังคารใช้ค่าเดียวกัน)
   style: {
     fontFamily: '',
-    fontSize: 0,
-    panelBgColor: '',
-    panelBorderColor: '',
-    titleColor: '',
-    subtitleColor: '',
-    textColor: '',
-    buttonColor: '',
-    buttonHoverColor: '',
-    closeButtonColor: '',
-    highlightColor: ''
+    fontSize: 26,
+    panelBgColor: '#14110b',
+    panelBorderColor: '#eab308',
+    titleColor: '#fef08a',
+    subtitleColor: '#fcd34d',
+    textColor: '#ffffff',
+    buttonColor: '#854d0e',
+    buttonHoverColor: '#ca8a04',
+    closeButtonColor: '#3f3826',
+    highlightColor: '#fde047'
   },
 
   // --- 4. ตั้งค่าโครงสร้าง ขนาด ตำแหน่ง และปุ่มของการ์ดข้อมูลแยกอิสระ (Independent Card Config) ---
