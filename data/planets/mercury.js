@@ -55,24 +55,91 @@ window.PLANET_DATA.push({
   },
 
   // --- 4. ตั้งค่าการ์ดข้อมูลแยกอิสระ (แก้ไขเฉพาะดาวดวงนี้ได้โดยไม่กระทบดาวดวงอื่น) ---
+  // ดาวพุธใช้ธีม Cyber-Titanium / BepiColombo Probe สไตล์ยานสำรวจอวกาศ ไทเทเนียมเงิน-ดำ คมกริบ
   card: {
-    width: 1.68,
-    height: 1.16,
-    position: '0 0 0',
-    rotation: '0 0 0',
-    distance: 1.8,
+    width: 1.80,
+    height: 1.28,
     layout: 'horizontal',
-    background: { color: '#0a0b0e', opacity: 0.96, image: '' },
-    border: { style: 'full', color: '#f1f5f9', thickness: 0.024 },
-    header: { show: true, titlePos: '0 0.45 0.02', subtitlePos: '0 0.32 0.02', showDivider: false },
-    media: { show: true, show3D: true, position: '-0.48 0.02 0.035', modelRadius: 0.22, showCaption: true },
-    content: { position: '-0.10 0.06 0.03', width: 0.86, maxHeight: 0.50, fontSize: 36, lineHeight: 1.36, align: 'left', bullet: '• ' },
-    sections: [],
-    decorations: [],
-    buttonLayout: { mode: 'custom', position: '0 -0.42 0.035', spacing: 0.06 },
+    position: { x: 0, y: 0, z: 0 },
+    distance: 0,
+    rotation: { x: 0, y: 0, z: 0 },
+    background: {
+      color: '#07080a',
+      opacity: 0.97,
+      image: '',
+      outerGlow: true,
+      outerGlowColor: '#e2e8f0',
+      outerGlowOpacity: 0.12
+    },
+    border: {
+      style: 'full',
+      color: '#f8fafc',
+      thickness: 0.016,
+      opacity: 0.95
+    },
+    header: {
+      titlePos: { x: 0, y: 0.48, z: 0.02 },
+      subtitlePos: { x: 0, y: 0.36, z: 0.02 },
+      titleWidth: 1.45,
+      subtitleWidth: 1.25,
+      titleFontSize: 44,
+      subtitleFontSize: 36,
+      titleColor: '#ffffff',
+      subtitleColor: '#94a3b8',
+      align: 'center',
+      showDivider: true,
+      dividerY: 0.30,
+      dividerColor: '#334155'
+    },
+    media: {
+      show: true,
+      position: { x: -0.50, y: -0.04, z: 0.035 },
+      show3D: true,
+      modelRadius: 0.22,
+      modelOffset: { x: 0, y: 0.06, z: 0.04 },
+      frameColor: '#475569',
+      showImage: false,
+      showCaption: true,
+      captionColor: '#cbd5e1',
+      captionPos: { x: 0, y: -0.32, z: 0.02 }
+    },
+    content: {
+      position: { x: 0.16, y: -0.04, z: 0.02 },
+      width: 0.92,
+      maxHeight: 0.54,
+      fontSize: 30,
+      lineHeight: 38,
+      align: 'left',
+      bulletPrefix: '◈ ',
+      includeInfo: true,
+      includeFacts: true
+    },
+    buttonLayout: 'custom',
     buttons: [
-      { id: 'quiz', enabled: true, label: 'PLAY MINIGAME', action: 'quiz', position: '0.32 -0.37 0.035', width: 0.70, height: 0.18, color: '#262930', hoverColor: '#4b5563', textColor: '#ffffff', fontSize: 36 },
-      { id: 'close', enabled: true, label: 'ปิดการ์ด', action: 'close', position: '-0.50 -0.46 0.035', width: 0.46, height: 0.14, color: '#181a1f', hoverColor: '#4b5563', textColor: '#ffffff', fontSize: 36 }
+      {
+        id: 'quiz',
+        label: 'ภารกิจสำรวจดาวพุธ',
+        action: 'quiz',
+        position: { x: -0.22, y: -0.48, z: 0.035 },
+        width: 0.62,
+        height: 0.13,
+        color: '#1e2229',
+        hoverColor: '#475569',
+        textColor: '#ffffff',
+        fontSize: 34
+      },
+      {
+        id: 'close',
+        label: 'ปิดระบบ',
+        action: 'close',
+        position: { x: 0.38, y: -0.48, z: 0.035 },
+        width: 0.42,
+        height: 0.13,
+        color: '#111317',
+        hoverColor: '#334155',
+        textColor: '#cbd5e1',
+        fontSize: 34
+      }
     ]
   }
 });
