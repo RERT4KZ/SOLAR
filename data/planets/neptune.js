@@ -76,12 +76,12 @@ window.PLANET_DATA.push({
       opacity: 0.95,
       image: '',
       outerGlow: true,
-      outerGlowColor: '#3b82f6',
+      outerGlowColor: '#244e93',
       outerGlowOpacity: 0.18
     },
     border: {
       style: 'frame',
-      color: '#60a5fa',
+      color: '#4484d2',
       thickness: 0.022,
       opacity: 0.9,
       cornerSize: 0.15
@@ -133,8 +133,8 @@ window.PLANET_DATA.push({
         position: { x: -0.22, y: -0.49, z: 0.03 },
         width: 0.64,
         height: 0.13,
-        color: '#1d4ed8',
-        hoverColor: '#2563eb',
+        color: '#4c77ee',
+        hoverColor: '#648fed',
         textColor: '#ffffff',
         fontSize: 38
       },
