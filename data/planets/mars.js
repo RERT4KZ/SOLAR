@@ -49,109 +49,82 @@ window.PLANET_DATA.push({
   // --- 3. ปรับแต่งสไตล์เฉพาะของดาวดวงนี้ (เว้นว่างไว้หากต้องการใช้ค่ามาตรฐานกลาง) ---
   style: {
     fontFamily: '',
-    fontSize: 0,
-    panelBgColor: '',
-    panelBorderColor: '',
-    titleColor: '',
-    subtitleColor: '',
-    textColor: '',
-    buttonColor: '',
-    buttonHoverColor: '',
-    closeButtonColor: '',
-    highlightColor: ''
+    fontSize: 26,
+    panelBgColor: '#180a06',
+    panelBorderColor: '#ea580c',
+    titleColor: '#fed7aa',
+    subtitleColor: '#fdba74',
+    textColor: '#ffffff',
+    buttonColor: '#9a3412',
+    buttonHoverColor: '#ea580c',
+    closeButtonColor: '#3b2013',
+    highlightColor: '#fb923c'
   },
 
   // --- 4. ตั้งค่าการ์ดข้อมูลแยกอิสระ (แก้ไขเฉพาะดาวดวงนี้ได้โดยไม่กระทบดาวดวงอื่น) ---
-  // ดาวอังคารใช้ธีมสีแดงคริมสัน-อำพัน พร้อมแสงเรืองรองสีส้มแดง รองรับข้อมูล 10 รายการ
   card: {
-    width: 2.02,
+    width: 2.06,
     height: 1.48,
+    position: '0 0 0',
+    rotation: '0 0 0',
+    distance: 1.8,
     layout: 'horizontal',
-    position: { x: 0, y: 0, z: 0 },
-    distance: 0,
-    rotation: { x: 0, y: 0, z: 0 },
-    background: {
-      color: '#1a0a06',
-      opacity: 0.96,
-      image: '',
-      outerGlow: true,
-      outerGlowColor: '#c2410c',
-      outerGlowOpacity: 0.16
-    },
-    border: {
-      style: 'corners',
-      color: '#ea580c',
-      thickness: 0.022,
-      opacity: 0.9,
-      cornerSize: 0.18,
-      cornerColor: '#fb923c'
-    },
+    background: { color: '#180a06', opacity: 0.96, image: '' },
+    border: { style: 'corners', color: '#ea580c', thickness: 0.018, cornerSize: 0.16, cornerColor: '#fb923c' },
     header: {
-      titlePos: { x: 0, y: 0.58, z: 0.02 },
-      subtitlePos: { x: 0, y: 0.47, z: 0.02 },
-      titleWidth: 1.50,
-      subtitleWidth: 1.30,
-      titleFontSize: 46,
-      subtitleFontSize: 38,
+      show: true,
+      titlePos: '0 0.58 0.02',
+      subtitlePos: '0 0.47 0.02',
       titleColor: '#fed7aa',
       subtitleColor: '#fdba74',
-      align: 'center',
+      titleFontSize: 46,
+      subtitleFontSize: 38,
+      titleWidth: 1.60,
+      subtitleWidth: 1.40,
       showDivider: true,
+      dividerColor: '#ea580c',
       dividerY: 0.40,
-      dividerColor: '#ea580c'
+      dividerWidth: 1.90
     },
     media: {
       show: true,
-      position: { x: -0.58, y: 0.0, z: 0.03 },
       show3D: true,
-      modelRadius: 0.23,
-      modelOffset: { x: 0, y: 0.08, z: 0.04 },
+      position: '-0.60 0.03 0.035',
+      modelRadius: 0.24,
       frameColor: '#ea580c',
-      showImage: true,
-      imageWidth: 0.42,
-      imageHeight: 0.26,
-      imageOffset: { x: 0, y: -0.22, z: 0.01 },
       showCaption: true,
-      captionColor: '#fdba74',
-      captionPos: { x: 0, y: -0.38, z: 0.02 }
+      captionColor: '#fdba74'
     },
+    // กรอบข้อความ (Text Box): แสดงข้อมูลครบทั้ง 10 ข้อพร้อมคำอธิบายดาว
     content: {
-      position: { x: 0.22, y: -0.02, z: 0.02 },
+      position: '-0.14 0.04 0.03',
       width: 1.04,
-      maxHeight: 0.76,
-      fontSize: 32,
-      lineHeight: 40,
+      maxHeight: 0.72,
+      fontSize: 26,
+      lineHeight: 1.28,
       align: 'left',
-      bulletPrefix: '• ',
-      includeInfo: true,
-      includeFacts: true
+      bullet: '• ',
+      showInfoSummary: true,
+      color: '#ffffff'
     },
-    buttonLayout: 'custom',
+    sections: [],
+    // ตกแต่งกรอบข้อความ (Text Box Frame): แผงพื้นหลังและเส้นกรอบล้อมรอบข้อความ
+    decorations: [
+      // แผงพื้นหลังกล่องข้อความ
+      { type: 'plane', position: '0.38 0.04 0.012', width: 1.08, height: 0.74, color: '#2b1008', opacity: 0.65 },
+      // เส้นกรอบบน
+      { type: 'plane', position: '0.38 0.41 0.02', width: 1.08, height: 0.008, color: '#ea580c', opacity: 0.85 },
+      // เส้นกรอบล่าง
+      { type: 'plane', position: '0.38 -0.33 0.02', width: 1.08, height: 0.008, color: '#ea580c', opacity: 0.85 },
+      // เส้นกรอบซ้าย
+      { type: 'plane', position: '-0.16 0.04 0.02', width: 0.008, height: 0.74, color: '#ea580c', opacity: 0.85 },
+      // เส้นกรอบขวา
+      { type: 'plane', position: '0.92 0.04 0.02', width: 0.008, height: 0.74, color: '#ea580c', opacity: 0.85 }
+    ],
+    buttonLayout: { mode: 'custom', position: '0 -0.56 0.035', spacing: 0.06 },
     buttons: [
-      {
-        id: 'quiz',
-        label: 'เริ่มมินิเกมคำถาม',
-        action: 'quiz',
-        position: { x: -0.24, y: -0.58, z: 0.03 },
-        width: 0.68,
-        height: 0.13,
-        color: '#9a3412',
-        hoverColor: '#ea580c',
-        textColor: '#ffffff',
-        fontSize: 38
-      },
-      {
-        id: 'close',
-        label: 'ปิดหน้าต่าง',
-        action: 'close',
-        position: { x: 0.40, y: -0.58, z: 0.03 },
-        width: 0.44,
-        height: 0.13,
-        color: '#3b2013',
-        hoverColor: '#5c3520',
-        textColor: '#fed7aa',
-        fontSize: 38
-      }
+      { id: 'quiz', enabled: true, label: 'PLAY MINIGAME', action: 'quiz', position: '0.38 -0.56 0.035', width: 0.72, height: 0.16, color: '#9a3412', hoverColor: '#ea580c', textColor: '#ffffff', fontSize: 34 },
+      { id: 'close', enabled: true, label: 'ปิดการ์ด', action: 'close', position: '-0.50 -0.56 0.035', width: 0.48, height: 0.16, color: '#3b2013', hoverColor: '#5c3520', textColor: '#fed7aa', fontSize: 34 }
     ]
   }
 });
