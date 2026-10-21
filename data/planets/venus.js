@@ -34,10 +34,10 @@ window.PLANET_DATA.push({
   en: 'Venus',
   info: 'ดาวเคราะห์ที่ร้อนที่สุดในระบบสุริยะ และสว่างที่สุดบนท้องฟ้ารองจากดวงจันทร์',
   facts: [
-    'ฉายา "ฝาแฝดของโลก" ขนาดและมวลใกล้เคียงกับโลก',
-    'พื้นผิวร้อนที่สุดในระบบสุริยะ สูงถึงประมาณ 465°C',
-    'หมุนรอบตัวเองกลับทิศ ดวงอาทิตย์ขึ้นทางทิศตะวันตก',
-    'สว่างสดใส รู้จักในชื่อ "ดาวประจำเมือง" และ "ดาวประกายพรึก"'
+    'ฉายาฝาแฝดโลก ขนาดและมวลใกล้เคียงโลกมากที่สุด',
+    'ผิวร้อนที่สุดในระบบสุริยะ อุณหภูมิสูงถึง 465°C',
+    'หมุนรอบตัวเองกลับทิศ ดวงอาทิตย์ขึ้นทิศตะวันตก',
+    'สว่างที่สุดบนท้องฟ้า รู้จักในชื่อดาวประกายพรึก'
   ],
 
   // --- 2. ตั้งค่าโมเดล 3D และรูปภาพประกอบ ---
@@ -49,7 +49,7 @@ window.PLANET_DATA.push({
   // --- 3. ปรับแต่งสไตล์เฉพาะของดาวดวงนี้ (เว้นว่างไว้หากต้องการใช้ค่ามาตรฐานกลาง) ---
   style: {
     fontFamily: '',
-    fontSize: 26,
+    fontSize: 36,
     panelBgColor: '#1a0c13',       // พื้นหลังสีดำเหลือบกุหลาบเข้ม (Rose Obsidian)
     panelBorderColor: '#fb7185',   // ขอบการ์ดสีโรสโกลด์ / ชมพูพีชสว่าง (Rose Gold)
     titleColor: '#ffe4e6',         // หัวข้อสีขาวประกายชมพูโรส
@@ -62,17 +62,17 @@ window.PLANET_DATA.push({
   },
 
   // --- 4. ตั้งค่าการ์ดข้อมูลแยกอิสระ (แก้ไขเฉพาะดาวดวงนี้ได้โดยไม่กระทบดาวดวงอื่น) ---
-  // ดาวศุกร์ใช้ธีม Empress Rose Gold / Celestial Romance อัญมณีโรสโกลด์ นุ่มนวล เปล่งประกายแห่งเทพีวีนัส
+  // ดาวศุกร์ใช้ธีม Empress Rose Gold อัญมณีโรสโกลด์ นุ่มนวล เปล่งประกายแห่งเทพีวีนัส
   card: {
-    width: 1.94,
-    height: 1.38,
+    width: 1.84,
+    height: 1.28,
     layout: 'horizontal',
     position: { x: 0, y: 0, z: 0 },
     distance: 0,
     rotation: { x: 0, y: 0, z: 0 },
     background: {
       color: '#150810',
-      opacity: 0.96,
+      opacity: 1.0,
       image: '',
       outerGlow: true,
       outerGlowColor: '#f43f5e',
@@ -81,43 +81,44 @@ window.PLANET_DATA.push({
     border: {
       style: 'corners',
       color: '#fb7185',
-      thickness: 0.024,
-      opacity: 0.95,
+      thickness: 0.026,
+      opacity: 1.0,
       cornerSize: 0.22,
       cornerColor: '#fda4af'
     },
     header: {
-      titlePos: { x: 0, y: 0.54, z: 0.02 },
-      subtitlePos: { x: 0, y: 0.42, z: 0.02 },
-      titleWidth: 1.50,
-      subtitleWidth: 1.30,
-      titleFontSize: 46,
-      subtitleFontSize: 38,
+      titlePos: { x: 0, y: 0.46, z: 0.02 },
+      subtitlePos: { x: 0, y: 0.35, z: 0.02 },
+      titleWidth: 1.45,
+      subtitleWidth: 1.25,
+      titleFontSize: 44,
+      subtitleFontSize: 36,
       titleColor: '#fff1f2',
       subtitleColor: '#fecdd3',
       align: 'center',
       showDivider: true,
-      dividerY: 0.35,
+      dividerY: 0.28,
       dividerColor: '#fb7185'
     },
     media: {
       show: true,
-      position: { x: -0.54, y: -0.02, z: 0.035 },
+      position: { x: -0.48, y: -0.01, z: 0.22 },
       show3D: true,
-      modelRadius: 0.24,
-      modelOffset: { x: 0, y: 0.06, z: 0.04 },
+      modelRadius: 0.20,
+      modelOffset: { x: 0, y: 0, z: 0 },
       frameColor: '#fb7185',
       showImage: false,
       showCaption: true,
+      caption: 'แบบจำลอง 3D ดาวศุกร์',
       captionColor: '#fecdd3',
-      captionPos: { x: 0, y: -0.34, z: 0.02 }
+      captionPos: { x: 0, y: -0.28, z: 0.02 }
     },
     content: {
-      position: { x: 0.18, y: -0.02, z: 0.02 },
-      width: 0.98,
-      maxHeight: 0.60,
-      fontSize: 32,
-      lineHeight: 40,
+      position: { x: -0.15, y: -0.01, z: 0.02 },
+      width: 0.94,
+      maxHeight: 0.52,
+      fontSize: 28,
+      lineHeight: 44,
       align: 'left',
       bulletPrefix: '✦ ',
       includeInfo: true,
@@ -129,19 +130,19 @@ window.PLANET_DATA.push({
         id: 'quiz',
         label: 'ท้าทายควิซดาวศุกร์',
         action: 'quiz',
-        position: { x: -0.22, y: -0.52, z: 0.035 },
-        width: 0.66,
+        position: { x: 0.32, y: -0.46, z: 0.035 },
+        width: 0.68,
         height: 0.13,
         color: '#9f1239',
         hoverColor: '#e11d48',
-        textColor: '#fff1f2',
+        textColor: '#ffffff',
         fontSize: 36
       },
       {
         id: 'close',
         label: 'กลับสู่ระบบสุริยะ',
         action: 'close',
-        position: { x: 0.40, y: -0.52, z: 0.035 },
+        position: { x: -0.50, y: -0.46, z: 0.035 },
         width: 0.46,
         height: 0.13,
         color: '#2a0e1b',
