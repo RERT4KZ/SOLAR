@@ -11,12 +11,18 @@
 //   info: 'ดาวเคราะห์ที่มีพื้นผิวร้อนที่สุด'
 //   image: 'assets/images/venus.svg'
 //
-// [คู่มือการปรับแต่งการ์ดข้อมูลแยกอิสระ (หมวด card ด้านล่าง)]
-//   1. ขนาดการ์ด         : ปรับที่ card.width (ความกว้าง) และ card.height (ความสูง)
-//   2. ตำแหน่งและการหมุน : ปรับที่ card.position ('x y z'), card.distance (ระยะห่าง), card.rotation ('rx ry rz')
-//   3. โครงสร้างและดีไซน์ : ปรับที่ card.layout ('horizontal' | 'vertical' | 'custom'),
-//                          card.background, card.border, card.header, card.media, card.content, card.sections, card.decorations
-//   4. ปุ่มกด (Buttons)  : เพิ่ม/ลบ/ย้ายตำแหน่ง/เปลี่ยนขนาดและสีปุ่มได้ที่อาเรย์ card.buttons
+// [มาตรฐานดีไซน์กลางที่ใช้เหมือนกันทั้งโปรเจกต์ (หากเว้นว่าง ระบบจะใช้ค่าเหล่านี้)]
+//   - ฟอนต์หลัก (fontFamily)     : '"Sarabun", "Kanit", "Tahoma", system-ui, sans-serif'
+//   - ขนาดฟอนต์ (fontSize)       : 42 (px บน Canvas 1024px)
+//   - ขนาดแผงการ์ด UI            : กว้าง 1.78 เมตร x สูง 1.22 เมตร
+//   - สีพื้นหลังการ์ด (panelBgColor): '#071827' (ความโปร่งใส opacity 0.94)
+//   - สีเส้นขอบการ์ด (panelBorderColor): '#22d3ee'
+//   - สีหัวข้อชื่อดาว (titleColor) : '#a5f3fc' (ขนาดกว้าง 1.35)
+//   - สีชื่อภาษาอังกฤษ (subtitleColor): '#c8e9f3' (ขนาดกว้าง 1.25)
+//   - สีข้อความเนื้อหา (textColor) : '#ffffff' (ขนาดกว้าง 0.90, จัดชิดซ้าย)
+//   - สีปุ่มมินิเกม (buttonColor)  : '#0e7490' (เมื่อชี้เมาส์: '#0891b2')
+//   - สีปุ่มปิดการ์ด (closeButtonColor): '#334155'
+//   - สีเรืองแสงรอบดาว (highlightColor): '#6cd7ff'
 // ============================================================================
 
 window.PLANET_DATA = window.PLANET_DATA || [];
@@ -38,42 +44,42 @@ window.PLANET_DATA.push({
   color: '#e7bd7b',
   radius: 0.38,
   image: '',
-  texture: 'assets/images/venus.jpg',
+  texture: 'assets/textures/venus.jpg',
 
   // --- 3. ปรับแต่งสไตล์เฉพาะของดาวดวงนี้ (เว้นว่างไว้หากต้องการใช้ค่ามาตรฐานกลาง) ---
   style: {
     fontFamily: '',
     fontSize: 36,
-    panelBgColor: '#180e07',       // พื้นหลังสีน้ำตาลทองดำอบอุ่น
-    panelBorderColor: '#f59e0b',   // ขอบการ์ดสีทองอำพันเรืองรอง
-    titleColor: '#fef08a',         // หัวข้อสีทองอร่ามสว่างไสว
-    subtitleColor: '#fed7aa',      // ชื่อภาษาอังกฤษสีแชมเปญทองอ่อน
-    textColor: '#fffbeb',          // ข้อความเนื้อหาสีขาวครีมไอวอรี่
-    buttonColor: '#854d0e',        // ปุ่มมินิเกมสีบรอนซ์ทองเข้ม
-    buttonHoverColor: '#d97706',   // สีปุ่มเมื่อชี้เมาส์
-    closeButtonColor: '#442312',   // ปุ่มปิดสีน้ำตาลไหม้
-    highlightColor: '#fde047'      // แสงเรืองรองสีทองรอบดาว
+    panelBgColor: '#1a0c13',       // พื้นหลังสีดำเหลือบกุหลาบเข้ม (Rose Obsidian)
+    panelBorderColor: '#fb7185',   // ขอบการ์ดสีโรสโกลด์ / ชมพูพีชสว่าง (Rose Gold)
+    titleColor: '#ffe4e6',         // หัวข้อสีขาวประกายชมพูโรส
+    subtitleColor: '#fecdd3',      // ชื่อภาษาอังกฤษสีพีชพาสเทล
+    textColor: '#ffffff',          // ข้อความเนื้อหาสีขาวคมชัด
+    buttonColor: '#881337',        // ปุ่มมินิเกมสีแดงกุหลาบเข้มบรอนซ์ (Deep Rose Bronze)
+    buttonHoverColor: '#e11d48',   // สีปุ่มเมื่อชี้เมาส์สว่างเป็นชมพูโรสสด
+    closeButtonColor: '#3f1d28',   // ปุ่มปิดสีไวน์เข้ม
+    highlightColor: '#fda4af'      // แสงเรืองรองสีชมพูโรสโกลด์รอบดาว
   },
 
   // --- 4. ตั้งค่าการ์ดข้อมูลแยกอิสระ (แก้ไขเฉพาะดาวดวงนี้ได้โดยไม่กระทบดาวดวงอื่น) ---
   card: {
-    width: 1.80,
-    height: 1.24,
+    width: 1.68,
+    height: 1.16,
     position: '0 0 0',
     rotation: '0 0 0',
     distance: 1.8,
     layout: 'horizontal',
-    background: { color: '#180e07', opacity: 0.95, image: '' },
-    border: { style: 'frame', color: '#f59e0b', thickness: 0.016, cornerSize: 0.12, cornerColor: '#fef08a' },
-    header: { show: true, titlePos: '0 0.48 0.02', subtitlePos: '0 0.35 0.02', showDivider: true, dividerColor: '#f59e0b', dividerY: 0.28 },
-    media: { show: true, show3D: true, position: '-0.52 0.01 0.035', modelRadius: 0.25, showCaption: true },
-    content: { position: '-0.10 0.06 0.03', width: 0.90, maxHeight: 0.52, fontSize: 36, lineHeight: 1.36, align: 'left', bullet: '• ' },
+    background: { color: '#1a0c13', opacity: 0.96, image: '' },
+    border: { style: 'top-bottom', color: '#fb7185', thickness: 0.018 },
+    header: { show: true, titlePos: '0 0.45 0.02', subtitlePos: '0 0.32 0.02', showDivider: false },
+    media: { show: true, show3D: true, position: '-0.48 0.02 0.035', modelRadius: 0.23, showCaption: true },
+    content: { position: '-0.10 0.06 0.03', width: 0.86, maxHeight: 0.50, fontSize: 36, lineHeight: 1.36, align: 'left', bullet: '• ' },
     sections: [],
     decorations: [],
-    buttonLayout: { mode: 'custom', position: '0 -0.45 0.035', spacing: 0.06 },
+    buttonLayout: { mode: 'custom', position: '0 -0.42 0.035', spacing: 0.06 },
     buttons: [
-      { id: 'quiz', enabled: true, label: 'PLAY MINIGAME', action: 'quiz', position: '0.35 -0.39 0.035', width: 0.72, height: 0.19, color: '#854d0e', hoverColor: '#d97706', textColor: '#ffffff', fontSize: 36 },
-      { id: 'close', enabled: true, label: 'ปิดการ์ด', action: 'close', position: '-0.56 -0.50 0.035', width: 0.48, height: 0.15, color: '#442312', hoverColor: '#d97706', textColor: '#ffffff', fontSize: 36 }
+      { id: 'quiz', enabled: true, label: 'PLAY MINIGAME', action: 'quiz', position: '0.32 -0.37 0.035', width: 0.70, height: 0.18, color: '#881337', hoverColor: '#e11d48', textColor: '#ffffff', fontSize: 36 },
+      { id: 'close', enabled: true, label: 'ปิดการ์ด', action: 'close', position: '-0.50 -0.46 0.035', width: 0.46, height: 0.14, color: '#3f1d28', hoverColor: '#e11d48', textColor: '#ffffff', fontSize: 36 }
     ]
   }
 });
