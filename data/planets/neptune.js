@@ -148,7 +148,7 @@ window.PLANET_DATA.push({
         color: '#06a6eb',
         hoverColor: '#ef0c0c',
         textColor: '#080115',
-        fontSize: 78
+        fontSize: 108
       }
     ]
   }
