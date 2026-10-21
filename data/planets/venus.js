@@ -44,7 +44,7 @@ window.PLANET_DATA.push({
   color: '#e7bd7b',
   radius: 0.38,
   image: '',
-  texture: 'assets/textures/venus.jpg',
+  texture: 'assets/images/venus.jpg',
 
   // --- 3. ปรับแต่งสไตล์เฉพาะของดาวดวงนี้ (เว้นว่างไว้หากต้องการใช้ค่ามาตรฐานกลาง) ---
   style: {
