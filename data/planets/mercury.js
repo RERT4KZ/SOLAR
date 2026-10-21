@@ -43,7 +43,7 @@ window.PLANET_DATA.push({
   color: '#a7a5a1',
   radius: 0.30,
   image: '',
-  texture: 'assets/textures/mercury.jpg',
+  texture: 'assets/images/mercury.jpg',
 
   // --- 3. ปรับแต่งสไตล์เฉพาะของดาวดวงนี้ (เว้นว่างไว้หากต้องการใช้ค่ามาตรฐานกลาง) ---
   style: {
