@@ -134,8 +134,8 @@ window.PLANET_DATA.push({
         width: 0.64,
         height: 0.13,
         color: '#f74a00',
-        hoverColor: '#01fb37',
-        textColor: '#f3e7e7',
+        hoverColor: '#32f30b',
+        textColor: '#0a0909',
         fontSize: 78
       },
       {
@@ -145,7 +145,7 @@ window.PLANET_DATA.push({
         position: { x: 0.38, y: -0.49, z: 0.03 },
         width: 0.42,
         height: 0.13,
-        color: '#0cf03d',
+        color: '#0cc935',
         hoverColor: '#287838',
         textColor: '#ff3c00',
         fontSize: 78
