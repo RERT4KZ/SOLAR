@@ -135,7 +135,7 @@ window.PLANET_DATA.push({
         height: 0.13,
         color: '#59a7eb',
         hoverColor: '#32f30b',
-        textColor: '#6200f4',
+        textColor: '#07010f',
         fontSize: 78
       },
       {
