@@ -255,18 +255,21 @@ let isOrbitPaused = false;
 function clearUI(){while(uiRoot.firstChild)uiRoot.removeChild(uiRoot.firstChild);}
 
 // ฟังก์ชันวาดข้อความด้วย HTML5 Canvas เพื่อรองรับภาษาไทย 100% ใน A-Frame
-// รองรับการกำหนด fontSize, fontFamily, lineHeight, และ maxHeight (ย่อขนาดอัตโนมัติไม่ให้ข้อความล้นกรอบ)
+// รองรับการกำหนด fontSize, fontFamily, lineHeight (ทั้งแบบสัดส่วน 1.38 และแบบพิกเซล 40), และ maxHeight (ย่อขนาดอัตโนมัติไม่ให้ข้อความล้นกรอบ)
 function txt(parent, value, pos, width, color = '#e7faff', align = 'center', customStyle = {}) {
   const rawLines = String(value ?? '').split('\n');
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d');
   const fontFamily = customStyle.fontFamily || '"Sarabun", "Kanit", "Tahoma", system-ui, sans-serif';
-  const lineRatio = customStyle.lineHeight || 1.38;
+  const rawLineHeight = Number(customStyle.lineHeight) || 0;
   const maxWidth = 944;
 
   canvas.width = 1024;
-  let fontSize = Number(customStyle.fontSize) > 0 ? Number(customStyle.fontSize) : 42;
+  const initialFontSize = Number(customStyle.fontSize) > 0 ? Number(customStyle.fontSize) : 42;
+  let fontSize = initialFontSize;
   const minFontSize = Number(customStyle.minFontSize) > 0 ? Number(customStyle.minFontSize) : 22;
+  // รองรับทั้ง lineHeight แบบตัวคูณ (<= 5 เช่น 1.35) และแบบพิกเซล (> 5 เช่น 38, 44, 50)
+  const lineRatio = rawLineHeight > 5 ? (rawLineHeight / initialFontSize) : (rawLineHeight > 0 ? rawLineHeight : 1.38);
   const maxCanvasHeight = (Number(customStyle.maxHeight) > 0 && Number(width) > 0)
     ? Math.floor(1024 * (Number(customStyle.maxHeight) / Number(width)))
     : 0;
@@ -321,15 +324,17 @@ function txt(parent, value, pos, width, color = '#e7faff', align = 'center', cus
   const aspect = canvas.height / canvas.width;
   const planeHeight = width * aspect;
 
-  let finalPos = pos;
-  if (align === 'left') {
-    const parts = String(pos).trim().split(/\s+/).map(Number);
-    parts[0] += width / 2;
-    finalPos = parts.join(' ');
-  } else if (align === 'right') {
-    const parts = String(pos).trim().split(/\s+/).map(Number);
-    parts[0] -= width / 2;
-    finalPos = parts.join(' ');
+  let finalPos = formatVec3(pos, '0 0 0');
+  if (!customStyle.centerAnchor) {
+    if (align === 'left') {
+      const parts = String(finalPos).trim().split(/\s+/).map(Number);
+      parts[0] += width / 2;
+      finalPos = parts.join(' ');
+    } else if (align === 'right') {
+      const parts = String(finalPos).trim().split(/\s+/).map(Number);
+      parts[0] -= width / 2;
+      finalPos = parts.join(' ');
+    }
   }
 
   const el = make('a-plane', {
@@ -421,6 +426,7 @@ function closeUI(){
 }
 
 // วาดแผงการ์ดพื้นฐาน รองรับการกำหนดขนาด พื้นหลัง ขอบ มุมตกแต่ง และตำแหน่งหัวข้อแยกแต่ละดวงดาว
+// ให้ความสำคัญกับค่าที่กรอกในหมวด style ของไฟล์ดาวทันที และใช้ค่าจาก card เป็นโครงสร้าง/ค่าเสริม
 function basePanel(title,subtitle='',style={},targetRoot=uiRoot,cardCfg={}){
  const w = Number(cardCfg.width) > 0 ? Number(cardCfg.width) : 1.78;
  const h = Number(cardCfg.height) > 0 ? Number(cardCfg.height) : 1.22;
@@ -428,17 +434,20 @@ function basePanel(title,subtitle='',style={},targetRoot=uiRoot,cardCfg={}){
  const borderCfg = cardCfg.border || {};
  const headerCfg = cardCfg.header || {};
 
- const bg = bgCfg.color || style.panelBgColor || '#071827';
+ const bg = style.panelBgColor || bgCfg.color || '#071827';
  const bgOpacity = (typeof bgCfg.opacity === 'number') ? bgCfg.opacity : 0.94;
- const border = borderCfg.color || style.panelBorderColor || '#22d3ee';
+ const border = style.panelBorderColor || borderCfg.color || '#22d3ee';
  const borderThickness = Number(borderCfg.thickness) > 0 ? Number(borderCfg.thickness) : 0.018;
+ const borderOpacity = (typeof borderCfg.opacity === 'number') ? borderCfg.opacity : 1;
  const borderStyle = borderCfg.style || 'top-bottom';
- const tColor = headerCfg.titleColor || style.titleColor || '#a5f3fc';
- const subColor = headerCfg.subtitleColor || style.subtitleColor || '#c8e9f3';
+ const tColor = style.titleColor || headerCfg.titleColor || '#a5f3fc';
+ const subColor = style.subtitleColor || headerCfg.subtitleColor || '#c8e9f3';
 
- if (borderCfg.glowColor) {
-   const glowPad = Number(borderCfg.glowSpread) > 0 ? Number(borderCfg.glowSpread) : 0.06;
-   make('a-plane',{width:w+glowPad,height:h+glowPad,position:'0 0 -0.006',material:`shader: flat; color:${borderCfg.glowColor}; opacity:${borderCfg.glowOpacity||0.18}; transparent:true; side:double`},targetRoot);
+ const glowColor = borderCfg.glowColor || (bgCfg.outerGlow ? (bgCfg.outerGlowColor || style.highlightColor || border) : '');
+ if (glowColor) {
+   const glowPad = Number(borderCfg.glowSpread || bgCfg.outerGlowSpread) > 0 ? Number(borderCfg.glowSpread || bgCfg.outerGlowSpread) : 0.06;
+   const glowOp = borderCfg.glowOpacity || bgCfg.outerGlowOpacity || 0.18;
+   make('a-plane',{width:w+glowPad,height:h+glowPad,position:'0 0 -0.006',material:`shader: flat; color:${glowColor}; opacity:${glowOp}; transparent:true; side:double`},targetRoot);
  }
 
  make('a-plane',{width:w,height:h,position:'0 0 0',material:`shader: flat; color:${bg}; opacity:${bgOpacity}; transparent:true; side:double`},targetRoot);
@@ -451,25 +460,25 @@ function basePanel(title,subtitle='',style={},targetRoot=uiRoot,cardCfg={}){
  const halfH = h / 2 - borderThickness / 2;
  const halfW = w / 2 - borderThickness / 2;
  if (borderStyle !== 'none') {
-   if (borderStyle === 'top-bottom' || borderStyle === 'all' || borderStyle === 'frame' || borderStyle === 'corners') {
-     make('a-plane',{width:w,height:borderThickness,position:`0 ${halfH} .008`,material:`shader: flat; color:${border}; side:double`},targetRoot);
-     make('a-plane',{width:w,height:borderThickness,position:`0 ${-halfH} .008`,material:`shader: flat; color:${border}; side:double`},targetRoot);
+   if (borderStyle === 'top-bottom' || borderStyle === 'all' || borderStyle === 'full' || borderStyle === 'frame' || borderStyle === 'corners') {
+     make('a-plane',{width:w,height:borderThickness,position:`0 ${halfH} .008`,material:`shader: flat; color:${border}; opacity:${borderOpacity}; transparent:true; side:double`},targetRoot);
+     make('a-plane',{width:w,height:borderThickness,position:`0 ${-halfH} .008`,material:`shader: flat; color:${border}; opacity:${borderOpacity}; transparent:true; side:double`},targetRoot);
    }
-   if (borderStyle === 'all' || borderStyle === 'frame') {
-     make('a-plane',{width:borderThickness,height:h,position:`${-halfW} 0 .008`,material:`shader: flat; color:${border}; side:double`},targetRoot);
-     make('a-plane',{width:borderThickness,height:h,position:`${halfW} 0 .008`,material:`shader: flat; color:${border}; side:double`},targetRoot);
+   if (borderStyle === 'all' || borderStyle === 'full' || borderStyle === 'frame') {
+     make('a-plane',{width:borderThickness,height:h,position:`${-halfW} 0 .008`,material:`shader: flat; color:${border}; opacity:${borderOpacity}; transparent:true; side:double`},targetRoot);
+     make('a-plane',{width:borderThickness,height:h,position:`${halfW} 0 .008`,material:`shader: flat; color:${border}; opacity:${borderOpacity}; transparent:true; side:double`},targetRoot);
    }
    if (borderStyle === 'corners' || Number(borderCfg.cornerSize) > 0) {
      const cSize = Number(borderCfg.cornerSize) > 0 ? Number(borderCfg.cornerSize) : 0.14;
      const cThick = borderThickness * 1.35;
-     const cColor = borderCfg.cornerColor || borderCfg.accentColor || border;
+     const cColor = style.panelBorderColor || borderCfg.cornerColor || borderCfg.accentColor || border;
      [[-1,1],[1,1],[-1,-1],[1,-1]].forEach(([sx,sy])=>{
        const cx = sx * (w/2 - cSize/2);
        const cy = sy * (h/2 - cThick/2);
-       make('a-plane',{width:cSize,height:cThick,position:`${cx} ${cy} .011`,material:`shader: flat; color:${cColor}; side:double`},targetRoot);
+       make('a-plane',{width:cSize,height:cThick,position:`${cx} ${cy} .011`,material:`shader: flat; color:${cColor}; opacity:${borderOpacity}; transparent:true; side:double`},targetRoot);
        const vx = sx * (w/2 - cThick/2);
        const vy = sy * (h/2 - cSize/2);
-       make('a-plane',{width:cThick,height:cSize,position:`${vx} ${vy} .011`,material:`shader: flat; color:${cColor}; side:double`},targetRoot);
+       make('a-plane',{width:cThick,height:cSize,position:`${vx} ${vy} .011`,material:`shader: flat; color:${cColor}; opacity:${borderOpacity}; transparent:true; side:double`},targetRoot);
      });
    }
  }
@@ -482,8 +491,10 @@ function basePanel(title,subtitle='',style={},targetRoot=uiRoot,cardCfg={}){
    const titleWidth = Number(headerCfg.titleWidth) > 0 ? Number(headerCfg.titleWidth) : Math.min(w * 0.82, 1.55);
    const subtitleWidth = Number(headerCfg.subtitleWidth) > 0 ? Number(headerCfg.subtitleWidth) : Math.min(w * 0.75, 1.35);
    const headerAlign = headerCfg.align || 'center';
-   const titleStyle = Object.assign({}, style, headerCfg.titleFontSize ? { fontSize: headerCfg.titleFontSize } : {});
-   const subStyle = Object.assign({}, style, headerCfg.subtitleFontSize ? { fontSize: headerCfg.subtitleFontSize } : {});
+   const titleFontSize = Number(style.fontSize) > 0 ? Math.round(Number(style.fontSize) * 1.15) : (headerCfg.titleFontSize || 46);
+   const subFontSize = Number(style.fontSize) > 0 ? Math.round(Number(style.fontSize) * 0.92) : (headerCfg.subtitleFontSize || 38);
+   const titleStyle = Object.assign({}, style, { fontSize: titleFontSize });
+   const subStyle = Object.assign({}, style, { fontSize: subFontSize });
 
    const displayTitle = (headerCfg.title !== undefined && headerCfg.title !== '') ? headerCfg.title : (title || 'ยังไม่ได้ระบุชื่อดาว');
    const displaySub = (headerCfg.subtitle !== undefined) ? headerCfg.subtitle : subtitle;
@@ -494,7 +505,7 @@ function basePanel(title,subtitle='',style={},targetRoot=uiRoot,cardCfg={}){
    if (headerCfg.showDivider) {
      const divY = (typeof headerCfg.dividerY === 'number') ? headerCfg.dividerY : (defaultSubY - 0.075);
      const divW = Number(headerCfg.dividerWidth) > 0 ? Number(headerCfg.dividerWidth) : w * 0.86;
-     const divColor = headerCfg.dividerColor || border;
+     const divColor = style.panelBorderColor || headerCfg.dividerColor || border;
      make('a-plane',{width:divW,height:0.005,position:`0 ${divY} .015`,material:`shader: flat; color:${divColor}; opacity:0.65; side:double`},targetRoot);
    }
  }
@@ -519,9 +530,11 @@ function planetImage(p, targetRoot=uiRoot, cardCfg={}){
  const v = make('a-entity', { position: mediaPos }, targetRoot);
  if (mediaCfg.rotation) v.setAttribute('rotation', formatVec3(mediaCfg.rotation, '0 0 0'));
 
- if (mediaCfg.frameColor) {
+ const frameColor = p.style?.panelBorderColor || mediaCfg.frameColor;
+ if (frameColor) {
    const frameR = modelRadius * 1.26;
-   make('a-ring',{'radius-inner':frameR-0.01,'radius-outer':frameR+0.01,position:'0 0 -0.01',material:`shader: flat; color:${mediaCfg.frameColor}; opacity:0.6; transparent:true; side:double`},v);
+   const [ox, oy, oz] = parseVec3(mediaCfg.modelOffset, [0, 0, 0]);
+   make('a-ring',{'radius-inner':frameR-0.01,'radius-outer':frameR+0.01,position:`${ox} ${oy} ${(oz - 0.01).toFixed(3)}`,material:`shader: flat; color:${frameColor}; opacity:0.6; transparent:true; side:double`},v);
  }
 
  let previewSphere = null;
@@ -540,10 +553,11 @@ function planetImage(p, targetRoot=uiRoot, cardCfg={}){
      material: mat,
      animation: 'property: rotation; to: 0 360 0; loop: true; dur: 28000; easing: linear'
    }, v);
-   if (p.id === 'saturn' || p.ringColor || mediaCfg.showRing) {
+   if (p.id === 'saturn' || p._fallbackId === 'saturn' || p.ringColor || mediaCfg.showRing || mediaCfg.ringRadius) {
      const rRadius = Number(mediaCfg.ringRadius) > 0 ? Number(mediaCfg.ringRadius) : modelRadius * 1.48;
      const rTube = Number(mediaCfg.ringTube) > 0 ? Number(mediaCfg.ringTube) : 0.025;
-     make('a-torus',{radius:rRadius,'radius-tubular':rTube,rotation:mediaCfg.ringRotation||'70 0 0',color:mediaCfg.ringColor||p.ringColor||'#cdb98d'},v);
+     const [ox, oy, oz] = parseVec3(mediaCfg.modelOffset, [0, 0, 0]);
+     make('a-torus',{position:`${ox} ${oy} ${oz}`,radius:rRadius,'radius-tubular':rTube,rotation:mediaCfg.ringRotation||'70 0 0',color:mediaCfg.ringColor||p.ringColor||'#cdb98d'},v);
    }
  }
 
@@ -557,13 +571,20 @@ function planetImage(p, targetRoot=uiRoot, cardCfg={}){
  }
 
  if (mediaCfg.showCaption !== false) {
-   const [mx, my] = parseVec3(mediaPos, [-0.52, 0.02, 0.035]);
-   const defaultCapPos = `${mx.toFixed(3)} ${(my - modelRadius - 0.12).toFixed(3)} .04`;
-   const capPos = formatVec3(mediaCfg.captionPos, defaultCapPos);
+   const [mx, my, mz] = parseVec3(mediaPos, [-0.52, 0.02, 0.035]);
+   let capPos;
+   if (mediaCfg.captionPos) {
+     const [cx, cy, cz] = parseVec3(mediaCfg.captionPos, [0, -0.36, 0.02]);
+     // หากระบุ x: 0 ใน captionPos ให้จัดอยู่ตรงใต้โมเดล (mx) โดยอัตโนมัติ
+     const finalCapX = (Math.abs(cx) < 0.001 && layout === 'horizontal') ? mx : cx;
+     capPos = `${finalCapX.toFixed(3)} ${(my + cy).toFixed(3)} ${Math.max(mz, cz).toFixed(3)}`;
+   } else {
+     capPos = `${mx.toFixed(3)} ${(my - modelRadius - 0.12).toFixed(3)} .04`;
+   }
    const capWidth = Number(mediaCfg.captionWidth) > 0 ? Number(mediaCfg.captionWidth) : 0.72;
-   const capText = mediaCfg.caption !== undefined ? mediaCfg.caption : 'ภาพประกอบใน assets/images';
-   const capColor = mediaCfg.captionColor || p.style?.titleColor || '#67e8f9';
-   const capStyle = Object.assign({}, p.style || {}, mediaCfg.captionFontSize ? { fontSize: mediaCfg.captionFontSize } : {});
+   const capText = mediaCfg.caption !== undefined ? mediaCfg.caption : (p.name ? `โมเดล 3D: ${p.name}` : 'ภาพประกอบใน assets/images');
+   const capColor = p.style?.subtitleColor || p.style?.titleColor || mediaCfg.captionColor || '#67e8f9';
+   const capStyle = Object.assign({}, p.style || {}, { fontSize: mediaCfg.captionFontSize || 34 });
    if (capText) txt(targetRoot, capText, capPos, capWidth, capColor, 'center', capStyle);
  }
  return previewSphere;
@@ -631,7 +652,7 @@ function renderCardContent(p, targetRoot, cardCfg) {
       const secPos = formatVec3(sec.position, defaultSecPos);
       const [sx, sy, sz] = parseVec3(secPos, [0, 0, 0.03]);
       const align = sec.align || 'left';
-      const bullet = sec.bullet !== undefined ? sec.bullet : '• ';
+      const bullet = sec.bulletPrefix !== undefined ? sec.bulletPrefix : (sec.bullet !== undefined ? sec.bullet : '• ');
 
       if (sec.bgColor) {
         const boxH = Number(sec.boxHeight) > 0 ? Number(sec.boxHeight) : 0.22;
@@ -646,8 +667,8 @@ function renderCardContent(p, targetRoot, cardCfg) {
 
       let bodyY = sy;
       if (sec.title) {
-        const tStyle = Object.assign({}, s, { fontSize: sec.titleFontSize || Math.round((s.fontSize || 42) * 0.86) });
-        txt(targetRoot, sec.title, `${sx} ${(sy + 0.075).toFixed(3)} ${sz}`, secW, sec.titleColor || s.titleColor || '#67e8f9', align, tStyle);
+        const tStyle = Object.assign({}, s, { fontSize: sec.titleFontSize || Math.round((Number(s.fontSize) || 42) * 0.86) });
+        txt(targetRoot, sec.title, `${sx} ${(sy + 0.075).toFixed(3)} ${sz}`, secW, s.titleColor || sec.titleColor || '#67e8f9', align, tStyle);
         bodyY = sy - 0.025;
       }
 
@@ -656,11 +677,11 @@ function renderCardContent(p, targetRoot, cardCfg) {
         : (sec.text || '');
       if (items) {
         const bodyStyle = Object.assign({}, s, {
-          fontSize: sec.fontSize || s.fontSize || 36,
+          fontSize: Number(s.fontSize) > 0 ? Number(s.fontSize) : (sec.fontSize || 36),
           lineHeight: sec.lineHeight || 1.32,
           maxHeight: sec.maxHeight || 0.42
         });
-        txt(targetRoot, items, `${sx} ${bodyY.toFixed(3)} ${sz}`, secW, sec.color || s.textColor || '#ffffff', align, bodyStyle);
+        txt(targetRoot, items, `${sx} ${bodyY.toFixed(3)} ${sz}`, secW, s.textColor || sec.color || '#ffffff', align, bodyStyle);
       }
     });
     return;
@@ -669,16 +690,20 @@ function renderCardContent(p, targetRoot, cardCfg) {
   const contentCfg = cardCfg.content || {};
   if (contentCfg.show === false) return;
 
-  const customFacts = Array.isArray(p.facts) && p.facts.filter(Boolean).length ? p.facts.filter(Boolean) : null;
-  let facts = customFacts || (p.id === 'sun'
+  const includeFacts = contentCfg.includeFacts !== false;
+  const includeInfo = Boolean(contentCfg.includeInfo || contentCfg.showInfoSummary);
+  const customFacts = (includeFacts && Array.isArray(p.facts) && p.facts.filter(Boolean).length) ? p.facts.filter(Boolean) : null;
+  let facts = customFacts ? customFacts.slice() : (p.id === 'sun'
     ? ['ดวงอาทิตย์เป็นดาวฤกษ์', 'เป็นศูนย์กลางของระบบสุริยะ']
     : [p.info || 'รอเพิ่มข้อมูลของดาวดวงนี้', 'ข้อมูลเพิ่มเติมจะใส่ภายหลัง', 'ขนาดและระยะทาง', 'อุณหภูมิและองค์ประกอบ', 'ข้อเท็จจริงที่น่าสนใจ']);
 
-  if (contentCfg.showInfoSummary && p.info && customFacts && !facts.includes(p.info)) {
+  if (includeInfo && p.info && customFacts && !facts.includes(p.info)) {
     facts = [p.info, ...facts];
+  } else if (!includeFacts && includeInfo && p.info) {
+    facts = [p.info];
   }
 
-  const bullet = contentCfg.bullet !== undefined ? contentCfg.bullet : '• ';
+  const bullet = contentCfg.bulletPrefix !== undefined ? contentCfg.bulletPrefix : (contentCfg.bullet !== undefined ? contentCfg.bullet : '• ');
   const align = contentCfg.align || (layout === 'vertical' ? 'left' : 'left');
   const defaultWidth = layout === 'vertical' ? w * 0.82 : w * 0.506;
   const contentW = Number(contentCfg.width) > 0 ? Number(contentCfg.width) : defaultWidth;
@@ -686,15 +711,20 @@ function renderCardContent(p, targetRoot, cardCfg) {
     ? `${(-contentW / 2).toFixed(3)} ${(-h * 0.10).toFixed(3)} .03`
     : `${(-w * 0.056).toFixed(3)} .08 .03`;
   const contentPos = formatVec3(contentCfg.position, defaultPos);
+  const [cx] = parseVec3(contentPos, [0, 0, 0.03]);
+  // หากในไฟล์ดาวระบุ position.x เป็นค่าบวก (เช่น x: 0.18 หรือ 0.24 ซึ่งเป็นจุดกึ่งกลางคอลัมน์ขวา) ให้วางกึ่งกลางแผ่นข้อความที่ x นั้นโดยตรง ไม่บวก width/2 ซ้ำ
+  const isCenterColumnX = typeof contentCfg.position === 'object' || cx > 0.05;
   const defaultMaxH = layout === 'vertical' ? h * 0.36 : h * 0.52;
 
+  const resolvedFontSize = Number(s.fontSize) > 0 ? Number(s.fontSize) : (Number(contentCfg.fontSize) > 0 ? Number(contentCfg.fontSize) : 42);
   const textStyle = Object.assign({}, s, {
-    fontSize: contentCfg.fontSize || s.fontSize || 42,
+    fontSize: resolvedFontSize,
     lineHeight: contentCfg.lineHeight || 1.35,
-    maxHeight: contentCfg.maxHeight !== undefined ? contentCfg.maxHeight : defaultMaxH
+    maxHeight: contentCfg.maxHeight !== undefined ? contentCfg.maxHeight : defaultMaxH,
+    centerAnchor: isCenterColumnX
   });
 
-  txt(targetRoot, facts.map(x => `${bullet}${x}`).join('\n'), contentPos, contentW, contentCfg.color || s.textColor || '#ffffff', align, textStyle);
+  txt(targetRoot, facts.map(x => `${bullet}${x}`).join('\n'), contentPos, contentW, s.textColor || contentCfg.color || '#ffffff', align, textStyle);
 }
 
 // วาดชุดปุ่มกดของการ์ด รองรับการเพิ่ม/ลบ/ย้าย/เปลี่ยนขนาด/เปลี่ยนสีปุ่มแยกอิสระต่อดาว
@@ -703,7 +733,8 @@ function renderCardButtons(p, targetRoot, cardCfg, previewSphere) {
   const w = Number(cardCfg.width) > 0 ? Number(cardCfg.width) : 1.78;
   const h = Number(cardCfg.height) > 0 ? Number(cardCfg.height) : 1.22;
   const layout = cardCfg.layout || 'horizontal';
-  const btnLayout = cardCfg.buttonLayout || {};
+  const btnLayoutRaw = cardCfg.buttonLayout || {};
+  const btnLayout = typeof btnLayoutRaw === 'string' ? { mode: btnLayoutRaw } : btnLayoutRaw;
   const hasSunQuiz = p.id === 'sun' && Array.isArray(window.PLANET_QUIZ?.sun) && window.PLANET_QUIZ.sun.some(x => x.q);
 
   let rawButtons = Array.isArray(cardCfg.buttons) ? cardCfg.buttons : null;
@@ -737,7 +768,7 @@ function renderCardButtons(p, targetRoot, cardCfg, previewSphere) {
     });
   }
 
-  const activeButtons = rawButtons.filter(b => b && b.enabled !== false);
+  const activeButtons = rawButtons.filter(b => b && b.enabled !== false && b.visible !== false);
   const mode = btnLayout.mode || 'custom';
   const [baseX, baseY, baseZ] = parseVec3(btnLayout.position, [0, -h / 2 + 0.14, 0.035]);
   const spacing = (typeof btnLayout.spacing === 'number') ? btnLayout.spacing : 0.06;
@@ -761,12 +792,15 @@ function renderCardButtons(p, targetRoot, cardCfg, previewSphere) {
     }
 
     const isClose = btnCfg.action === 'close' || btnCfg.id === 'close';
-    const bColor = btnCfg.color || (isClose ? (s.closeButtonColor || '#334155') : (s.buttonColor || '#0e7490'));
-    const bHover = btnCfg.hoverColor || s.buttonHoverColor || '#0891b2';
+    // ให้สีปุ่มที่กรอกในหมวด style (buttonColor / closeButtonColor / buttonHoverColor) มีผลทันที
+    const bColor = isClose
+      ? (s.closeButtonColor || btnCfg.color || '#334155')
+      : (s.buttonColor || btnCfg.color || '#0e7490');
+    const bHover = s.buttonHoverColor || btnCfg.hoverColor || '#0891b2';
     const bStyle = Object.assign({}, s, {
-      fontSize: btnCfg.fontSize || s.fontSize || 40,
-      textColor: btnCfg.textColor || '#ffffff',
-      borderColor: btnCfg.borderColor || '',
+      fontSize: Number(s.fontSize) > 0 ? Number(s.fontSize) : (btnCfg.fontSize || 38),
+      textColor: btnCfg.textColor || s.textColor || '#ffffff',
+      borderColor: btnCfg.borderColor || s.panelBorderColor || '',
       borderThickness: btnCfg.borderThickness || 0,
       opacity: btnCfg.opacity
     });
