@@ -49,14 +49,14 @@ window.PLANET_DATA.push({
   style: {
     fontFamily: '',
     fontSize: 36,
-    panelBgColor: '',
-    panelBorderColor: '',
-    titleColor: '',
-    subtitleColor: '',
-    textColor: '',
-    buttonColor: '',
-    buttonHoverColor: '',
-    closeButtonColor: '',
-    highlightColor: ''
+    panelBgColor: '#0b1320',       // พื้นหลังสีกรมท่าน้ำเงินเข้มอวกาศ
+    panelBorderColor: '#38bdf8',   // ขอบการ์ดสีฟ้าน้ำแข็งสะท้อนฉายาเตาไฟแช่แข็ง
+    titleColor: '#e0f2fe',         // หัวข้อสีเงินสว่างประกายฟ้า
+    subtitleColor: '#94a3b8',      // ชื่อภาษาอังกฤษสีเงิน Slate
+    textColor: '#f1f5f9',          // ข้อความเนื้อหาสีขาวนวล
+    buttonColor: '#1e3a5f',        // ปุ่มมินิเกมสีน้ำเงินเมทัลลิก
+    buttonHoverColor: '#0284c7',   // สีปุ่มเมื่อชี้เมาส์
+    closeButtonColor: '#334155',   // ปุ่มปิดสีเทาเข้ม
+    highlightColor: '#7dd3fc'      // แสงเรืองรองสีฟ้าน้ำแข็งรอบดาว
   }
 });
