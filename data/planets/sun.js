@@ -48,7 +48,7 @@ window.PLANET_DATA.push({
 
   // --- 2. ตั้งค่าโมเดล 3D และรูปภาพประกอบ ---
   color: '#ffbe32',
-  radius: 0.58,
+  radius: 1.15,
   image: '',
   texture: 'assets/images/2k_sun.jpg',
 
