@@ -54,7 +54,6 @@ window.PLANET_DATA.push({
 
   // --- 3. ปรับแต่งสไตล์เฉพาะของดาวดวงนี้ (เว้นว่างไว้หากต้องการใช้ค่ามาตรฐานกลาง) ---
   style: {
-    cardLayout: 'minimal',
     fontFamily: '',
     fontSize: 0,
     panelBgColor: '',
