@@ -49,8 +49,8 @@ window.PLANET_DATA.push({
   // --- 2. ตั้งค่าโมเดล 3D และรูปภาพประกอบ ---
   color: '#c65b3d',
   radius: 0.34,
-  image: 'assets/images/2k_mars.jpg',
-  texture: 'assets/textures/mars.jpg',
+  image: '',
+  texture: 'assets/images/mars.jpg',
 
   // --- 3. ปรับแต่งสไตล์เฉพาะของดาวดวงนี้ (เว้นว่างไว้หากต้องการใช้ค่ามาตรฐานกลาง) ---
   style: {
