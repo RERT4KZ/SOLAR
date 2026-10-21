@@ -62,9 +62,7 @@ window.PLANET_DATA.push({
     highlightColor: ''
   },
 
-  // --- 4. ตั้งค่าโครงสร้าง ขนาด ตำแหน่ง และปุ่มของการ์ดข้อมูลแยกอิสระ (Independent Card Config) ---
-  // ดาวเนปจูนใช้ธีมสีน้ำเงินเข้มแห่งห้วงอวกาศลึก พร้อมกรอบเรืองแสงสีคราม
-  card: {
+ card: {
     width: 1.84,
     height: 1.28,
     layout: 'horizontal',
@@ -93,8 +91,8 @@ window.PLANET_DATA.push({
       subtitleWidth: 1.25,
       titleFontSize: 46,
       subtitleFontSize: 38,
-      titleColor: '#93c5fd',
-      subtitleColor: '#dbeafe',
+      titleColor: '#6b3458',
+      subtitleColor: '#0ec14f',
       align: 'center',
       showDivider: true,
       dividerY: 0.32,
@@ -133,9 +131,9 @@ window.PLANET_DATA.push({
         position: { x: -0.22, y: -0.49, z: 0.03 },
         width: 0.64,
         height: 0.13,
-        color: '#e2632d',
-        hoverColor: '#64ed82',
-        textColor: '#ffffff',
+        color: '#f74a00',
+        hoverColor: '#01fb37',
+        textColor: '#8d2525',
         fontSize: 38
       },
       {
@@ -145,7 +143,7 @@ window.PLANET_DATA.push({
         position: { x: 0.38, y: -0.49, z: 0.03 },
         width: 0.42,
         height: 0.13,
-        color: '#1e293b',
+        color: '#ba2d5c',
         hoverColor: '#334155',
         textColor: '#93c5fd',
         fontSize: 38
