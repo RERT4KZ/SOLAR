@@ -28,19 +28,11 @@
 window.PLANET_DATA = window.PLANET_DATA || [];
 
 window.PLANET_DATA.push({
-
-  // ============================================================
-  // 1. ข้อมูลดาวเนปจูน
-  // ============================================================
-
+  // --- 1. ข้อมูลพื้นฐานและเนื้อหาของดาว ---
   id: "neptune",
-
   name: "ดาวเนปจูน",
-
   en: "Neptune",
-
   info: "ดาวเคราะห์ลำดับที่ 8 และอยู่ไกลดวงอาทิตย์ที่สุดในบรรดาดาวเคราะห์ เป็นดาวเคราะห์น้ำแข็งยักษ์ที่มีลมแรงมากและบรรยากาศมีมีเทน",
-
   facts: [
     "อยู่ลำดับที่ 8 และไกลดวงอาทิตย์ที่สุดในกลุ่มดาวเคราะห์",
     "โคจรรอบดวงอาทิตย์ใช้เวลาประมาณ 165 ปีโลก",
@@ -49,314 +41,115 @@ window.PLANET_DATA.push({
     "ดวงจันทร์บริวารที่ใหญ่ที่สุดชื่อไทรทัน"
   ],
 
-  // ============================================================
-  // 2. โมเดลดาวเคราะห์ 3D
-  // ============================================================
-
+  // --- 2. ตั้งค่าโมเดล 3D และรูปภาพประกอบ ---
   color: "#3e67d5",
-
   radius: 0.39,
-
   image: "",
+  texture: 'assets/images/neptune.jpg',
 
-  texture: "assets/images/neptune.jpg",
-
-  // ============================================================
-  // 3. GLOBAL STYLE
-  // ============================================================
-
+  // --- 3. ปรับแต่งสไตล์เฉพาะของดาวดวงนี้ (เว้นว่างไว้หากต้องการใช้ค่ามาตรฐานกลาง) ---
   style: {
-
-    fontFamily: '"Kanit", "Sarabun", "Tahoma", sans-serif',
-
-    fontSize: 40,
-
-    panelBgColor: "#030B1E",
-
-    panelBorderColor: "#00E5FF",
-
-    titleColor: "#E0F7FF",
-
-    subtitleColor: "#38BDF8",
-
-    textColor: "#E2E8F0",
-
-    buttonColor: "#075985",
-
-    buttonHoverColor: "#0284C7",
-
-    closeButtonColor: "#1E293B",
-
-    highlightColor: "#00D9FF"
-
+    fontFamily: '',
+    fontSize: 0,
+    panelBgColor: '',
+    panelBorderColor: '',
+    titleColor: '',
+    subtitleColor: '',
+    textColor: '',
+    buttonColor: '',
+    buttonHoverColor: '',
+    closeButtonColor: '',
+    highlightColor: ''
   },
 
-  // ============================================================
-  // 4. FUTURISTIC GAMING CARD
-  // ============================================================
-
+  // --- 4. ตั้งค่าโครงสร้าง ขนาด ตำแหน่ง และปุ่มของการ์ดข้อมูลแยกอิสระ (Independent Card Config) ---
+  // ดาวเนปจูนใช้ธีมสีน้ำเงินเข้มแห่งห้วงอวกาศลึก พร้อมกรอบเรืองแสงสีคราม
   card: {
-
-    // ขนาดการ์ด
-    width: 2.15,
-
-    height: 1.48,
-
-    // รูปแบบจัดวาง
-    layout: "horizontal",
-
-    // ตำแหน่งการ์ด
-    position: {
-      x: 0,
-      y: 0,
-      z: 0
-    },
-
+    width: 1.84,
+    height: 1.28,
+    layout: 'horizontal',
+    position: { x: 0, y: 0, z: 0 },
     distance: 0,
-
-    rotation: {
-      x: 0,
-      y: 0,
-      z: 0
-    },
-
-    // ============================================================
-    // 5. BACKGROUND
-    // ============================================================
-
+    rotation: { x: 0, y: 0, z: 0 },
     background: {
-
-      // พื้นหลังสีน้ำเงินดำ
-      color: "#030B1E",
-
-      opacity: 0.97,
-
-      image: "",
-
-      // เปิดเอฟเฟกต์เรืองแสง
+      color: '#07122b',
+      opacity: 0.95,
+      image: '',
       outerGlow: true,
-
-      outerGlowColor: "#00BFFF",
-
-      outerGlowOpacity: 0.30
-
+      outerGlowColor: '#244e93',
+      outerGlowOpacity: 0.18
     },
-
-    // ============================================================
-    // 6. NEON BORDER
-    // ============================================================
-
     border: {
-
-      style: "frame",
-
-      color: "#00E5FF",
-
-      thickness: 0.018,
-
-      opacity: 1,
-
-      cornerSize: 0.18
-
+      style: 'frame',
+      color: '#4484d2',
+      thickness: 0.022,
+      opacity: 0.9,
+      cornerSize: 0.15
     },
-
-    // ============================================================
-    // 7. HEADER
-    // ============================================================
-
     header: {
-
-      titlePos: {
-        x: 0,
-        y: 0.58,
-        z: 0.03
-      },
-
-      subtitlePos: {
-        x: 0,
-        y: 0.46,
-        z: 0.03
-      },
-
-      titleWidth: 1.65,
-
-      subtitleWidth: 1.35,
-
-      titleFontSize: 50,
-
-      subtitleFontSize: 34,
-
-      // ชื่อดาวสีฟ้าขาว
-      titleColor: "#E0F7FF",
-
-      // ชื่ออังกฤษสีฟ้า
-      subtitleColor: "#38BDF8",
-
-      align: "center",
-
-      // เส้นแบ่งหัวข้อ
+      titlePos: { x: 0, y: 0.49, z: 0.02 },
+      subtitlePos: { x: 0, y: 0.39, z: 0.02 },
+      titleWidth: 1.4,
+      subtitleWidth: 1.25,
+      titleFontSize: 46,
+      subtitleFontSize: 38,
+      titleColor: '#6b3458',
+      subtitleColor: '#0ec14f',
+      align: 'center',
       showDivider: true,
-
-      dividerY: 0.38,
-
-      dividerColor: "#00E5FF"
-
+      dividerY: 0.32,
+      dividerColor: '#3b82f6'
     },
-
-    // ============================================================
-    // 8. PLANET DISPLAY
-    // ============================================================
-
     media: {
-
       show: true,
-
-      position: {
-        x: -0.58,
-        y: -0.02,
-        z: 0.04
-      },
-
-      // แสดงโมเดลดาว 3D
+      position: { x: -0.50, y: 0.0, z: 0.03 },
       show3D: true,
-
-      modelRadius: 0.25,
-
-      modelOffset: {
-        x: 0,
-        y: 0.09,
-        z: 0.05
-      },
-
-      // แสดงภาพประกอบเมื่อมีภาพ
+      modelRadius: 0.21,
+      modelOffset: { x: 0, y: 0.08, z: 0.04 },
       showImage: true,
-
-      imageWidth: 0.40,
-
-      imageHeight: 0.26,
-
-      imageOffset: {
-        x: 0,
-        y: -0.25,
-        z: 0.02
-      },
-
+      imageWidth: 0.38,
+      imageHeight: 0.24,
+      imageOffset: { x: 0, y: -0.22, z: 0.01 },
       showCaption: true,
-
-      captionPos: {
-        x: 0,
-        y: -0.42,
-        z: 0.03
-      }
-
+      captionPos: { x: 0, y: -0.38, z: 0.02 }
     },
-
-    // ============================================================
-    // 9. INFORMATION PANEL
-    // ============================================================
-
     content: {
-
-      position: {
-        x: 0.24,
-        y: -0.02,
-        z: 0.04
-      },
-
-      width: 1.12,
-
-      maxHeight: 0.73,
-
-      fontSize: 33,
-
-      lineHeight: 44,
-
-      align: "left",
-
-      bulletPrefix: "◆ ",
-
+      position: { x: 0.23, y: -0.01, z: 0.02 },
+      width: 0.98,
+      maxHeight: 0.60,
+      fontSize: 36,
+      lineHeight: 46,
+      align: 'left',
+      bulletPrefix: '• ',
       includeInfo: true,
-
       includeFacts: true
-
     },
-
-    // ============================================================
-    // 10. GAMING BUTTONS
-    // ============================================================
-
-    buttonLayout: "custom",
-
+    buttonLayout: 'custom',
     buttons: [
-
-      // --------------------------------------------------------
-      // ปุ่มเริ่มมินิเกม
-      // --------------------------------------------------------
-
       {
-
-        id: "quiz",
-
-        label: "▶ เริ่มมินิเกม",
-
-        action: "quiz",
-
-        position: {
-          x: -0.27,
-          y: -0.60,
-          z: 0.05
-        },
-
-        width: 0.78,
-
-        height: 0.16,
-
-        // สีฟ้าแบบเกม
-        color: "#0369A1",
-
-        // สีเมื่อชี้เมาส์
-        hoverColor: "#00BFFF",
-
-        textColor: "#FFFFFF",
-
-        fontSize: 38
-
+        id: 'quiz',
+        label: 'เริ่มมินิเกมคำถาม',
+        action: 'quiz',
+        position: { x: -0.22, y: -0.49, z: 0.03 },
+        width: 0.64,
+        height: 0.13,
+        color: '#f74a00',
+        hoverColor: '#01fb37',
+        textColor: '#f3e7e7',
+        fontSize: 78
       },
-
-      // --------------------------------------------------------
-      // ปุ่มปิดหน้าต่าง
-      // --------------------------------------------------------
-
       {
-
-        id: "close",
-
-        label: "✕ ปิด",
-
-        action: "close",
-
-        position: {
-          x: 0.48,
-          y: -0.60,
-          z: 0.05
-        },
-
-        width: 0.43,
-
-        height: 0.16,
-
-        color: "#1E293B",
-
-        hoverColor: "#EF4444",
-
-        textColor: "#E2E8F0",
-
-        fontSize: 36
-
+        id: 'close',
+        label: 'ปิดหน้าต่าง',
+        action: 'close',
+        position: { x: 0.38, y: -0.49, z: 0.03 },
+        width: 0.42,
+        height: 0.13,
+        color: '#0cf03d',
+        hoverColor: '#287838',
+        textColor: '#ff3c00',
+        fontSize: 78
       }
-
     ]
-
   }
-
 });
