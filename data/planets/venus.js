@@ -70,7 +70,7 @@ window.PLANET_DATA.push({
     distance: 1.8,
     layout: 'horizontal',
     background: { color: '#1a0c13', opacity: 0.96, image: '' },
-    border: { style: 'top-bottom', color: '#fb7185', thickness: 0.018 },
+    border: { style: 'full', color: '#fb7185', thickness: 0.024 },
     header: { show: true, titlePos: '0 0.45 0.02', subtitlePos: '0 0.32 0.02', showDivider: false },
     media: { show: true, show3D: true, position: '-0.48 0.02 0.035', modelRadius: 0.23, showCaption: true },
     content: { position: '-0.10 0.06 0.03', width: 0.86, maxHeight: 0.50, fontSize: 36, lineHeight: 1.36, align: 'left', bullet: '• ' },
