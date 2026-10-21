@@ -22,11 +22,42 @@
 <script src="data/quiz/saturn.js"></script>
 <script src="data/quiz/uranus.js"></script>
 <script src="data/quiz/neptune.js"></script>
-<style>body{margin:0}#help{position:fixed;top:12px;left:12px;color:white;background:#101827c9;padding:12px 16px;border-radius:10px;font:14px system-ui;z-index:2;pointer-events:none}#help small{color:#b7c8e0}</style>
+<style>
+  body { margin: 0; overflow: hidden; }
+  #help {
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    color: white;
+    background: #101827c9;
+    padding: 12px 16px;
+    border-radius: 10px;
+    font: 14px system-ui;
+    z-index: 2;
+    pointer-events: none;
+  }
+  #help small { color: #b7c8e0; }
+  #exit-vr-btn {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 90px;
+    z-index: 9999;
+    background: #0e7490;
+    color: #ffffff;
+    border: 2px solid #22d3ee;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font: bold 14px system-ui;
+    cursor: pointer;
+  }
+  #exit-vr-btn:hover { background: #0891b2; }
+</style>
 </head>
 <body>
 <div id="help"><b>SOLAR ODYSSEY VR · Modular Prototype 05</b><br><small>Desktop: ลากเมาส์เพื่อมอง · คลิกดาว/ปุ่ม<br>VR: มุมมองเหนือดวงอาทิตย์ เห็นวงโคจรรอบตัว · Controller + Trigger<br>คลิกที่ดาวเพื่อหยุดวงโคจรชั่วคราวและเปิดการ์ดตรงหน้า<br><span id="vr-status">สถานะ: รอเข้า VR</span></small></div>
-<a-scene background="color: #000006" renderer="antialias: true; colorManagement: true" xr-mode-ui="enabled: true" vr-mode-ui="enabled: true">
+<button id="exit-vr-btn" type="button">ออกจากโหมด VR (ESC)</button>
+<a-scene background="color: #000006" renderer="antialias: true; colorManagement: true" xr-mode-ui="enabled: true; enterVREnabled: true; cardboardModeEnabled: true">
 <a-entity id="stars"></a-entity>
 
 <!-- ระบบสุริยะและวงโคจร วางที่จุดศูนย์กลาง (0, 0.7, 0) ใต้ตำแหน่งสายตาผู้เล่น -->
@@ -48,18 +79,133 @@
 <script>
 const planets = window.PLANET_DATA || [];
 const scene = document.querySelector('a-scene');
-// Camera gaze is for desktop only. In VR, selection is made with the wand laser.
+const exitVrBtn = document.getElementById('exit-vr-btn');
+let hasVRController = false;
+
+// ระบบจัดการปุ่ม VR ให้กดเข้าโหมด VR ได้ทุกเบราว์เซอร์ (ทั้งมีแว่น WebXR และไม่มีแว่น VR)
+(function setupVRFallback() {
+  const origEnterVR = scene.enterVR.bind(scene);
+  const origExitVR = scene.exitVR.bind(scene);
+
+  function requestCanvasFullscreen() {
+    const target = scene.canvas || document.documentElement;
+    const reqFs = target.requestFullscreen || target.webkitRequestFullscreen || target.mozRequestFullScreen || target.msRequestFullscreen;
+    if (reqFs && !document.fullscreenElement) {
+      try {
+        const p = reqFs.call(target);
+        if (p && typeof p.catch === 'function') p.catch(() => {});
+      } catch (e) {}
+    }
+  }
+
+  function enterFallbackVR() {
+    if (scene.is('vr-mode')) return;
+    scene.addState('vr-mode');
+    if (scene.addFullScreenStyles) scene.addFullScreenStyles();
+    requestCanvasFullscreen();
+    scene.emit('enter-vr', { target: scene });
+    if (scene.resize) scene.resize();
+  }
+
+  function exitFallbackVR() {
+    if (document.fullscreenElement && document.exitFullscreen) {
+      document.exitFullscreen().catch(() => {});
+    }
+    if (scene.is('vr-mode') && !scene.xrSession) {
+      scene.removeState('vr-mode');
+      if (scene.removeFullScreenStyles) scene.removeFullScreenStyles();
+      scene.emit('exit-vr', { target: scene });
+      if (scene.resize) scene.resize();
+    }
+  }
+
+  scene.enterVR = function (useAR, useOfferSession) {
+    if (useOfferSession) {
+      return origEnterVR(useAR, useOfferSession);
+    }
+    // ขอ Fullscreen ทันทีในจังหวะที่ผู้ใช้คลิกปุ่ม (ป้องกันเบราว์เซอร์บล็อกเมื่อ WebXR ปฏิเสธแบบ Async)
+    if (!AFRAME.utils.device.checkHeadsetConnected()) {
+      requestCanvasFullscreen();
+    }
+    try {
+      const res = origEnterVR(useAR, false);
+      if (res && typeof res.then === 'function') {
+        return res.then((val) => {
+          if (!scene.is('vr-mode')) enterFallbackVR();
+          return val;
+        }).catch(() => {
+          enterFallbackVR();
+        });
+      }
+      if (!scene.is('vr-mode')) enterFallbackVR();
+      return Promise.resolve();
+    } catch (err) {
+      enterFallbackVR();
+      return Promise.resolve();
+    }
+  };
+
+  scene.exitVR = function () {
+    if (scene.is('vr-mode') && !scene.xrSession) {
+      exitFallbackVR();
+      return Promise.resolve();
+    }
+    return origExitVR();
+  };
+
+  exitVrBtn.addEventListener('click', () => {
+    scene.exitVR();
+  });
+
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && scene.is('vr-mode') && !scene.xrSession) {
+      exitFallbackVR();
+    }
+  });
+
+  document.addEventListener('fullscreenchange', () => {
+    if (!document.fullscreenElement && scene.is('vr-mode') && !scene.xrSession) {
+      exitFallbackVR();
+    }
+  });
+
+  function bindVRButton() {
+    const vrContainer = document.querySelector('.a-enter-vr');
+    if (vrContainer) vrContainer.classList.remove('a-hidden');
+    const vrBtn = document.querySelector('.a-enter-vr-button');
+    if (vrBtn && !vrBtn.dataset.boundFallback) {
+      vrBtn.dataset.boundFallback = 'true';
+      vrBtn.addEventListener('click', () => {
+        requestCanvasFullscreen();
+        setTimeout(() => {
+          if (!scene.is('vr-mode')) enterFallbackVR();
+        }, 150);
+      });
+    }
+  }
+
+  scene.addEventListener('loaded', bindVRButton);
+  setTimeout(bindVRButton, 500);
+})();
+
+// Camera gaze is for desktop or headset-less VR mode. In VR with controller, selection is made with the wand laser.
 scene.addEventListener('enter-vr', () => {
-  document.querySelector('#desktop-cursor').setAttribute('raycaster', 'enabled', false);
+  if (hasVRController) {
+    document.querySelector('#desktop-cursor').setAttribute('raycaster', 'enabled', false);
+  }
+  exitVrBtn.style.display = 'block';
   document.querySelector('#vr-status').textContent = 'สถานะ: เข้าสู่ VR แล้ว';
 });
 scene.addEventListener('exit-vr', () => {
   document.querySelector('#desktop-cursor').setAttribute('raycaster', 'enabled', true);
+  exitVrBtn.style.display = 'none';
   document.querySelector('#vr-status').textContent = 'สถานะ: Desktop';
 });
 ['left-controller','right-controller'].forEach(id => {
   const controller = document.getElementById(id);
   controller.addEventListener('controllerconnected', () => {
+    hasVRController = true;
+    document.querySelector('#desktop-cursor').setAttribute('raycaster', 'enabled', false);
     document.querySelector('#vr-status').textContent = 'Controller เชื่อมต่อ: ' + id;
   });
   controller.addEventListener('controllerdisconnected', () => {
