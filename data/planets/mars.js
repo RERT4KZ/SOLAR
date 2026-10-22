@@ -20,6 +20,11 @@
 //   5. ตกแต่งกรอบใหญ่     : กรอบใหญ่รอบนอก 4 ด้านมี 4 สีที่แตกต่างกันชัดเจน (แดง, เขียว, น้ำเงิน, เหลือง) สลับหมุนเวียนต่อเนื่อง
 // ============================================================================
 
+// ============================================================================
+// ไฟล์ข้อมูลประจำดวงดาว: ดาวอังคาร (Mars)
+// ไฟล์: data/planets/mars.js
+// ============================================================================
+
 window.PLANET_DATA = window.PLANET_DATA || [];
 
 (function () {
@@ -69,7 +74,7 @@ window.PLANET_DATA = window.PLANET_DATA || [];
       highlightColor: '#fb923c'
     },
 
-    // --- 4. ตั้งค่าการ์ดข้อมูลแยกอิสระ (แก้ไขเฉพาะดาวดวงนี้ได้โดยไม่กระทบดาวดวงอื่น) ---
+    // --- 4. ตั้งค่าการ์ดข้อมูลแยกอิสระ ---
     card: {
       width: 2.06,
       height: 1.48,
@@ -78,7 +83,6 @@ window.PLANET_DATA = window.PLANET_DATA || [];
       distance: 1.8,
       layout: 'horizontal',
       background: { color: '#180a06', opacity: 0.96, image: '', outerGlow: true, outerGlowColor: '#ff1744', outerGlowOpacity: 0.25 },
-      // กรอบใหญ่ข้างนอกรอบแผงการ์ดข้อมูล (Frame 4 ด้านแบบเต็ม) สำหรับไฟ RGB
       border: { style: 'frame', color: '#ff1744', thickness: 0.024, opacity: 1.0 },
       header: {
         show: true,
@@ -104,7 +108,6 @@ window.PLANET_DATA = window.PLANET_DATA || [];
         showCaption: true,
         captionColor: '#fdba74'
       },
-      // กรอบข้อความ (Text Box): แสดงข้อมูลครบทั้ง 10 ข้อพร้อมคำอธิบายดาว
       content: {
         position: '-0.14 0.04 0.03',
         width: 1.04,
@@ -117,18 +120,13 @@ window.PLANET_DATA = window.PLANET_DATA || [];
         color: '#ffffff'
       },
       sections: [],
-
-      // ตกแต่งกล่องข้อความภายใน: ใช้แผงพื้นหลังและเส้นกรอบสีเรียบหรู เพื่อให้กรอบใหญ่รอบนอกที่เป็นสี RGB โดดเด่นที่สุด
       decorations: [
-        // แผงพื้นหลังกล่องข้อความ
         { type: 'plane', position: '0.38 0.04 0.012', width: 1.08, height: 0.74, color: '#2b1008', opacity: 0.70 },
-        // เส้นกรอบกล่องข้อความด้านใน
         { type: 'plane', position: '0.38 0.41 0.016', width: 1.08, height: 0.006, color: '#521d10', opacity: 0.80 },
         { type: 'plane', position: '0.38 -0.33 0.016', width: 1.08, height: 0.006, color: '#521d10', opacity: 0.80 },
         { type: 'plane', position: '-0.16 0.04 0.016', width: 0.006, height: 0.74, color: '#521d10', opacity: 0.80 },
         { type: 'plane', position: '0.92 0.04 0.016', width: 0.006, height: 0.74, color: '#521d10', opacity: 0.80 }
       ],
-
       buttonLayout: { mode: 'custom', position: '0 -0.56 0.035', spacing: 0.06 },
       buttons: [
         {
@@ -149,8 +147,19 @@ window.PLANET_DATA = window.PLANET_DATA || [];
             } else if (typeof window.startQuiz === 'function') {
               window.startQuiz(p);
             }
-            setTimeout(repositionQuizButtons, 0);
-            setTimeout(applyRGBColorsToFrames, 20);
+            
+            // --- แอบสร้าง Marker ระบุว่าตอนนี้คือหน้าควิซ "ดาวอังคาร" ---
+            setTimeout(() => {
+              const uiRoot = document.querySelector('#ui-root');
+              if (uiRoot && !uiRoot.querySelector('#mars-quiz-marker')) {
+                const marker = document.createElement('a-entity');
+                marker.id = 'mars-quiz-marker';
+                marker.setAttribute('visible', 'false');
+                uiRoot.appendChild(marker);
+              }
+              repositionQuizButtons();
+              applyRGBColorsToFrames();
+            }, 50);
           }
         },
         {
@@ -179,6 +188,14 @@ window.PLANET_DATA = window.PLANET_DATA || [];
       const previewSphere = api.planetImage(p, cardContainer, cardCfg);
       api.renderCardContent(p, cardContainer, cardCfg);
       api.renderCardButtons(p, cardContainer, cardCfg, previewSphere);
+
+      // --- แอบสร้าง Marker ระบุว่าตอนนี้คือหน้าการ์ด "ดาวอังคาร" ---
+      if (!cardContainer.querySelector('#mars-ui-marker')) {
+        const marker = document.createElement('a-entity');
+        marker.id = 'mars-ui-marker';
+        marker.setAttribute('visible', 'false');
+        cardContainer.appendChild(marker);
+      }
 
       if (typeof api.refreshRaycasters === 'function') {
         setTimeout(api.refreshRaycasters, 0);
@@ -219,26 +236,21 @@ window.PLANET_DATA = window.PLANET_DATA || [];
 
   // --------------------------------------------------------------------------
   // ระบบแอนิเมชันไฟเส้น RGB หมุนสลับสีที่ "กรอบใหญ่ข้างนอก"
-  // ทั้ง 4 ด้านมี 4 สีที่แตกต่างกันชัดเจน (แดง, เขียว, น้ำเงิน, เหลือง)
   // --------------------------------------------------------------------------
   let rgbStep = 0;
 
- function applyRGBColorsToFrames() {
+  function applyRGBColorsToFrames() {
+    // เช็คว่ามี Marker ของดาวอังคารอยู่หรือไม่ ถ้าไม่มีให้หยุดทำงานทันที (ไม่ไปกวนดาวดวงอื่น)
+    const isMarsCard = document.getElementById('mars-ui-marker');
+    const isMarsQuiz = document.getElementById('mars-quiz-marker');
+    
+    if (!isMarsCard && !isMarsQuiz) return;
+
     const uiRoot = document.querySelector('#ui-root');
-    if (!uiRoot) return;
+    const cardRoot = document.querySelector('#planet-card-root');
 
-    // เช็คว่าในหน้าต่างนี้มีคำว่า Mars หรือ ดาวอังคาร หรือไม่ (เพื่อยืนยันว่าเป็น UI ของดาวอังคาร)
-    // หากไม่ใช่ ให้ return หยุดการทำงานทันทีเพื่อไม่ให้ไปกวนดาวดวงอื่น
-    if (!uiRoot.innerHTML.includes('mars') && !uiRoot.innerHTML.includes('ดาวอังคาร')) return;
-
-    // ตรวจสอบว่าแผง UI กำลังเปิดแสดงอยู่หรือไม่
-    const isVisible = uiRoot.getAttribute('visible') !== false && uiRoot.getAttribute('visible') !== 'false';
-    if (!isVisible) return;
-
-    // ========================================================================
-    // 1. กรอบใหญ่รอบนอกของการ์ดข้อมูลดาวอังคาร (#planet-card-root)
-    // ========================================================================
-    if (cardRoot && cardRoot.isConnected) {
+    // 1. กรอบใหญ่รอบนอกของการ์ดข้อมูลดาวอังคาร
+    if (isMarsCard && cardRoot && cardRoot.isConnected) {
       const planes = Array.from(cardRoot.querySelectorAll('a-plane'));
       
       const topPlane = planes.find(p => {
@@ -262,17 +274,14 @@ window.PLANET_DATA = window.PLANET_DATA || [];
         return dim.height > 1.3 && dim.width < 0.05 && pos.x > 0.8;
       });
 
-      // ด้านบน, ขวา, ล่าง, ซ้าย ใช้คนละสีกัน 4 สีครบถ้วน
       if (topPlane) updateElementColor(topPlane, RGB_LINE_PALETTE[rgbStep % 4]);
       if (rightPlane) updateElementColor(rightPlane, RGB_LINE_PALETTE[(rgbStep + 1) % 4]);
       if (bottomPlane) updateElementColor(bottomPlane, RGB_LINE_PALETTE[(rgbStep + 2) % 4]);
       if (leftPlane) updateElementColor(leftPlane, RGB_LINE_PALETTE[(rgbStep + 3) % 4]);
     }
 
-    // ========================================================================
-    // 2. กรอบใหญ่รอบนอกตอนตอบคำถามมินิเกม (#ui-root ตอนที่ไม่มี cardRoot)
-    // ========================================================================
-    if (!cardRoot && uiRoot.children.length > 0) {
+    // 2. กรอบใหญ่รอบนอกตอนตอบคำถามมินิเกม
+    if (isMarsQuiz && uiRoot && uiRoot.children.length > 0) {
       const planes = Array.from(uiRoot.children).filter(el => {
         return el.tagName && el.tagName.toLowerCase() === 'a-plane' && !el.classList.contains('selectable');
       });
@@ -310,7 +319,6 @@ window.PLANET_DATA = window.PLANET_DATA || [];
         uiRoot.appendChild(rightPlane);
       }
 
-      // ด้านบน, ขวา, ล่าง, ซ้าย ใช้คนละสีกัน 4 สีครบถ้วน
       if (topPlane) {
         topPlane.setAttribute('height', '0.024');
         updateElementColor(topPlane, RGB_LINE_PALETTE[rgbStep % 4]);
@@ -328,26 +336,24 @@ window.PLANET_DATA = window.PLANET_DATA || [];
     }
   }
 
-  // เลื่อนจังหวะสีไป 1 ขั้นอย่างช้าๆ นุ่มนวล
   function advanceRGBStep() {
     rgbStep = (rgbStep + 1) % 4;
     applyRGBColorsToFrames();
   }
 
   // --------------------------------------------------------------------------
-  // ปรับตำแหน่งข้อช้อยในข้อตอบคำถามมินิเกมให้เลื่อนขึ้นด้านบน ไม่ลงมาข้างล่างเกินไป
+  // ปรับตำแหน่งข้อช้อยในข้อตอบคำถามมินิเกม
   // --------------------------------------------------------------------------
   function repositionQuizButtons() {
+    // เช็คว่าใช่ควิซดาวอังคารหรือไม่ ถ้าไม่ใช่ให้หยุดทำงาน!
+    if (!document.getElementById('mars-quiz-marker')) return;
+
     const ui = document.querySelector('#ui-root');
     if (!ui) return;
-
-    // เช็คเหมือนกันว่าใช่ควิซของดาวอังคารหรือไม่
-    if (!ui.innerHTML.includes('mars') && !ui.innerHTML.includes('ดาวอังคาร')) return;
 
     const buttons = Array.from(ui.querySelectorAll('.selectable.ui-button'));
     if (buttons.length < 5) return;
 
-    // หาปุ่มออกจากมินิเกม (ความกว้าง 0.85 หรือตำแหน่ง y = -0.53)
     const exitBtn = buttons.find(b => {
       const w = parseFloat(b.getAttribute('width') || '0');
       const pos = getElementPos(b);
@@ -360,7 +366,6 @@ window.PLANET_DATA = window.PLANET_DATA || [];
         return getElementPos(b).y - getElementPos(a).y;
       });
 
-      // ปรับเลื่อนข้อช้อย 4 ข้อขึ้นด้านบนให้เห็นชัดเจนและไม่อยู่ข้างล่างเกินไป
       const targetYs = [0.110, -0.020, -0.150, -0.280];
       choiceButtons.slice(0, 4).forEach((btn, i) => {
         const ty = targetYs[i];
@@ -370,7 +375,6 @@ window.PLANET_DATA = window.PLANET_DATA || [];
         }
       });
 
-      // ปรับหัวข้อโจทย์คำถามขึ้นไปที่ y = 0.24 เพื่อให้ระยะห่างลงตัว
       const textEntities = Array.from(ui.querySelectorAll('a-entity')).filter(el => !el.closest('.selectable.ui-button'));
       textEntities.forEach(txtEl => {
         const pos = getElementPos(txtEl);
@@ -388,11 +392,15 @@ window.PLANET_DATA = window.PLANET_DATA || [];
     }
   }
 
-  // เฝ้าสังเกตและปรับตำแหน่งปุ่มตัวเลือกอัตโนมัติเมื่อ DOM เปลี่ยน
   function setupChoicePositionObserver() {
+    if (window._marsObserverSetup) return;
+    window._marsObserverSetup = true;
+
     const observer = new MutationObserver(() => {
-      repositionQuizButtons();
-      applyRGBColorsToFrames();
+      if (document.getElementById('mars-quiz-marker') || document.getElementById('mars-ui-marker')) {
+        repositionQuizButtons();
+        applyRGBColorsToFrames();
+      }
     });
 
     const target = document.querySelector('#ui-root') || document.body;
@@ -400,20 +408,15 @@ window.PLANET_DATA = window.PLANET_DATA || [];
       observer.observe(target, { childList: true, subtree: true });
     }
 
-    // 1. ตรวจสอบตำแหน่งปุ่มตัวเลือกเป็นระยะ
     setInterval(repositionQuizButtons, 250);
-
-    // 2. หมุนสลับสีไฟกรอบใหญ่ RGB ตามจังหวะเวลาที่ช้าลงอย่างนุ่มนวล (850ms)
     setInterval(advanceRGBStep, RGB_INTERVAL_MS);
   }
 
-  // เริ่มต้นทำงานเมื่อโหลดหน้า
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', setupChoicePositionObserver);
   } else {
     setupChoicePositionObserver();
   }
-
   window.addEventListener('load', setupChoicePositionObserver);
 
   // บันทึกข้อมูลดาวอังคารเข้าสู่ระบบ
