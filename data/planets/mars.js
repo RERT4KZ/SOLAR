@@ -223,15 +223,17 @@ window.PLANET_DATA = window.PLANET_DATA || [];
   // --------------------------------------------------------------------------
   let rgbStep = 0;
 
-  function applyRGBColorsToFrames() {
+ function applyRGBColorsToFrames() {
     const uiRoot = document.querySelector('#ui-root');
     if (!uiRoot) return;
+
+    // เช็คว่าในหน้าต่างนี้มีคำว่า Mars หรือ ดาวอังคาร หรือไม่ (เพื่อยืนยันว่าเป็น UI ของดาวอังคาร)
+    // หากไม่ใช่ ให้ return หยุดการทำงานทันทีเพื่อไม่ให้ไปกวนดาวดวงอื่น
+    if (!uiRoot.innerHTML.includes('mars') && !uiRoot.innerHTML.includes('ดาวอังคาร')) return;
 
     // ตรวจสอบว่าแผง UI กำลังเปิดแสดงอยู่หรือไม่
     const isVisible = uiRoot.getAttribute('visible') !== false && uiRoot.getAttribute('visible') !== 'false';
     if (!isVisible) return;
-
-    const cardRoot = document.querySelector('#planet-card-root');
 
     // ========================================================================
     // 1. กรอบใหญ่รอบนอกของการ์ดข้อมูลดาวอังคาร (#planet-card-root)
@@ -338,6 +340,9 @@ window.PLANET_DATA = window.PLANET_DATA || [];
   function repositionQuizButtons() {
     const ui = document.querySelector('#ui-root');
     if (!ui) return;
+
+    // เช็คเหมือนกันว่าใช่ควิซของดาวอังคารหรือไม่
+    if (!ui.innerHTML.includes('mars') && !ui.innerHTML.includes('ดาวอังคาร')) return;
 
     const buttons = Array.from(ui.querySelectorAll('.selectable.ui-button'));
     if (buttons.length < 5) return;
