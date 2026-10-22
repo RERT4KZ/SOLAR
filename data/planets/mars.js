@@ -1,30 +1,3 @@
-// ============================================================================
-// ไฟล์ข้อมูลประจำดวงดาว: ดาวอังคาร (Mars)
-// ไฟล์: data/planets/mars.js
-// ============================================================================
-// [ค่าอ้างอิงเดิมของดาวอังคาร (นำไปวางในช่องด้านล่าง หรือปรับแต่งเองได้)]
-//   id: 'mars'
-//   name: 'ดาวอังคาร'
-//   en: 'Mars'
-//   color: '#c65b3d'
-//   radius: 0.18
-//   info: 'ดาวเคราะห์สีแดงจากเหล็กออกไซด์'
-//   image: 'assets/images/mars.svg'
-//
-// [คู่มือการปรับแต่งการ์ดข้อมูลแยกอิสระ (หมวด card ด้านล่าง)]
-//   1. ขนาดการ์ด         : ปรับที่ card.width (ความกว้าง) และ card.height (ความสูง)
-//   2. ตำแหน่งและการหมุน : ปรับที่ card.position ('x y z'), card.distance (ระยะห่าง), card.rotation ('rx ry rz')
-//   3. โครงสร้างและดีไซน์ : ปรับที่ card.layout ('horizontal' | 'vertical' | 'custom'),
-//                          card.background, card.border, card.header, card.media, card.content, card.sections, card.decorations
-//   4. ปุ่มกด (Buttons)  : เพิ่ม/ลบ/ย้ายตำแหน่ง/เปลี่ยนขนาดและสีปุ่มได้ที่อาเรย์ card.buttons
-//   5. ตกแต่งกรอบใหญ่     : กรอบใหญ่รอบนอก 4 ด้านมี 4 สีที่แตกต่างกันชัดเจน (แดง, เขียว, น้ำเงิน, เหลือง) สลับหมุนเวียนต่อเนื่อง
-// ============================================================================
-
-// ============================================================================
-// ไฟล์ข้อมูลประจำดวงดาว: ดาวอังคาร (Mars)
-// ไฟล์: data/planets/mars.js
-// ============================================================================
-
 window.PLANET_DATA = window.PLANET_DATA || [];
 
 (function () {
@@ -306,7 +279,7 @@ window.PLANET_DATA = window.PLANET_DATA || [];
         leftPlane.setAttribute('width', '0.024');
         leftPlane.setAttribute('height', '1.22');
         leftPlane.setAttribute('position', '-0.88 0 0.012');
-        leftPlane.setAttribute('material', `shader: flat; color: ${RGB_LINE_PALETTE[(rgbStep + 3) % 4]}; opacity: 1; transparent: true; side: double`);
+        leftPlane.setAttribute('material', shader: flat; color: ${RGB_LINE_PALETTE[(rgbStep + 3) % 4]}; opacity: 1; transparent: true; side: double);
         uiRoot.appendChild(leftPlane);
       }
       if (!rightPlane) {
@@ -315,7 +288,7 @@ window.PLANET_DATA = window.PLANET_DATA || [];
         rightPlane.setAttribute('width', '0.024');
         rightPlane.setAttribute('height', '1.22');
         rightPlane.setAttribute('position', '0.88 0 0.012');
-        rightPlane.setAttribute('material', `shader: flat; color: ${RGB_LINE_PALETTE[(rgbStep + 1) % 4]}; opacity: 1; transparent: true; side: double`);
+        rightPlane.setAttribute('material', shader: flat; color: ${RGB_LINE_PALETTE[(rgbStep + 1) % 4]}; opacity: 1; transparent: true; side: double);
         uiRoot.appendChild(rightPlane);
       }
 
@@ -369,7 +342,7 @@ window.PLANET_DATA = window.PLANET_DATA || [];
       const targetYs = [0.110, -0.020, -0.150, -0.280];
       choiceButtons.slice(0, 4).forEach((btn, i) => {
         const ty = targetYs[i];
-        btn.setAttribute('position', `0 ${ty} 0.035`);
+        btn.setAttribute('position', 0 ${ty} 0.035);
         if (btn.object3D) {
           btn.object3D.position.set(0, ty, 0.035);
         }
