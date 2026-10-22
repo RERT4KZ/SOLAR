@@ -17,7 +17,7 @@ window.PLANET_DATA = window.PLANET_DATA || [];
       'เป็นดาวเคราะห์ลำดับที่ 4 จากดวงอาทิตย์',
       'มีสีแดงเพราะพื้นผิวเต็มไปด้วยเหล็กออกไซด์ (สนิมเหล็ก)',
       'มีดวงจันทร์ 2 ดวง คือ โฟบอส และ ดีมอส',
-      'มี Olympus Mons ภูเขาไฟสูงสุดในระบบสุริยะ (21.9 กม.)',
+      'มี โอลิมปัส มอนส์ ภูเขาไฟสูงสุดในระบบสุริยะ (21.9 กม.)',
       'เส้นผ่านศูนย์กลาง 6,779 กม. ขนาดราวครึ่งหนึ่งของโลก',
       '1 วัน (Sol) ยาว 24 ชม. 37 นาที',
       'โคจรรอบดวงอาทิตย์ใช้เวลา 687 วัน',
@@ -35,7 +35,7 @@ window.PLANET_DATA = window.PLANET_DATA || [];
     // --- 3. ปรับแต่งสไตล์เฉพาะของดาวดวงนี้ (เว้นว่างไว้หากต้องการใช้ค่ามาตรฐานกลาง) ---
     style: {
       fontFamily: '',
-      fontSize: 26,
+      fontSize: 37,
       panelBgColor: '#180a06',
       panelBorderColor: '#ff1744',
       titleColor: '#fed7aa',
@@ -279,7 +279,13 @@ window.PLANET_DATA = window.PLANET_DATA || [];
         leftPlane.setAttribute('width', '0.024');
         leftPlane.setAttribute('height', '1.22');
         leftPlane.setAttribute('position', '-0.88 0 0.012');
-        leftPlane.setAttribute('material', shader: flat; color: ${RGB_LINE_PALETTE[(rgbStep + 3) % 4]}; opacity: 1; transparent: true; side: double);
+        leftPlane.setAttribute('material', {
+          shader: 'flat',
+          color: RGB_LINE_PALETTE[(rgbStep + 3) % 4],
+          opacity: 1,
+          transparent: true,
+          side: 'double'
+        });
         uiRoot.appendChild(leftPlane);
       }
       if (!rightPlane) {
@@ -288,7 +294,13 @@ window.PLANET_DATA = window.PLANET_DATA || [];
         rightPlane.setAttribute('width', '0.024');
         rightPlane.setAttribute('height', '1.22');
         rightPlane.setAttribute('position', '0.88 0 0.012');
-        rightPlane.setAttribute('material', shader: flat; color: ${RGB_LINE_PALETTE[(rgbStep + 1) % 4]}; opacity: 1; transparent: true; side: double);
+        rightPlane.setAttribute('material', {
+          shader: 'flat',
+          color: RGB_LINE_PALETTE[(rgbStep + 1) % 4],
+          opacity: 1,
+          transparent: true,
+          side: 'double'
+        });
         uiRoot.appendChild(rightPlane);
       }
 
@@ -327,11 +339,9 @@ window.PLANET_DATA = window.PLANET_DATA || [];
     const buttons = Array.from(ui.querySelectorAll('.selectable.ui-button'));
     if (buttons.length < 5) return;
 
-    const exitBtn = buttons.find(b => {
-      const w = parseFloat(b.getAttribute('width') || '0');
-      const pos = getElementPos(b);
-      return Math.abs(w - 0.85) < 0.08 || Math.abs(pos.y - (-0.53)) < 0.05;
-    }) || buttons[buttons.length - 1];
+    const exitBtn = buttons
+      .slice()
+      .sort((a, b) => getElementPos(a).y - getElementPos(b).y)[0] || buttons[buttons.length - 1];
 
     const choiceButtons = buttons.filter(b => b !== exitBtn);
     if (choiceButtons.length >= 4) {
@@ -342,11 +352,18 @@ window.PLANET_DATA = window.PLANET_DATA || [];
       const targetYs = [0.110, -0.020, -0.150, -0.280];
       choiceButtons.slice(0, 4).forEach((btn, i) => {
         const ty = targetYs[i];
-        btn.setAttribute('position', 0 ${ty} 0.035);
+        btn.setAttribute('position', `0 ${ty} 0.035`);
         if (btn.object3D) {
           btn.object3D.position.set(0, ty, 0.035);
         }
       });
+
+      if (exitBtn) {
+        exitBtn.setAttribute('position', '0 -0.53 0.035');
+        if (exitBtn.object3D) {
+          exitBtn.object3D.position.set(0, -0.53, 0.035);
+        }
+      }
 
       const textEntities = Array.from(ui.querySelectorAll('a-entity')).filter(el => !el.closest('.selectable.ui-button'));
       textEntities.forEach(txtEl => {
