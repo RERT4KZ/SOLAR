@@ -65,91 +65,299 @@ window.PLANET_DATA.push({
   // --- 4. ตั้งค่าโครงสร้าง ขนาด ตำแหน่ง และปุ่มของการ์ดข้อมูลแยกอิสระ (Independent Card Config) ---
   // ดาวเนปจูนใช้ธีมสีน้ำเงินเข้มแห่งห้วงอวกาศลึก พร้อมกรอบเรืองแสงสีคราม
   card: {
-    width: 1.84,
-    height: 1.28,
-    layout: 'horizontal',
-    position: { x: 0, y: 0, z: 0 },
-    distance: 0,
-    rotation: { x: 0, y: 0, z: 0 },
-    background: {
-      color: '#07122b',
-      opacity: 0.95,
-      image: '',
-      outerGlow: true,
-      outerGlowColor: '#244e93',
-      outerGlowOpacity: 0.18
+
+  // ============================================================
+  // 1. CARD STRUCTURE
+  // ============================================================
+
+  width: 2.25,
+  height: 1.55,
+
+  layout: 'horizontal',
+
+  position: {
+    x: 0,
+    y: 0,
+    z: 0
+  },
+
+  distance: 0,
+
+  rotation: {
+    x: 0,
+    y: 0,
+    z: 0
+  },
+
+
+  // ============================================================
+  // 2. BACKGROUND — DEEP SPACE FANTASY
+  // ============================================================
+
+  background: {
+
+    // พื้นหลังน้ำเงินเข้มแบบอวกาศ
+    color: '#030B24',
+
+    // ความทึบของการ์ด
+    opacity: 0.97,
+
+    // สามารถใส่ภาพพื้นหลังแฟนตาซีได้
+    image: '',
+
+    // เปิดแสงเรืองรอบการ์ด
+    outerGlow: true,
+
+    // แสงคริสตัลสีน้ำเงิน
+    outerGlowColor: '#00BFFF',
+
+    // ความเข้มของแสง
+    outerGlowOpacity: 0.42
+
+  },
+
+
+  // ============================================================
+  // 3. BORDER — LEGENDARY CRYSTAL FRAME
+  // ============================================================
+
+  border: {
+
+    // กรอบสไตล์ Fantasy RPG
+    style: 'frame',
+
+    // สีทองแบบ Legendary
+    color: '#D9AE63',
+
+    // ความหนาของกรอบ
+    thickness: 0.025,
+
+    opacity: 1,
+
+    // ขนาดมุมตกแต่ง
+    cornerSize: 0.19
+
+  },
+
+
+  // ============================================================
+  // 4. HEADER — CELESTIAL TITLE
+  // ============================================================
+
+  header: {
+
+    // ชื่อภาษาไทย
+    titlePos: {
+      x: 0,
+      y: 0.62,
+      z: 0.04
     },
-    border: {
-      style: 'frame',
-      color: '#4484d2',
-      thickness: 0.022,
-      opacity: 0.9,
-      cornerSize: 0.15
+
+    // ชื่อภาษาอังกฤษ
+    subtitlePos: {
+      x: 0,
+      y: 0.49,
+      z: 0.04
     },
-    header: {
-      titlePos: { x: 0, y: 0.49, z: 0.02 },
-      subtitlePos: { x: 0, y: 0.39, z: 0.02 },
-      titleWidth: 1.4,
-      subtitleWidth: 1.25,
-      titleFontSize: 46,
-      subtitleFontSize: 38,
-      titleColor: '#6b3458',
-      subtitleColor: '#0ec14f',
-      align: 'center',
-      showDivider: true,
-      dividerY: 0.32,
-      dividerColor: '#3b82f6'
+
+    titleWidth: 1.65,
+
+    subtitleWidth: 1.45,
+
+    // ขนาดตัวอักษร
+    titleFontSize: 56,
+
+    subtitleFontSize: 39,
+
+    // สีฟ้าคริสตัล
+    titleColor: '#78E9FF',
+
+    // สีขาวอมฟ้า
+    subtitleColor: '#D8EEFF',
+
+    align: 'center',
+
+    // เส้นคั่นใต้หัวข้อ
+    showDivider: true,
+
+    dividerY: 0.41,
+
+    // สีทองแฟนตาซี
+    dividerColor: '#D9AE63'
+
+  },
+
+
+  // ============================================================
+  // 5. MEDIA — PLANET DISPLAY
+  // ============================================================
+
+  media: {
+
+    show: true,
+
+    // ตำแหน่งโมเดลดาวด้านซ้าย
+    position: {
+      x: -0.62,
+      y: -0.04,
+      z: 0.04
     },
-    media: {
-      show: true,
-      position: { x: -0.50, y: 0.0, z: 0.03 },
-      show3D: true,
-      modelRadius: 0.21,
-      modelOffset: { x: 0, y: 0.08, z: 0.04 },
-      showImage: true,
-      imageWidth: 0.38,
-      imageHeight: 0.24,
-      imageOffset: { x: 0, y: -0.22, z: 0.01 },
-      showCaption: true,
-      captionPos: { x: 0, y: -0.38, z: 0.02 }
+
+    // แสดงโมเดล 3D
+    show3D: true,
+
+    // ขนาดดาว
+    modelRadius: 0.27,
+
+    // ปรับตำแหน่งโมเดล
+    modelOffset: {
+      x: 0,
+      y: 0.12,
+      z: 0.06
     },
-    content: {
-      position: { x: 0.23, y: -0.01, z: 0.02 },
-      width: 0.98,
-      maxHeight: 0.60,
-      fontSize: 36,
-      lineHeight: 46,
-      align: 'left',
-      bulletPrefix: '• ',
-      includeInfo: true,
-      includeFacts: true
+
+    // แสดงภาพประกอบดาว
+    showImage: true,
+
+    imageWidth: 0.47,
+
+    imageHeight: 0.27,
+
+    imageOffset: {
+      x: 0,
+      y: -0.24,
+      z: 0.02
     },
-    buttonLayout: 'custom',
-    buttons: [
-      {
-        id: 'quiz',
-        label: 'เริ่มมินิเกมคำถาม',
-        action: 'quiz',
-        position: { x: -0.22, y: -0.49, z: 0.03 },
-        width: 0.64,
-        height: 0.13,
-        color: '#59a7eb',
-        hoverColor: '#32f30b',
-        textColor: '#07010f',
-        fontSize: 78
+
+    // คำอธิบายใต้ภาพ
+    showCaption: true,
+
+    captionPos: {
+      x: 0,
+      y: -0.42,
+      z: 0.04
+    }
+
+  },
+
+
+  // ============================================================
+  // 6. CONTENT — RPG INFORMATION PANEL
+  // ============================================================
+
+  content: {
+
+    // ข้อมูลอยู่ด้านขวาของดาว
+    position: {
+      x: 0.28,
+      y: -0.035,
+      z: 0.04
+    },
+
+    // ความกว้างพื้นที่ข้อความ
+    width: 1.12,
+
+    // ความสูงสูงสุด
+    maxHeight: 0.77,
+
+    // ขนาดข้อความ
+    fontSize: 32,
+
+    // ระยะห่างบรรทัด
+    lineHeight: 43,
+
+    align: 'left',
+
+    // สัญลักษณ์แบบ RPG
+    bulletPrefix: '✦ ',
+
+    // แสดงข้อมูลทั่วไป
+    includeInfo: true,
+
+    // แสดงข้อเท็จจริง
+    includeFacts: true
+
+  },
+
+
+  // ============================================================
+  // 7. RPG BUTTON SYSTEM
+  // ============================================================
+
+  buttonLayout: 'custom',
+
+  buttons: [
+
+    // ----------------------------------------------------------
+    // BUTTON 1 — START QUEST
+    // ----------------------------------------------------------
+
+    {
+
+      id: 'quiz',
+
+      label: '⚔ เริ่มมินิเกมคำถาม',
+
+      action: 'quiz',
+
+      position: {
+        x: -0.27,
+        y: -0.62,
+        z: 0.06
       },
-      {
-        id: 'close',
-        label: 'ปิดหน้าต่าง',
-        action: 'close',
-        position: { x: 0.38, y: -0.49, z: 0.03 },
-        width: 0.42,
-        height: 0.13,
-        color: '#06a6eb',
-        hoverColor: '#ef0c0c',
-        textColor: '#080115',
-        fontSize: 108
-      }
-    ]
-  }
-});
+
+      width: 0.82,
+
+      height: 0.16,
+
+      // สีน้ำเงินคริสตัล
+      color: '#0754B8',
+
+      // สีเมื่อชี้เมาส์
+      hoverColor: '#00CFFF',
+
+      // สีข้อความ
+      textColor: '#FFFFFF',
+
+      fontSize: 43
+
+    },
+
+
+    // ----------------------------------------------------------
+    // BUTTON 2 — CLOSE WINDOW
+    // ----------------------------------------------------------
+
+    {
+
+      id: 'close',
+
+      label: '✕ ปิดหน้าต่าง',
+
+      action: 'close',
+
+      position: {
+        x: 0.49,
+        y: -0.62,
+        z: 0.06
+      },
+
+      width: 0.51,
+
+      height: 0.16,
+
+      // สีพื้นหลังปุ่ม
+      color: '#152342',
+
+      // สีเมื่อชี้เมาส์
+      hoverColor: '#B91C1C',
+
+      textColor: '#E8F5FF',
+
+      fontSize: 40
+
+    }
+
+  ]
+
+}
