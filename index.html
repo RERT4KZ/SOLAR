@@ -557,10 +557,98 @@ const MILKYWAY_STRENGTH = 1;
   document.querySelector('a-scene').appendChild(shell);
 })();
 function make(tag,attrs,parent){const el=document.createElement(tag);for(const [key,value] of Object.entries(attrs))el.setAttribute(key,value);parent.appendChild(el);return el;}
+// ===== การ์ดขอบมน =====
+// รัศมีมุมเริ่มต้นของการ์ดทุกใบ (หน่วยเมตร) | 0 = เหลี่ยมเหมือนเดิม | ดาวแต่ละดวงตั้งเองได้ด้วย card: { cornerRadius: 0.1 }
+const DEFAULT_CARD_CORNER_RADIUS = 0.07;
+
+function roundedRectShape(w, h, r) {
+  const x = -w / 2, y = -h / 2, sh = new THREE.Shape();
+  sh.moveTo(x + r, y);
+  sh.lineTo(x + w - r, y);         sh.absarc(x + w - r, y + r, r, -Math.PI / 2, 0, false);
+  sh.lineTo(x + w, y + h - r);     sh.absarc(x + w - r, y + h - r, r, 0, Math.PI / 2, false);
+  sh.lineTo(x + r, y + h);         sh.absarc(x + r, y + h - r, r, Math.PI / 2, Math.PI, false);
+  sh.lineTo(x, y + r);             sh.absarc(x + r, y + r, r, Math.PI, Math.PI * 1.5, false);
+  return sh;
+}
+
+// เส้นกรอบ/มุมตกแต่งแบบมนที่ "ขอบนอกชิดขอบการ์ดพอดี" (กว้าง w x สูง h, มุมรัศมี r, หนา t)
+function roundStrokeGeometry(w, h, r, t, mode, leg) {
+  const W = w - t, H = h - t;
+  const R = Math.max(0.0005, Math.min(r - t / 2, W / 2, H / 2));
+  const sx = W / 2 - R, sy = H / 2 - R, arc = Math.PI / 2 * R;
+  const pcs = [
+    { len: 2 * sy, at: u => [W / 2, -sy + u * 2 * sy, 1, 0] },
+    { len: arc,    at: u => { const a = u * Math.PI / 2;               return [ sx + R * Math.cos(a),  sy + R * Math.sin(a), Math.cos(a), Math.sin(a)]; } },
+    { len: 2 * sx, at: u => [sx - u * 2 * sx, H / 2, 0, 1] },
+    { len: arc,    at: u => { const a = Math.PI / 2 + u * Math.PI / 2; return [-sx + R * Math.cos(a),  sy + R * Math.sin(a), Math.cos(a), Math.sin(a)]; } },
+    { len: 2 * sy, at: u => [-W / 2, sy - u * 2 * sy, -1, 0] },
+    { len: arc,    at: u => { const a = Math.PI + u * Math.PI / 2;     return [-sx + R * Math.cos(a), -sy + R * Math.sin(a), Math.cos(a), Math.sin(a)]; } },
+    { len: 2 * sx, at: u => [-sx + u * 2 * sx, -H / 2, 0, -1] },
+    { len: arc,    at: u => { const a = 1.5 * Math.PI + u * Math.PI / 2; return [ sx + R * Math.cos(a), -sy + R * Math.sin(a), Math.cos(a), Math.sin(a)]; } }
+  ];
+  let L = 0; pcs.forEach(c => { c.off = L; L += c.len; });
+  const pointAt = (s) => {
+    s = ((s % L) + L) % L;
+    for (const c of pcs) if (c.len > 0 && s <= c.off + c.len + 1e-9) return c.at(Math.min(1, Math.max(0, (s - c.off) / c.len)));
+    return pcs[0].at(0);
+  };
+  const pos = [], idx = [];
+  const strip = (s0, s1) => {
+    const n = Math.max(2, Math.ceil((s1 - s0) / 0.01)), base = pos.length / 3;
+    for (let i = 0; i <= n; i++) {
+      const q = pointAt(s0 + (s1 - s0) * i / n);
+      pos.push(q[0] - q[2] * t / 2, q[1] - q[3] * t / 2, 0, q[0] + q[2] * t / 2, q[1] + q[3] * t / 2, 0);
+      if (i > 0) { const a = base + (i - 1) * 2; idx.push(a, a + 1, a + 2, a + 1, a + 3, a + 2); }
+    }
+  };
+  if (mode === 'outline') strip(0, L);
+  else {
+    const extra = Math.max(0, Math.min(leg - r, 0.45 * Math.min(2 * sx, 2 * sy)));
+    [1, 3, 5, 7].forEach(k => { const c = pcs[k], mid = c.off + c.len / 2; strip(mid - c.len / 2 - extra, mid + c.len / 2 + extra); });
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+  g.setIndex(idx);
+  return g;
+}
+
+AFRAME.registerComponent('round-rect', {
+  schema: {
+    mode: { default: 'fill' },   // fill = แผ่นทึบ | outline = เส้นกรอบรอบการ์ด | corners = มุมตกแต่ง
+    width: { default: 1 }, height: { default: 1 }, radius: { default: 0.05 },
+    thickness: { default: 0.02 }, leg: { default: 0.14 },
+    color: { type: 'color', default: '#ffffff' }, opacity: { default: 1 }, src: { type: 'string' }
+  },
+  init: function () {
+    const d = this.data, r = Math.max(0.001, Math.min(d.radius, Math.min(d.width, d.height) / 2 - 0.0005));
+    let geo;
+    if (d.mode === 'fill') {
+      geo = new THREE.ShapeGeometry(roundedRectShape(d.width, d.height, r), 10);
+      const ps = geo.attributes.position, uv = geo.attributes.uv;
+      for (let i = 0; i < ps.count; i++) uv.setXY(i, (ps.getX(i) + d.width / 2) / d.width, (ps.getY(i) + d.height / 2) / d.height);
+    } else {
+      geo = roundStrokeGeometry(d.width, d.height, r, d.thickness, d.mode, d.leg);
+    }
+    const mat = new THREE.MeshBasicMaterial({ color: d.color, side: THREE.DoubleSide, transparent: true, opacity: d.opacity });
+    if (d.src) {
+      mat.visible = false;   // ซ่อนไว้จนกว่าภาพโหลดสำเร็จ (ถ้าโหลดไม่ได้ก็ไม่แสดง เหมือนเดิม)
+      new THREE.TextureLoader().load(d.src, (tex) => { tex.colorSpace = THREE.SRGBColorSpace; mat.map = tex; mat.visible = true; mat.needsUpdate = true; }, undefined, () => {});
+    }
+    this.mesh = new THREE.Mesh(geo, mat);
+    this.el.setObject3D('mesh', this.mesh);
+  },
+  remove: function () {
+    if (!this.mesh) return;
+    this.mesh.geometry.dispose();
+    if (this.mesh.material.map) this.mesh.material.map.dispose();
+    this.mesh.material.dispose();
+    this.el.removeObject3D('mesh');
+  }
+});
 // การ์ดลอยตามสายตาแบบนุ่ม ๆ: เมื่อหันหน้า การ์ดจะตามช้ากว่าเล็กน้อยแล้วค่อยกลับมาอยู่ตรงหน้า (ไม่แข็งตายตัว)
 // smooth = ความหน่วง (วินาที) ยิ่งมากยิ่งหน่วง | maxYaw / maxPitch = องศาสูงสุดที่การ์ดเลื่อนออกจากกลางสายตาได้
 AFRAME.registerComponent('soft-follow', {
-  schema: { smooth: { default: 0.18 }, maxYaw: { default: 20 }, maxPitch: { default: 14 } },
+  schema: { smooth: { default: 0.30 }, maxYaw: { default: 20 }, maxPitch: { default: 14 } },
   init: function () {
     this.base = this.el.object3D.position.clone();   // ตำแหน่งเดิมในกล้อง (0 0 -1.8)
     this.sY = 0; this.sP = 0; this.ready = false;
@@ -821,6 +909,35 @@ function basePanel(title,subtitle='',style={},targetRoot=uiRoot,cardCfg={}){
  const tColor = style.titleColor || headerCfg.titleColor || '#a5f3fc';
  const subColor = style.subtitleColor || headerCfg.subtitleColor || '#c8e9f3';
 
+  const cornerR = Math.min(Math.max(Number(cardCfg.cornerRadius !== undefined ? cardCfg.cornerRadius : (borderCfg.radius !== undefined ? borderCfg.radius : DEFAULT_CARD_CORNER_RADIUS)) || 0, 0), Math.min(w, h) / 2 - 0.001);
+ if (cornerR > 0) {
+  // ---- การ์ดขอบมน ----
+  const rGlow = borderCfg.glowColor || (bgCfg.outerGlow ? (bgCfg.outerGlowColor || style.highlightColor || border) : '');
+  if (rGlow) {
+    const gPad = Number(borderCfg.glowSpread || bgCfg.outerGlowSpread) > 0 ? Number(borderCfg.glowSpread || bgCfg.outerGlowSpread) : 0.06;
+    const gOp = borderCfg.glowOpacity || bgCfg.outerGlowOpacity || 0.18;
+    make('a-entity',{position:'0 0 -0.006','round-rect':`mode: fill; width: ${w + gPad}; height: ${h + gPad}; radius: ${cornerR + gPad / 2}; color: ${rGlow}; opacity: ${gOp}`},targetRoot);
+  }
+  make('a-entity',{position:'0 0 0','round-rect':`mode: fill; width: ${w}; height: ${h}; radius: ${cornerR}; color: ${bg}; opacity: ${bgOpacity}`},targetRoot);
+  if (bgCfg.image) {
+    make('a-entity',{position:'0 0 0.003','round-rect':`mode: fill; width: ${w}; height: ${h}; radius: ${cornerR}; color: #ffffff; opacity: ${bgCfg.imageOpacity || 0.22}; src: ${bgCfg.image}`},targetRoot);
+  }
+  if (borderStyle !== 'none') {
+    const bt = borderThickness;
+    if (borderStyle === 'frame' || borderStyle === 'all' || borderStyle === 'full') {
+      make('a-entity',{position:'0 0 .008','round-rect':`mode: outline; width: ${w}; height: ${h}; radius: ${cornerR}; thickness: ${bt}; color: ${border}; opacity: ${borderOpacity}`},targetRoot);
+    } else if (borderStyle === 'top-bottom' || borderStyle === 'corners') {
+      const lineW = Math.max(0.01, w - 2 * cornerR);
+      [1, -1].forEach(sy => make('a-plane',{width:lineW,height:bt,position:`0 ${sy * (h / 2 - bt / 2)} .008`,material:`shader: flat; color:${border}; opacity:${borderOpacity}; transparent:true; side:double`},targetRoot));
+    }
+    if (borderStyle === 'corners' || Number(borderCfg.cornerSize) > 0) {
+      const cSize = Number(borderCfg.cornerSize) > 0 ? Number(borderCfg.cornerSize) : 0.14;
+      const cColor = style.panelBorderColor || borderCfg.cornerColor || borderCfg.accentColor || border;
+      make('a-entity',{position:'0 0 .011','round-rect':`mode: corners; width: ${w}; height: ${h}; radius: ${cornerR}; thickness: ${bt * 1.35}; leg: ${cSize}; color: ${cColor}; opacity: ${borderOpacity}`},targetRoot);
+    }
+  }
+ } else {
+
  const glowColor = borderCfg.glowColor || (bgCfg.outerGlow ? (bgCfg.outerGlowColor || style.highlightColor || border) : '');
  if (glowColor) {
    const glowPad = Number(borderCfg.glowSpread || bgCfg.outerGlowSpread) > 0 ? Number(borderCfg.glowSpread || bgCfg.outerGlowSpread) : 0.06;
@@ -860,7 +977,7 @@ function basePanel(title,subtitle='',style={},targetRoot=uiRoot,cardCfg={}){
      });
    }
  }
-
+ }
  if (headerCfg.show !== false) {
    const defaultTitleY = h / 2 - 0.13;
    const defaultSubY = defaultTitleY - 0.13;
