@@ -1,4 +1,3 @@
-[README.md](https://github.com/user-attachments/files/33919433/README.md)
 # Solar Odyssey VR
 
 🚀 **[กดเพื่อเล่นเกม](https://rert4kz.github.io/SOLAR/)**
