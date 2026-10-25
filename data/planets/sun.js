@@ -381,7 +381,7 @@ window.PLANET_DATA = window.PLANET_DATA.filter(
       // พื้นหลังทึบ (opacity 1) เพื่อไม่ให้ดาวดวงอื่นทะลุมารบกวนข้อความ
       background: {
         color: '#06122a',
-        opacity: 0.42,
+        opacity: 0.70,
         image: ''
       },
 
