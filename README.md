@@ -1,1 +1,0 @@
-https://rert4kz.github.io/SOLAR/?utm_source=chatgpt.com&fbclid=IwY2xjawVHELBleHRuA2FlbQIxMABwZG9mBWJyaWQRMWVZVVB1aEVwR25EUjlIUUlzcnRjBmFwcF9pZBAyMjIwMzkxNzg4MjAwODkyAAEem2rQBV-nw8fng5vkikhVE5txMguU-87eWoG8j6rU0FiYNsJgD9DqPZprUK8_aem_ehnUlXqN4trjnK6M7StTWw
