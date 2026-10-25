@@ -259,7 +259,7 @@ window.PLANET_DATA = window.PLANET_DATA.filter(
       // --- ระดับที่ 1: ตัวเลขเด่นใต้โมเดล ---
       api.make('a-plane', {
         position: '-0.80 -0.525 0.03', width: 0.92, height: 0.21,
-        material: 'shader: flat; color: #3b1405; opacity: 0.75; transparent: true; side: double'
+        material: 'shader: flat; color: #3b1405; opacity: 0.55; transparent: true; side: double'
       }, dyn);
       api.txt(dyn, pg.stat.big, '-0.80 -0.472 0.04', 0.86, '#ffd27d', 'center',
         { fontSize: 92, lineHeight: 1.15, fontFamily: FONT });
@@ -381,7 +381,7 @@ window.PLANET_DATA = window.PLANET_DATA.filter(
       // พื้นหลังทึบ (opacity 1) เพื่อไม่ให้ดาวดวงอื่นทะลุมารบกวนข้อความ
       background: {
         color: '#06122a',
-        opacity: 1.0,
+        opacity: 0.42,
         image: ''
       },
 
@@ -392,7 +392,7 @@ window.PLANET_DATA = window.PLANET_DATA.filter(
         cornerSize: 0.12,
         cornerColor: '#ff9b42',
         glowColor: '#ff7a18',
-        glowOpacity: 0.14
+        glowOpacity: 0.10
       },
 
       header: {
@@ -433,8 +433,8 @@ window.PLANET_DATA = window.PLANET_DATA.filter(
 
       decorations: [
         // แผ่นกระจกจางๆ ด้านซ้าย (โมเดล) และด้านขวา (ความรู้)
-        { type: 'plane', position: '-0.80 -0.125 0.006', width: 0.92, height: 1.04, color: '#0d2a52', opacity: 0.55 },
-        { type: 'plane', position: '0.47 -0.11 0.006', width: 1.50, height: 0.98, color: '#0a2147', opacity: 0.45 },
+        { type: 'plane', position: '-0.80 -0.125 0.006', width: 0.92, height: 1.04, color: '#0d2a52', opacity: 0.25 },
+        { type: 'plane', position: '0.47 -0.11 0.006', width: 1.50, height: 0.98, color: '#0a2147', opacity: 0.32 },
 
         // เส้นกรอบบางสีฟ้า (hairline) ซ้อนด้านในกรอบสีส้ม
         { type: 'plane', position: '0 0.835 0.012', width: 2.46, height: 0.004, color: '#7deaff', opacity: 0.5 },
