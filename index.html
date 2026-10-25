@@ -81,7 +81,7 @@
   <a-camera position="0 1.6 0" look-controls="pointerLockEnabled: false" wasd-controls="enabled: false">
     <a-cursor id="desktop-cursor" raycaster="objects: .selectable; far: 25; enabled: false" fuse="false" visible="false" material="color: #ffffff; shader: flat; opacity: 1; depthTest: false" geometry="primitive: ring; radiusInner: 0.010; radiusOuter: 0.020"></a-cursor>
     <!-- การ์ด UI ผูกติดกับกล้อง แสดงตรงหน้าผู้เล่นและขยับตามเมื่อหันหน้าเสมอ -->
-    <a-entity id="ui-root" position="0 0 -1.8" visible="false"></a-entity>
+    <a-entity id="ui-root" position="0 0 -1.8" visible="false" soft-follow></a-entity>
   </a-camera>
   <a-entity id="right-controller" laser-controls="hand: right" cursor="rayOrigin: entity; fuse: false" raycaster="objects: .selectable; far: 25; showLine: true" line="color: #81d8ff; opacity: 0.8"></a-entity>
   <a-entity id="left-controller" laser-controls="hand: left" cursor="rayOrigin: entity; fuse: false" raycaster="objects: .selectable; far: 25; showLine: true" line="color: #81d8ff; opacity: 0.8"></a-entity>
@@ -557,6 +557,42 @@ const MILKYWAY_STRENGTH = 1;
   document.querySelector('a-scene').appendChild(shell);
 })();
 function make(tag,attrs,parent){const el=document.createElement(tag);for(const [key,value] of Object.entries(attrs))el.setAttribute(key,value);parent.appendChild(el);return el;}
+// การ์ดลอยตามสายตาแบบนุ่ม ๆ: เมื่อหันหน้า การ์ดจะตามช้ากว่าเล็กน้อยแล้วค่อยกลับมาอยู่ตรงหน้า (ไม่แข็งตายตัว)
+// smooth = ความหน่วง (วินาที) ยิ่งมากยิ่งหน่วง | maxYaw / maxPitch = องศาสูงสุดที่การ์ดเลื่อนออกจากกลางสายตาได้
+AFRAME.registerComponent('soft-follow', {
+  schema: { smooth: { default: 0.18 }, maxYaw: { default: 20 }, maxPitch: { default: 14 } },
+  init: function () {
+    this.base = this.el.object3D.position.clone();   // ตำแหน่งเดิมในกล้อง (0 0 -1.8)
+    this.sY = 0; this.sP = 0; this.ready = false;
+    this.e = new THREE.Euler(0, 0, 0, 'YXZ');
+    this.q = new THREE.Quaternion(); this.qc = new THREE.Quaternion(); this.qi = new THREE.Quaternion();
+    this.v = new THREE.Vector3();
+  },
+  tick: function (time, dt) {
+    const o = this.el.object3D;
+    if (!o.visible) { this.ready = false; return; }
+    const cam = this.el.parentNode && this.el.parentNode.object3D;
+    if (!cam) return;
+    const wrap = (a) => Math.atan2(Math.sin(a), Math.cos(a));
+    cam.getWorldQuaternion(this.qc);
+    this.e.setFromQuaternion(this.qc, 'YXZ');
+    const cy = this.e.y, cp = this.e.x;
+    if (!this.ready) { this.sY = cy; this.sP = cp; this.ready = true; }
+    const k = 1 - Math.exp(-Math.min(dt, 100) / 1000 / Math.max(this.data.smooth, 0.001));
+    this.sY += wrap(cy - this.sY) * k;
+    this.sP += (cp - this.sP) * k;
+    const my = THREE.MathUtils.degToRad(this.data.maxYaw), mp = THREE.MathUtils.degToRad(this.data.maxPitch);
+    this.sY = cy - THREE.MathUtils.clamp(wrap(cy - this.sY), -my, my);
+    this.sP = cp - THREE.MathUtils.clamp(cp - this.sP, -mp, mp);
+    // การ์ดอยู่ในทิศ (sY, sP) แบบหน่วง แล้วแปลงกลับเป็นพิกัดภายในกล้อง
+    this.e.set(this.sP, this.sY, 0, 'YXZ');
+    this.q.setFromEuler(this.e);
+    this.qi.copy(this.qc).invert();
+    this.v.copy(this.base).applyQuaternion(this.q).applyQuaternion(this.qi);
+    o.position.copy(this.v);
+    o.quaternion.copy(this.qi).multiply(this.q);
+  }
+});
 // วงแหวนดาวเสาร์แบบมี texture: แถบภาพแนวนอน (ซ้าย=ขอบใน, ขวา=ขอบนอก) ถูกแมปตามรัศมีของ RingGeometry
 // ถ้าโหลดภาพไม่ได้ จะยังแสดงเป็นแผ่นวงแหวนสีเรียบ (p.ringColor) แทน
 AFRAME.registerComponent('ring-texture', {
