@@ -50,7 +50,7 @@ window.PLANET_DATA.push({
   radius: 0.56,
   image: '', // ไฟล์ assets/images/saturn.svg ไม่มีบนเว็บ (ทำให้เกิดกล่องดำ) จึงเว้นว่างไว้
   texture: 'assets/images/saturn.jpg',
-  ringColor: 'assets/ring_saturn.jpg', // เฉพาะดาวที่มีวงแหวน เช่น '#cdb98d'
+  ringColor: 'assets/images/ring_saturn.jpg', // เฉพาะดาวที่มีวงแหวน เช่น '#cdb98d'
 
   // --- 3. ปรับแต่งสไตล์เฉพาะของดาวดวงนี้ (เว้นว่างไว้หากต้องการใช้ค่ามาตรฐานกลาง) ---
   // ค่าชุดนี้มีผลกับหน้ามินิเกมด้วย (fontSize 0 = ใช้ขนาดมาตรฐาน 42 ตัวอักษรจะใหญ่อ่านง่าย)
