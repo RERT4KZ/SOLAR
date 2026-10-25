@@ -557,6 +557,37 @@ const MILKYWAY_STRENGTH = 1;
   document.querySelector('a-scene').appendChild(shell);
 })();
 function make(tag,attrs,parent){const el=document.createElement(tag);for(const [key,value] of Object.entries(attrs))el.setAttribute(key,value);parent.appendChild(el);return el;}
+// วงแหวนดาวเสาร์แบบมี texture: แถบภาพแนวนอน (ซ้าย=ขอบใน, ขวา=ขอบนอก) ถูกแมปตามรัศมีของ RingGeometry
+// ถ้าโหลดภาพไม่ได้ จะยังแสดงเป็นแผ่นวงแหวนสีเรียบ (p.ringColor) แทน
+AFRAME.registerComponent('ring-texture', {
+  schema: { src: { type: 'string' }, inner: { default: 1 }, outer: { default: 2 }, color: { type: 'color', default: '#cdb98d' } },
+  init: function () {
+    const d = this.data;
+    const geo = new THREE.RingGeometry(d.inner, d.outer, 96, 1);
+    const pos = geo.attributes.position, uv = geo.attributes.uv;
+    for (let k = 0; k < pos.count; k++) {
+      const r = Math.hypot(pos.getX(k), pos.getY(k));
+      uv.setXY(k, (r - d.inner) / (d.outer - d.inner), 0.5);
+    }
+    uv.needsUpdate = true;
+    const mat = new THREE.MeshBasicMaterial({ color: d.color, side: THREE.DoubleSide, transparent: true, opacity: 0.85, depthWrite: false });
+    this.mesh = new THREE.Mesh(geo, mat);
+    this.el.setObject3D('mesh', this.mesh);
+    if (d.src) {
+      new THREE.TextureLoader().load(d.src, (tex) => {
+        tex.colorSpace = THREE.SRGBColorSpace;
+        mat.map = tex; mat.color.set(0xffffff); mat.opacity = 1; mat.needsUpdate = true;
+      }, undefined, () => console.warn('ring-texture: โหลดภาพไม่ได้', d.src));
+    }
+  },
+  remove: function () {
+    if (!this.mesh) return;
+    this.mesh.geometry.dispose();
+    if (this.mesh.material.map) this.mesh.material.map.dispose();
+    this.mesh.material.dispose();
+    this.el.removeObject3D('mesh');
+  }
+});
 // Full-cycle prototype. All quiz items are placeholders, not final astronomy questions.
 const uiRoot=document.querySelector('#ui-root');
 const planetEntities=new Map();
@@ -870,7 +901,13 @@ function planetImage(p, targetRoot=uiRoot, cardCfg={}){
      const rRadius = Number(mediaCfg.ringRadius) > 0 ? Number(mediaCfg.ringRadius) : modelRadius * 1.48;
      const rTube = Number(mediaCfg.ringTube) > 0 ? Number(mediaCfg.ringTube) : 0.025;
      const [ox, oy, oz] = parseVec3(mediaCfg.modelOffset, [0, 0, 0]);
-     make('a-torus',{position:`${ox} ${oy} ${oz}`,radius:rRadius,'radius-tubular':rTube,rotation:mediaCfg.ringRotation||'70 0 0',color:mediaCfg.ringColor||p.ringColor||'#cdb98d'},v);
+     const ringTexCard = mediaCfg.ringTexture || p.ringTexture || ((p.id === 'saturn' || p._fallbackId === 'saturn') ? 'assets/images/ring_saturn.png' : '');
+    if (ringTexCard) {
+      const rOuter = rRadius * 1.5;
+      make('a-entity',{position:`${ox} ${oy} ${oz}`,rotation:mediaCfg.ringRotation||'70 0 0','ring-texture':`src: ${ringTexCard}; inner: ${(rOuter*0.555).toFixed(3)}; outer: ${rOuter.toFixed(3)}; color: ${mediaCfg.ringColor||p.ringColor||'#cdb98d'}`},v);
+    } else {
+      make('a-torus',{position:`${ox} ${oy} ${oz}`,radius:rRadius,'radius-tubular':rTube,rotation:mediaCfg.ringRotation||'70 0 0',color:mediaCfg.ringColor||p.ringColor||'#cdb98d'},v);
+    }
    }
  }
 
@@ -1857,14 +1894,22 @@ planets.forEach((p, i) => {
   }, group);
 
   if (id === 'saturn' || fallbackKey === 'saturn' || p.ringColor) {
-    make('a-torus', {
-      radius: radius * 1.65,
-      'radius-tubular': 0.045,
-      'segments-radial': 8,
-      'segments-tubular': 48,
-      rotation: '70 0 0',
-      color: p.ringColor || '#cdb98d'
-    }, group);
+       const ringTex = p.ringTexture || ((id === 'saturn' || fallbackKey === 'saturn') ? 'assets/images/ring_saturn.png' : '');
+    if (ringTex) {
+      make('a-entity', {
+        'ring-texture': `src: ${ringTex}; inner: ${(radius * 1.25).toFixed(3)}; outer: ${(radius * 2.25).toFixed(3)}; color: ${p.ringColor || '#cdb98d'}`,
+        rotation: '70 0 0'
+      }, group);
+    } else {
+      make('a-torus', {
+        radius: radius * 1.65,
+        'radius-tubular': 0.045,
+        'segments-radial': 8,
+        'segments-tubular': 48,
+        rotation: '70 0 0',
+        color: p.ringColor || '#cdb98d'
+      }, group);
+    }
   }
 
   // Lightweight hover FX: two low-poly cyan torus rings; kept hidden until the planet is targeted.
