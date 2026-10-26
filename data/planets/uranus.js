@@ -149,9 +149,7 @@ window.PLANET_DATA = window.PLANET_DATA || [];
     // ขนาดดาวในระบบสุริยะ
     radius: 0.38,
 
-    // ไม่ใช้รูปภาพ 2D
-    image: 'assets/images/uranus.jpg',
-
+   
     // พื้นผิวดาวยูเรนัส
     texture: 'assets/images/2k_uranus.jpg',
 
