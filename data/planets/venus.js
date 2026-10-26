@@ -41,37 +41,39 @@ window.PLANET_DATA = window.PLANET_DATA.filter(p => p.id !== 'venus');
       while (dyn.firstChild) dyn.removeChild(dyn.firstChild);
 
       // --- ข้อความ fact ปัจจุบัน ---
+      // left-align: position.x = ขอบซ้ายของข้อความ (txt() บวก width/2 ให้อัตโนมัติ)
+      // ขอบซ้าย x = -0.06 (ชิดเส้นแบ่ง) width = 1.18 → ขอบขวา = -0.06+1.18 = 1.12 ✓ (ในการ์ด)
       api.txt(
         dyn,
         '✦ ' + facts[factIdx],
-        '0.47 -0.04 0.055',
-        1.34,
+        '-0.06 0.05 0.055',
+        1.18,
         C.white, 'left',
-        style(62, { lineHeight: 1.38, maxHeight: 0.55, minFontSize: 50 })
+        style(50, { lineHeight: 1.38, minFontSize: 42 })
       );
 
       // ตัวเลข n/total ด้านขวาล่าง
       api.txt(
         dyn,
         `${factIdx + 1} / ${facts.length}`,
-        '1.05 -0.55 0.055',
-        0.20, C.peach, 'center',
-        style(64, { lineHeight: 1.0, maxHeight: 0.09, minFontSize: 48 })
+        '1.00 -0.52 0.055',
+        0.22, C.peach, 'center',
+        style(60, { lineHeight: 1.0, minFontSize: 46 })
       );
 
       // ปุ่ม ◀ / ▶ เลื่อน fact
       if (facts.length > 1) {
         api.button(
-          dyn, '◀', '0.14 -0.565 0.060', 0.24, 0.16,
+          dyn, '◀', '0.10 -0.540 0.060', 0.24, 0.16,
           () => { factIdx = (factIdx + facts.length - 1) % facts.length; draw(); },
           '#3b0a1a', '#9f1239',
-          style(110, { textColor: C.white, maxHeight: 0.14, minFontSize: 90, opacity: 1 })
+          style(110, { textColor: C.white, minFontSize: 90, opacity: 1 })
         );
         api.button(
-          dyn, '▶', '0.48 -0.565 0.060', 0.24, 0.16,
+          dyn, '▶', '0.44 -0.540 0.060', 0.24, 0.16,
           () => { factIdx = (factIdx + 1) % facts.length; draw(); },
           '#3b0a1a', '#9f1239',
-          style(110, { textColor: C.white, maxHeight: 0.14, minFontSize: 90, opacity: 1 })
+          style(110, { textColor: C.white, minFontSize: 90, opacity: 1 })
         );
       }
 
