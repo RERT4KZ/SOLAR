@@ -60,3 +60,75 @@ window.PLANET_DATA.push({
     highlightColor: ''
   }
 });
+
+// --- 4. การ์ดข้อมูลแยกอิสระ ---
+  card: {
+    width: 1.84,
+    height: 1.28,
+    layout: 'horizontal',
+    position: { x: 0, y: 0, z: 0 },
+    background: {
+      color: '#160812',
+      opacity: 1.0,
+      outerGlow: true,
+      outerGlowColor: '#fb7185',
+      outerGlowOpacity: 0.35       // เพิ่มแสงเรืองรอบการ์ดให้เด่นขึ้น
+    },
+    border: {
+      style: 'full',
+      color: '#fda4af',
+      thickness: 0.024,
+      opacity: 1.0
+    },
+    header: {
+      badgeText: '✦ ดาวฝาแฝดของโลก · GODDESS OF BEAUTY ✦',
+      titleFontSize: 44,
+      subtitleFontSize: 30,
+      titleColor: '#fff1f2',
+      subtitleColor: '#fecdd3',
+      showDivider: true,
+      dividerColor: '#fb7185'
+    },
+    media: {
+      position: { x: -0.48, y: -0.01, z: 0.22 },
+      modelRadius: 0.20,
+      showCaption: true,
+      caption: '✦ แบบจำลอง 3D ดาวศุกร์ ✦',
+      captionColor: '#fecdd3'
+    },
+    content: {
+      position: { x: -0.15, y: -0.01, z: 0.02 },
+      width: 0.94,
+      fontSize: 28,                // ขนาดปกติ อ่านง่าย ไม่ตกบรรทัด
+      lineHeight: 46,
+      align: 'left',
+      bulletPrefix: '✦ '
+    },
+    buttons: [
+      {
+        id: 'quiz',
+        label: '✦ ท้าทายควิซดาวศุกร์',
+        action: 'quiz',
+        position: { x: 0.32, y: -0.46, z: 0.035 },
+        width: 0.68,
+        height: 0.13,
+        color: '#be123c',          // พื้นปุ่มสีแดงกุหลาบสด
+        hoverColor: '#fb7185',
+        textColor: '#ffffff',      // ตัวอักษรขาวสว่าง เห็นทันทีโดยไม่ต้องชี้
+        fontSize: 32
+      },
+      {
+        id: 'close',
+        label: '✕ กลับสู่ระบบสุริยะ',
+        action: 'close',
+        position: { x: -0.50, y: -0.46, z: 0.035 },
+        width: 0.46,
+        height: 0.13,
+        color: '#9f1239',          // ไวน์แดงสว่างขึ้น แยกจากพื้นหลังชัดเจน
+        hoverColor: '#e11d48',
+        textColor: '#ffffff',
+        fontSize: 32
+      }
+    ]
+  }
+});
