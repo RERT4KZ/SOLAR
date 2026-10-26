@@ -2,31 +2,18 @@
 // ไฟล์ข้อมูลประจำดวงดาว: ดาวศุกร์ (Venus)
 // ไฟล์: data/planets/venus.js
 // ============================================================================
-// [ค่าอ้างอิงเดิมของดาวศุกร์ (นำไปวางในช่องด้านล่าง หรือปรับแต่งเองได้)]
-//   id: 'venus'
-//   name: 'ดาวศุกร์'
-//   en: 'Venus'
-//   color: '#e7bd7b'
-//   radius: 0.38
-//   info: 'ดาวเคราะห์ที่มีพื้นผิวร้อนที่สุด'
-//   image: 'assets/images/venus.svg'
+// [ค่าอ้างอิงเดิมของดาวศุกร์]
+//   id: 'venus' | name: 'ดาวศุกร์' | en: 'Venus'
+//   color: '#e7bd7b' | radius: 0.38
 //
 // [มาตรฐานดีไซน์กลางที่ใช้เหมือนกันทั้งโปรเจกต์ (หากเว้นว่าง ระบบจะใช้ค่าเหล่านี้)]
 //   - ฟอนต์หลัก (fontFamily)     : '"Sarabun", "Kanit", "Tahoma", system-ui, sans-serif'
-//   - ขนาดฟอนต์ (fontSize)       : 42 (px บน Canvas 1024px)
 //   - ขนาดแผงการ์ด UI            : กว้าง 1.78 เมตร x สูง 1.22 เมตร
-//   - สีพื้นหลังการ์ด (panelBgColor): '#071827' (ความโปร่งใส opacity 0.94)
-//   - สีเส้นขอบการ์ด (panelBorderColor): '#22d3ee'
-//   - สีหัวข้อชื่อดาว (titleColor) : '#a5f3fc' (ขนาดกว้าง 1.35)
-//   - สีชื่อภาษาอังกฤษ (subtitleColor): '#c8e9f3' (ขนาดกว้าง 1.25)
-//   - สีข้อความเนื้อหา (textColor) : '#ffffff' (ขนาดกว้าง 0.90, จัดชิดซ้าย)
-//   - สีปุ่มมินิเกม (buttonColor)  : '#0e7490' (เมื่อชี้เมาส์: '#0891b2')
-//   - สีปุ่มปิดการ์ด (closeButtonColor): '#334155'
-//   - สีเรืองแสงรอบดาว (highlightColor): '#6cd7ff'
+//   - สีปุ่มมินิเกม / ปุ่มปิด / สีเรืองแสง ตามที่กำหนดใน style และ card.buttons
 // ============================================================================
-
+ 
 window.PLANET_DATA = window.PLANET_DATA || [];
-
+ 
 window.PLANET_DATA.push({
   // --- 1. ข้อมูลพื้นฐานและเนื้อหาของดาว ---
   id: 'venus',
@@ -39,30 +26,30 @@ window.PLANET_DATA.push({
     'หมุนรอบตัวเองกลับทิศ ดวงอาทิตย์ขึ้นทิศตะวันตก',
     'สว่างที่สุดบนท้องฟ้า รู้จักในชื่อดาวประกายพรึก'
   ],
-
+ 
   // --- 2. ตั้งค่าโมเดล 3D และรูปภาพประกอบ ---
   color: '#e7bd7b',
   radius: 0.38,
   image: '',
   texture: 'assets/images/venus.jpg',
-
-  // --- 3. ปรับแต่งสไตล์เฉพาะของดาวดวงนี้ (เว้นว่างไว้หากต้องการใช้ค่ามาตรฐานกลาง) ---
+ 
+  // --- 3. สไตล์เฉพาะของดาวดวงนี้ (ธีม Rose Gold) ---
   style: {
-    fontFamily: '',
-    fontSize: 44,
+    fontFamily: '"Sarabun", "Kanit", "Tahoma", system-ui, sans-serif',
+    fontSize: 40,                  // ขนาดมาตรฐาน อ่านสบาย ไม่ใหญ่เกินกรอบ
     badgeText: '✦ ดาวฝาแฝดของโลก · GODDESS OF BEAUTY ✦',
-    panelBgColor: '#160812',       // พื้นหลังสีดำเหลือบกุหลาบเข้ม (Rose Obsidian)
-    panelBorderColor: '#fb7185',   // ขอบการ์ดสีโรสโกลด์ / ชมพูพีชสว่าง (Rose Gold)
-    titleColor: '#fff1f2',         // หัวข้อสีขาวประกายชมพูโรส
-    subtitleColor: '#fecdd3',      // ชื่อภาษาอังกฤษสีพีชพาสเทล
-    textColor: '#ffffff',          // ข้อความเนื้อหาสีขาวคมชัด
-    buttonColor: '#be123c',        // ปุ่มมินิเกมสีแดงกุหลาบคริมสันสว่าง เห็นชัดเจน
-    buttonHoverColor: '#fb7185',   // สีปุ่มเมื่อชี้เมาส์สว่างเป็นชมพูประกายโรสโกลด์
-    closeButtonColor: '#4c0519',   // ปุ่มปิดสีไวน์แดงชัดเจน ไม่มืดทึบ
-    highlightColor: '#fda4af'      // แสงเรืองรองสีชมพูโรสโกลด์รอบดาว
+    panelBgColor: '#160812',
+    panelBorderColor: '#fb7185',
+    titleColor: '#fff1f2',
+    subtitleColor: '#fecdd3',
+    textColor: '#ffffff',
+    buttonColor: '#be123c',        // ปุ่มสว่างตลอดเวลา เห็นข้อความโดยไม่ต้องชี้
+    buttonHoverColor: '#e11d48',
+    closeButtonColor: '#9f1239',   // ปุ่มปิดสว่างขึ้น เห็นชัดเจนตั้งแต่แรก
+    highlightColor: '#fda4af'
   },
-
-  // --- 4. ตั้งค่าการ์ดข้อมูลแยกอิสระ (แก้ไขเฉพาะดาวดวงนี้ได้โดยไม่กระทบดาวดวงอื่น) ---
+ 
+  // --- 4. การ์ดข้อมูลแยกอิสระ ---
   card: {
     width: 1.84,
     height: 1.28,
@@ -73,35 +60,35 @@ window.PLANET_DATA.push({
       opacity: 1.0,
       outerGlow: true,
       outerGlowColor: '#fb7185',
-      outerGlowOpacity: 0.28
+      outerGlowOpacity: 0.35       // เพิ่มแสงเรืองรอบการ์ดให้เด่นขึ้น
     },
     border: {
-      style: 'full',               // กรอบเส้นล้อมรอบครบทั้ง 4 ด้าน (กรอบรอบๆ สวยงาม)
-      color: '#fb7185',            // ขอบสีโรสโกลด์สว่างคมชัด
-      thickness: 0.022,
+      style: 'full',
+      color: '#fda4af',
+      thickness: 0.024,
       opacity: 1.0
     },
     header: {
       badgeText: '✦ ดาวฝาแฝดของโลก · GODDESS OF BEAUTY ✦',
-      titleFontSize: 46,           // ขนาดตัวอักษรชื่อดาว (ปรับให้พอดี สวยงาม)
-      subtitleFontSize: 34,        // ขนาดตัวอักษรภาษาอังกฤษ
+      titleFontSize: 44,
+      subtitleFontSize: 30,
       titleColor: '#fff1f2',
       subtitleColor: '#fecdd3',
       showDivider: true,
       dividerColor: '#fb7185'
     },
     media: {
-      position: { x: -0.48, y: -0.01, z: 0.22 }, // ลอยเด่นหน้าการ์ด ไม่ถูกตัดแหว่ง
+      position: { x: -0.48, y: -0.01, z: 0.22 },
       modelRadius: 0.20,
       showCaption: true,
-      caption: 'แบบจำลอง 3D ดาวศุกร์',
+      caption: '✦ แบบจำลอง 3D ดาวศุกร์ ✦',
       captionColor: '#fecdd3'
     },
     content: {
       position: { x: -0.15, y: -0.01, z: 0.02 },
       width: 0.94,
-      fontSize: 28,                // ขนาดตัวอักษรพอเหมาะ ไม่ตกบรรทัด
-      lineHeight: 44,
+      fontSize: 28,                // ขนาดปกติ อ่านง่าย ไม่ตกบรรทัด
+      lineHeight: 46,
       align: 'left',
       bulletPrefix: '✦ '
     },
@@ -113,10 +100,10 @@ window.PLANET_DATA.push({
         position: { x: 0.32, y: -0.46, z: 0.035 },
         width: 0.68,
         height: 0.13,
-        color: '#be123c',          // สีปุ่มแดงกุหลาบคริมสันสว่าง เห็นตัวอักษรได้ทันทีโดยไม่ต้องชี้เมาส์
-        hoverColor: '#fb7185',     // สีปุ่มเมื่อชี้เมาส์สว่างเป็นชมพูประกายโรสโกลด์
-        textColor: '#ffffff',      // ตัวอักษรสีขาวสว่าง ชัดเจน
-        fontSize: 34
+        color: '#be123c',          // พื้นปุ่มสีแดงกุหลาบสด
+        hoverColor: '#fb7185',
+        textColor: '#ffffff',      // ตัวอักษรขาวสว่าง เห็นทันทีโดยไม่ต้องชี้
+        fontSize: 32
       },
       {
         id: 'close',
@@ -125,10 +112,10 @@ window.PLANET_DATA.push({
         position: { x: -0.50, y: -0.46, z: 0.035 },
         width: 0.46,
         height: 0.13,
-        color: '#4c0519',          // สีปุ่มแดงไวน์เบอร์กันดีชัดเจน ไม่กลืนกับพื้นหลัง
-        hoverColor: '#e11d48',     // สีเมื่อชี้เมาส์
-        textColor: '#fff1f2',      // ตัวอักษรสีขาวอมชมพู สว่างชัดเจน
-        fontSize: 34
+        color: '#9f1239',          // ไวน์แดงสว่างขึ้น แยกจากพื้นหลังชัดเจน
+        hoverColor: '#e11d48',
+        textColor: '#ffffff',
+        fontSize: 32
       }
     ]
   }
