@@ -56,10 +56,9 @@ window.PLANET_DATA = window.PLANET_DATA || [];
 
     radius: 0.39,
 
-    image: '',
+    image: 'assets/images/neptune.jpg',
 
-    // พื้นผิวดาวเนปจูนจริงจากโปรเจกต์
-    texture: 'assets/images/neptune.jpg',
+  
 
     // ============================================================
     // 4. PLANET STYLE
