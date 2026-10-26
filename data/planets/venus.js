@@ -43,13 +43,15 @@ window.PLANET_DATA = window.PLANET_DATA.filter(p => p.id !== 'venus');
       // --- ข้อความ fact ปัจจุบัน ---
       // left-align: position.x = ขอบซ้ายของข้อความ (txt() บวก width/2 ให้อัตโนมัติ)
       // ขอบซ้าย x = -0.06 (ชิดเส้นแบ่ง) width = 1.18 → ขอบขวา = -0.06+1.18 = 1.12 ✓ (ในการ์ด)
+      // [แก้ข้อความขาดหาย] ลดฟอนต์ 50 → 46, ให้ย่อได้ถึง 30, ระยะบรรทัด 1.38 → 1.30
+      // และกำหนด maxHeight 0.70 (พื้นที่ระหว่างเส้นเน้น y 0.385 กับปุ่ม ◀ ▶) ให้ข้อความยาวแสดงครบทุกบรรทัด
       api.txt(
         dyn,
         '✦ ' + facts[factIdx],
         '-0.06 0.05 0.055',
         1.18,
         C.white, 'left',
-        style(50, { lineHeight: 1.38, minFontSize: 42 })
+        style(46, { lineHeight: 1.30, minFontSize: 30, maxHeight: 0.70 })
       );
 
       // ตัวเลข n/total ด้านขวาล่าง
