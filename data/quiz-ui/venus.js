@@ -97,9 +97,13 @@ window.PLANET_QUIZ_UI['venus'] = {
       rowSpacing: 0.205,
       width: 1.62,
       height: 0.17,
-      color: '#5c0f27',
+      // ปุ่มพื้นทึบสว่างขึ้น + ขอบสีอ่อน + ตัวอักษรขาว → เห็นคำตอบทันทีโดยไม่ต้องชี้
+      color: '#9f1239',
       hoverColor: '#e11d48',
-      textColor: '#fff1f2',
+      textColor: '#ffffff',
+      borderColor: '#fda4af',
+      borderThickness: 0.006,
+      opacity: 1,
       fontSize: 46
     },
     exitButton: {
@@ -108,9 +112,12 @@ window.PLANET_QUIZ_UI['venus'] = {
       position: '0 -0.67 0.035',
       width: 1.05,
       height: 0.15,
-      color: '#3a1224',
+      color: '#5c1a30',
       hoverColor: '#881337',
-      textColor: '#fecdd3',
+      textColor: '#ffffff',
+      borderColor: '#fda4af',
+      borderThickness: 0.006,
+      opacity: 1,
       fontSize: 70
     }
   },
@@ -133,6 +140,9 @@ window.PLANET_QUIZ_UI['venus'] = {
       color: '#be123c',
       hoverColor: '#e11d48',
       textColor: '#ffffff',
+      borderColor: '#fecdd3',
+      borderThickness: 0.006,
+      opacity: 1,
       fontSize: 80
     }
   },
@@ -153,6 +163,9 @@ window.PLANET_QUIZ_UI['venus'] = {
       color: '#be123c',
       hoverColor: '#e11d48',
       textColor: '#ffffff',
+      borderColor: '#fecdd3',
+      borderThickness: 0.006,
+      opacity: 1,
       fontSize: 64
     },
     closeSolarButton: {
@@ -162,9 +175,12 @@ window.PLANET_QUIZ_UI['venus'] = {
       position: '0.42 -0.62 0.035',
       width: 0.80,
       height: 0.17,
-      color: '#3a1224',
+      color: '#5c1a30',
       hoverColor: '#881337',
-      textColor: '#fecdd3',
+      textColor: '#ffffff',
+      borderColor: '#fda4af',
+      borderThickness: 0.006,
+      opacity: 1,
       fontSize: 64
     }
   }
