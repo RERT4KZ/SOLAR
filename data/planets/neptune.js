@@ -38,7 +38,7 @@ window.PLANET_DATA.push({
 
   radius: 0.39,
 
-  image: "assets/images/2k_neptune.jpg",
+  image: "assets/images/neptune.jpg",
 
   
 
