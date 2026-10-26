@@ -62,94 +62,304 @@ window.PLANET_DATA.push({
     highlightColor: ''
   },
 
-  // --- 4. ตั้งค่าโครงสร้าง ขนาด ตำแหน่ง และปุ่มของการ์ดข้อมูลแยกอิสระ (Independent Card Config) ---
-  // ดาวเนปจูนใช้ธีมสีน้ำเงินเข้มแห่งห้วงอวกาศลึก พร้อมกรอบเรืองแสงสีคราม
-  card: {
-    width: 1.84,
-    height: 1.28,
-    layout: 'horizontal',
-    position: { x: 0, y: 0, z: 0 },
-    distance: 0,
-    rotation: { x: 0, y: 0, z: 0 },
-    background: {
-      color: '#07122b',
-      opacity: 0.95,
-      image: '',
-      outerGlow: true,
-      outerGlowColor: '#244e93',
-      outerGlowOpacity: 0.18
+  // ============================================================================
+// 4. NEPTUNE CARD — LEGENDARY SPACE FANTASY RPG
+// Theme: Cosmic Ocean • Celestial Crystal • Galactic Kingdom
+// ============================================================================
+
+card: {
+
+  // ============================================================
+  // 1. CARD STRUCTURE
+  // ============================================================
+
+  width: 2.40,
+  height: 1.65,
+
+  layout: 'horizontal',
+
+  position: {
+    x: 0,
+    y: 0,
+    z: 0
+  },
+
+  distance: 0,
+
+  rotation: {
+    x: 0,
+    y: 0,
+    z: 0
+  },
+
+
+  // ============================================================
+  // 2. BACKGROUND — DEEP SPACE GALAXY
+  // ============================================================
+
+  background: {
+
+    // พื้นหลังอวกาศสีน้ำเงินเข้ม
+    color: '#020817',
+
+    opacity: 0.97,
+
+    // ภาพพื้นหลัง (หากระบบรองรับ)
+    image: '',
+
+    // เปิดแสงเรืองรอบการ์ด
+    outerGlow: true,
+
+    // แสงพลังงานสีฟ้า
+    outerGlowColor: '#00BFFF',
+
+    outerGlowOpacity: 0.48
+
+  },
+
+
+  // ============================================================
+  // 3. BORDER — LEGENDARY CELESTIAL FRAME
+  // ============================================================
+
+  border: {
+
+    // กรอบแฟนตาซีแบบ RPG
+    style: 'frame',
+
+    // สีทอง Legendary
+    color: '#E8B86D',
+
+    // ความหนาของกรอบ
+    thickness: 0.025,
+
+    opacity: 1,
+
+    // ขนาดมุมกรอบ
+    cornerSize: 0.20
+
+  },
+
+
+  // ============================================================
+  // 4. HEADER — LEGENDARY PLANET TITLE
+  // ============================================================
+
+  header: {
+
+    // ชื่อดาวภาษาไทย
+    titlePos: {
+      x: 0,
+      y: 0.67,
+      z: 0.05
     },
-    border: {
-      style: 'frame',
-      color: '#4484d2',
-      thickness: 0.022,
-      opacity: 0.9,
-      cornerSize: 0.15
+
+    // ชื่อดาวภาษาอังกฤษ
+    subtitlePos: {
+      x: 0,
+      y: 0.53,
+      z: 0.05
     },
-    header: {
-      titlePos: { x: 0, y: 0.49, z: 0.02 },
-      subtitlePos: { x: 0, y: 0.39, z: 0.02 },
-      titleWidth: 1.4,
-      subtitleWidth: 1.25,
-      titleFontSize: 46,
-      subtitleFontSize: 38,
-      titleColor: '#6b3458',
-      subtitleColor: '#0ec14f',
-      align: 'center',
-      showDivider: true,
-      dividerY: 0.32,
-      dividerColor: '#3b82f6'
+
+    titleWidth: 1.75,
+
+    subtitleWidth: 1.50,
+
+    // ขนาดข้อความ
+    titleFontSize: 58,
+
+    subtitleFontSize: 40,
+
+    // สีฟ้าเรืองแสง
+    titleColor: '#67E8F9',
+
+    // สีขาวน้ำแข็ง
+    subtitleColor: '#E0F7FF',
+
+    align: 'center',
+
+    // เส้นคั่นหัวข้อ
+    showDivider: true,
+
+    dividerY: 0.43,
+
+    // สีฟ้าคริสตัล
+    dividerColor: '#00D9FF'
+
+  },
+
+
+  // ============================================================
+  // 5. MEDIA — LEGENDARY PLANET DISPLAY
+  // ============================================================
+
+  media: {
+
+    show: true,
+
+    // ตำแหน่งโมเดลดาวด้านซ้าย
+    position: {
+      x: -0.68,
+      y: -0.04,
+      z: 0.05
     },
-    media: {
-      show: true,
-      position: { x: -0.50, y: 0.0, z: 0.03 },
-      show3D: true,
-      modelRadius: 0.21,
-      modelOffset: { x: 0, y: 0.08, z: 0.04 },
-      showImage: true,
-      imageWidth: 0.38,
-      imageHeight: 0.24,
-      imageOffset: { x: 0, y: -0.22, z: 0.01 },
-      showCaption: true,
-      captionPos: { x: 0, y: -0.38, z: 0.02 }
+
+    // เปิดโมเดลดาว 3D
+    show3D: true,
+
+    // ขนาดโมเดล
+    modelRadius: 0.30,
+
+    // ปรับตำแหน่งโมเดล
+    modelOffset: {
+      x: 0,
+      y: 0.13,
+      z: 0.06
     },
-    content: {
-      position: { x: 0.23, y: -0.01, z: 0.02 },
-      width: 0.98,
-      maxHeight: 0.60,
-      fontSize: 36,
-      lineHeight: 46,
-      align: 'left',
-      bulletPrefix: '• ',
-      includeInfo: true,
-      includeFacts: true
+
+    // แสดงภาพประกอบ
+    showImage: true,
+
+    imageWidth: 0.52,
+
+    imageHeight: 0.28,
+
+    imageOffset: {
+      x: 0,
+      y: -0.27,
+      z: 0.02
     },
-    buttonLayout: 'custom',
-    buttons: [
-      {
-        id: 'quiz',
-        label: 'เริ่มมินิเกมคำถาม',
-        action: 'quiz',
-        position: { x: -0.22, y: -0.49, z: 0.03 },
-        width: 0.64,
-        height: 0.13,
-        color: '#59a7eb',
-        hoverColor: '#32f30b',
-        textColor: '#07010f',
-        fontSize: 78
+
+    // แสดงคำอธิบายภาพ
+    showCaption: true,
+
+    captionPos: {
+      x: 0,
+      y: -0.44,
+      z: 0.04
+    }
+
+  },
+
+
+  // ============================================================
+  // 6. CONTENT — GALACTIC KNOWLEDGE PANEL
+  // ============================================================
+
+  content: {
+
+    // ตำแหน่งแผงข้อมูลด้านขวา
+    position: {
+      x: 0.30,
+      y: -0.03,
+      z: 0.05
+    },
+
+    // ความกว้างพื้นที่ข้อความ
+    width: 1.20,
+
+    // ความสูงของเนื้อหา
+    maxHeight: 0.84,
+
+    // ขนาดฟอนต์
+    fontSize: 30,
+
+    // ระยะห่างบรรทัด
+    lineHeight: 42,
+
+    align: 'left',
+
+    // สัญลักษณ์ RPG
+    bulletPrefix: '✦ ',
+
+    // แสดงข้อมูลทั่วไป
+    includeInfo: true,
+
+    // แสดงข้อมูลน่าสนใจ
+    includeFacts: true
+
+  },
+
+
+  // ============================================================
+  // 7. RPG BUTTON SYSTEM
+  // ============================================================
+
+  buttonLayout: 'custom',
+
+  buttons: [
+
+    // ==========================================================
+    // BUTTON 1 — START GALACTIC QUEST
+    // ==========================================================
+
+    {
+
+      id: 'quiz',
+
+      label: '⚔ เริ่มมินิเกมคำถาม',
+
+      action: 'quiz',
+
+      position: {
+        x: -0.28,
+        y: -0.68,
+        z: 0.07
       },
-      {
-        id: 'close',
-        label: 'ปิดหน้าต่าง',
-        action: 'close',
-        position: { x: 0.38, y: -0.49, z: 0.03 },
-        width: 0.42,
-        height: 0.13,
-        color: '#06a6eb',
-        hoverColor: '#ef0c0c',
-        textColor: '#080115',
-        fontSize: 108
-      }
-    ]
-  }
-});
+
+      width: 0.86,
+
+      height: 0.17,
+
+      // ปุ่มน้ำเงินพลังงาน
+      color: '#0759C7',
+
+      // สีเมื่อชี้เมาส์
+      hoverColor: '#00D9FF',
+
+      // สีข้อความ
+      textColor: '#FFFFFF',
+
+      fontSize: 42
+
+    },
+
+
+    // ==========================================================
+    // BUTTON 2 — CLOSE GALACTIC WINDOW
+    // ==========================================================
+
+    {
+
+      id: 'close',
+
+      label: '✕ ปิดหน้าต่าง',
+
+      action: 'close',
+
+      position: {
+        x: 0.52,
+        y: -0.68,
+        z: 0.07
+      },
+
+      width: 0.54,
+
+      height: 0.17,
+
+      // พื้นหลังน้ำเงินเข้ม
+      color: '#13223E',
+
+      // สีเมื่อชี้เมาส์
+      hoverColor: '#C62846',
+
+      // สีข้อความ
+      textColor: '#E0F7FF',
+
+      fontSize: 40
+
+    }
+
+  ]
+
+}
