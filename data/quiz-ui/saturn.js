@@ -8,7 +8,8 @@
 //
 // คุณสมบัติ: แถบความคืบหน้า (Progress) · ข้อที่ N / รวม · ปุ่มตัวเลือกใหญ่สำหรับเมาส์/Controller
 //            เฉลยพร้อมสัญลักษณ์ ✔/✘ (ไม่พึ่งสีอย่างเดียว) · คำอธิบายหลังตอบ · ปุ่มเล่นใหม่ในหน้าสรุปผล
-// ธีม: Ringed Gold — ทองนวลและน้ำตาลเข้ม ให้เข้ากับการ์ดข้อมูลดาวเสาร์ (data/planets/saturn.js)
+// ธีม: Ringed Gold × Deep Space — ทองนวลของดาวเสาร์ + ฟ้าโฮโลแกรม บนพื้นน้ำเงินม่วงเข้ม
+//      มีไอคอนดาวเสาร์พร้อมดวงจันทร์ มุมซ้ายบน, ไอคอนวงโคจรมุมขวาบน และกลุ่มดาวประดับขอบหน้าต่าง
 // ============================================================================
 
 window.PLANET_QUIZ_UI = window.PLANET_QUIZ_UI || {};
@@ -18,6 +19,21 @@ window.PLANET_QUIZ_UI = window.PLANET_QUIZ_UI || {};
   const TITLE = 'SATURN KNOWLEDGE CHALLENGE';
   const MISSION = 'ภารกิจสำรวจดาวเสาร์';
   const LETTERS = ['A', 'B', 'C', 'D'];
+
+  // กลุ่มดาวประดับ [x, y, รัศมี, สี, ความทึบ] — วางเฉพาะขอบหน้าต่างและมุมว่าง ไม่ทับคำถามหรือปุ่ม
+  const STARS = [
+    [0.93, 0.45, 0.006, '#ffffff', 0.80], [-0.94, 0.40, 0.005, '#7deaff', 0.80],
+    [0.94, -0.10, 0.005, '#fde68a', 0.75], [-0.95, -0.20, 0.006, '#ffffff', 0.80],
+    [0.93, -0.50, 0.006, '#7deaff', 0.75], [-0.93, -0.55, 0.005, '#ffffff', 0.75],
+    [0.70, -0.71, 0.005, '#fde68a', 0.75], [-0.70, -0.71, 0.005, '#ffffff', 0.75],
+    [0.80, 0.62, 0.005, '#ffffff', 0.80], [0.93, 0.56, 0.004, '#7deaff', 0.75],
+    [-0.80, 0.50, 0.004, '#fde68a', 0.70], [0.55, 0.745, 0.004, '#ffffff', 0.60],
+    [-0.55, 0.745, 0.004, '#ffffff', 0.60], [0.86, -0.28, 0.004, '#ffffff', 0.65],
+    [-0.87, -0.38, 0.004, '#7deaff', 0.65]
+  ];
+  const STAR_DECOR = STARS.map(s => ({
+    type: 'circle', position: s[0] + ' ' + s[1] + ' 0.018', radius: s[2], color: s[3], opacity: s[4]
+  }));
 
   function ts(extra) {
     return Object.assign({ fontFamily: FONT, lineHeight: 1.25 }, extra || {});
@@ -34,13 +50,13 @@ window.PLANET_QUIZ_UI = window.PLANET_QUIZ_UI || {};
     api.renderCardDecorations({ style: ui.style }, container, ui);
   }
 
-  // แถบความคืบหน้าแบบแบ่งช่องตามจำนวนข้อ
+  // แถบความคืบหน้าแบบแบ่งช่องตามจำนวนข้อ (ข้อที่ผ่านแล้ว = ทอง, ข้อปัจจุบัน = สีที่ส่งมา, ข้อที่ยังไม่ถึง = น้ำเงินเข้ม)
   function progress(api, container, total, doneCount, currentIndex, currentColor) {
     const availW = 1.7, gap = 0.04;
     const segW = (availW - (total - 1) * gap) / total;
     const x0 = -availW / 2 + segW / 2;
     for (let i = 0; i < total; i++) {
-      let color = '#2a2314';
+      let color = '#262a55';
       if (i < doneCount) color = '#ca8a04';
       if (i === currentIndex) color = currentColor;
       api.make('a-plane', {
@@ -63,9 +79,9 @@ window.PLANET_QUIZ_UI = window.PLANET_QUIZ_UI || {};
   function renderQuestion(ctx) {
     const { container, question: q, index, total, uiConfig: ui, answerQuestion, exitQuiz, api } = ctx;
     frame(api, container, ui, MISSION + ' · ข้อที่ ' + (index + 1) + ' / ' + total);
-    progress(api, container, total, index, index, '#fde047');
+    progress(api, container, total, index, index, '#7deaff');
 
-    panel(api, container, '0 0.25 0.02', 1.84, 0.33, '#2e2208', 0.65);
+    panel(api, container, '0 0.25 0.02', 1.84, 0.33, '#17143a', 0.72);
     api.txt(container, q.q || ('รอเพิ่มคำถามข้อที่ ' + (index + 1)), '0 0.25 0.03', 1.8, '#fefce8', 'center',
       ts({ fontSize: 42, maxHeight: 0.30, minFontSize: 32, centerAnchor: true }));
 
@@ -75,12 +91,12 @@ window.PLANET_QUIZ_UI = window.PLANET_QUIZ_UI || {};
       const x = (col - 0.5) * 0.96;
       const y = -0.10 - row * 0.33;
       api.button(container, optionLabel(q, i), x.toFixed(3) + ' ' + y.toFixed(3) + ' 0.035', 0.92, 0.30,
-        () => answerQuestion(i), '#4a3f20', '#a16207',
-        ts({ fontSize: 56, maxHeight: 0.27, minFontSize: 38, textColor: '#fffbeb', borderColor: '#cdb98d', borderThickness: 0.006, opacity: 1 }));
+        () => answerQuestion(i), '#1e2358', '#ca8a04',
+        ts({ fontSize: 56, maxHeight: 0.27, minFontSize: 38, textColor: '#f1f5ff', borderColor: '#7deaff', borderThickness: 0.006, opacity: 1 }));
     });
 
-    api.button(container, 'ออกจากแบบทดสอบ', '0 -0.69 0.035', 0.9, 0.12, exitQuiz, '#2a2314', '#5a4a1c',
-      ts({ fontSize: 70, textColor: '#f3e8c4', borderColor: '#cdb98d', borderThickness: 0.005, opacity: 1 }));
+    api.button(container, 'ออกจากแบบทดสอบ', '0 -0.69 0.035', 0.9, 0.12, exitQuiz, '#14163a', '#2b3a7a',
+      ts({ fontSize: 70, textColor: '#bff4ff', borderColor: '#7deaff', borderThickness: 0.005, opacity: 1 }));
   }
 
   // ------------------------------------------------------------------ หน้าเฉลย
@@ -101,12 +117,12 @@ window.PLANET_QUIZ_UI = window.PLANET_QUIZ_UI || {};
       api.txt(container, 'เฉลย ' + optionLabel(q, q.correct), '0 0.03 0.03', 1.8, '#fde047', 'center',
         ts({ fontSize: 38, lineHeight: 1.1, maxHeight: 0.15, minFontSize: 24, centerAnchor: true }));
     } else if (q.topic) {
-      api.txt(container, 'หัวข้อ: ' + q.topic, '0 0.03 0.03', 1.8, '#e7d9a8', 'center',
+      api.txt(container, 'หัวข้อ: ' + q.topic, '0 0.03 0.03', 1.8, '#7deaff', 'center',
         ts({ fontSize: 38, lineHeight: 1.1, maxHeight: 0.15, minFontSize: 24, centerAnchor: true }));
     }
 
-    panel(api, container, '0 -0.22 0.02', 1.82, 0.36, '#241d0c', 0.7);
-    api.txt(container, q.explanation || '', '0 -0.22 0.03', 1.74, '#fdf8e8', 'center',
+    panel(api, container, '0 -0.22 0.02', 1.82, 0.36, '#14123a', 0.78);
+    api.txt(container, q.explanation || '', '0 -0.22 0.03', 1.74, '#eaf6ff', 'center',
       ts({ fontSize: 40, maxHeight: 0.32, minFontSize: 30, centerAnchor: true }));
 
     const isLast = index === total - 1;
@@ -147,9 +163,9 @@ window.PLANET_QUIZ_UI = window.PLANET_QUIZ_UI || {};
     api.button(container, 'เล่นอีกครั้ง', '-0.66 ' + by + ' 0.035', bw, bh, () => api.startQuiz(planet),
       '#a16207', '#ca8a04', Object.assign({}, bs, { textColor: '#ffffff', borderColor: '#fde047' }));
     api.button(container, 'กลับสู่การ์ด', '0 ' + by + ' 0.035', bw, bh, returnToCard,
-      '#4a3f20', '#a16207', Object.assign({}, bs, { textColor: '#fffbeb', borderColor: '#cdb98d' }));
+      '#1e2358', '#2b3a7a', Object.assign({}, bs, { textColor: '#e6fbff', borderColor: '#7deaff' }));
     api.button(container, 'กลับสู่ระบบสุริยะ', '0.66 ' + by + ' 0.035', bw, bh, closeUI,
-      '#2a2314', '#5a4a1c', Object.assign({}, bs, { textColor: '#f3e8c4', borderColor: '#cdb98d' }));
+      '#14163a', '#232a5c', Object.assign({}, bs, { textColor: '#bff4ff', borderColor: '#7deaff' }));
   }
 
   window.PLANET_QUIZ_UI['saturn'] = {
@@ -161,28 +177,28 @@ window.PLANET_QUIZ_UI = window.PLANET_QUIZ_UI || {};
     rotation: { x: 0, y: 0, z: 0 },
     scale: 1,
 
-    // --- 2. ฟอนต์และสีหลัก (ธีม Ringed Gold: ทองนวลบนพื้นน้ำตาลเข้ม ตรงกับการ์ดข้อมูลดาวเสาร์) ---
+    // --- 2. ฟอนต์และสีหลัก (ธีม Ringed Gold × Deep Space: ทองนวล + ฟ้าโฮโลแกรม บนพื้นน้ำเงินม่วงเข้ม) ---
     style: {
       fontFamily: FONT,
       fontSize: 40,
-      panelBgColor: '#12100a',
+      panelBgColor: '#0a0a1f',
       panelBorderColor: '#fde047',
       titleColor: '#fde047',
-      subtitleColor: '#e7d9a8',
-      textColor: '#fdf8e8',
-      buttonColor: '#4a3f20',
-      buttonHoverColor: '#a16207',
-      closeButtonColor: '#2a2314'
+      subtitleColor: '#7deaff',
+      textColor: '#f1f5ff',
+      buttonColor: '#1e2358',
+      buttonHoverColor: '#ca8a04',
+      closeButtonColor: '#14163a'
     },
 
     // --- 3. พื้นหลังและกรอบ ---
     background: {
-      color: '#12100a',
+      color: '#0a0a1f',
       opacity: 0.96,
       image: '',
       outerGlow: true,
       outerGlowColor: '#eab308',
-      outerGlowOpacity: 0.22,
+      outerGlowOpacity: 0.24,
       outerGlowSpread: 0.08
     },
     border: {
@@ -203,14 +219,20 @@ window.PLANET_QUIZ_UI = window.PLANET_QUIZ_UI || {};
       showDivider: true,
       dividerY: 0.515,
       dividerWidth: 1.8,
-      dividerColor: '#cdb98d'
+      dividerColor: '#7deaff'
     },
 
-    // --- 4. ของตกแต่ง: ไอคอนดาวเสาร์มุมซ้ายบน (ทรงกลม + วงแหวน) ---
+    // --- 4. ของตกแต่ง: ไอคอนดาวเสาร์มุมซ้ายบน (ทรงกลม + วงแหวน + ดวงจันทร์) / ไอคอนวงโคจรมุมขวาบน / กลุ่มดาว ---
     decorations: [
       { type: 'sphere', position: '-0.88 0.66 0.04', radius: 0.05, color: '#ddc38e', opacity: 0.95 },
-      { type: 'ring', position: '-0.88 0.66 0.035', radiusInner: 0.075, radiusOuter: 0.088, color: '#cdb98d', opacity: 0.8 }
-    ],
+      { type: 'ring', position: '-0.88 0.66 0.035', radiusInner: 0.075, radiusOuter: 0.088, color: '#cdb98d', opacity: 0.85 },
+      { type: 'circle', position: '-0.809 0.701 0.045', radius: 0.012, color: '#7deaff', opacity: 0.95 },
+
+      { type: 'ring', position: '0.88 0.66 0.035', radiusInner: 0.058, radiusOuter: 0.062, color: '#7deaff', opacity: 0.6 },
+      { type: 'ring', position: '0.88 0.66 0.035', radiusInner: 0.032, radiusOuter: 0.035, color: '#fde047', opacity: 0.4 },
+      { type: 'circle', position: '0.88 0.66 0.04', radius: 0.012, color: '#fde68a', opacity: 0.95 },
+      { type: 'circle', position: '0.926 0.704 0.045', radius: 0.008, color: '#ffffff', opacity: 0.9 }
+    ].concat(STAR_DECOR),
 
     // --- 5. ฟังก์ชันวาดหน้าจอเฉพาะดาวเสาร์ ---
     renderQuestion: renderQuestion,
