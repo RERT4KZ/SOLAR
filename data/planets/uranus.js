@@ -150,7 +150,8 @@ window.PLANET_DATA = window.PLANET_DATA || [];
     radius: 0.38,
 
     // ไม่ใช้รูปภาพ 2D
-    image: 'assets/images/uranus.jpg',
+    image: '',
+    texture: 'assets/images/uranus.jpg',
 
     
     // ==========================================================================
