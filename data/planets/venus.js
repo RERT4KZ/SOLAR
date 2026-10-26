@@ -43,9 +43,9 @@ window.PLANET_DATA = window.PLANET_DATA.filter(p => p.id !== 'venus');
       // left-align: position.x = ขอบซ้ายของข้อความ (txt() บวก width/2 ให้อัตโนมัติ)
       // ขอบซ้าย x = -0.06 (ชิดเส้นแบ่ง) width = 1.18 → ขอบขวา = -0.06+1.18 = 1.12 ✓ (ในการ์ด)
       // พื้นที่ใช้ได้: ใต้เส้นเน้น y 0.385 ถึงเหนือปุ่มหลัก (ขอบบนปุ่ม y -0.66)
-      // แบ่ง 4 ช่อง ช่องละ 0.24 → y = 0.26, 0.02, -0.22, -0.46 (แต่ละช่องสูงสุด 0.22)
-      const FACT_TOP_Y = 0.26;
-      const FACT_STEP = 0.24;
+      // ฟอนต์ 46 ระยะห่างแถว 0.20 จัดกลุ่มกลางแผง → y = 0.19, -0.01, -0.21, -0.41
+      const FACT_TOP_Y = 0.19;
+      const FACT_STEP = 0.20;
       facts.forEach((fact, i) => {
         api.txt(
           dyn,
@@ -53,7 +53,7 @@ window.PLANET_DATA = window.PLANET_DATA.filter(p => p.id !== 'venus');
           `-0.06 ${(FACT_TOP_Y - i * FACT_STEP).toFixed(3)} 0.055`,
           1.18,
           C.white, 'left',
-          style(40, { lineHeight: 1.25, minFontSize: 26, maxHeight: 0.22 })
+          style(46, { lineHeight: 1.2, minFontSize: 34, maxHeight: 0.18 })
         );
       });
 
