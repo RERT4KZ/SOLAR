@@ -1,1030 +1,403 @@
 // ============================================================================
-// SOLAR ODYSSEY VR
 // หน้ามินิเกม (Quiz UI): ดาวยูเรนัส (Uranus)
 // ไฟล์: data/quiz-ui/uranus.js
-// THEME: BLACK & WHITE SCI-FI — URANUS KNOWLEDGE CHALLENGE
+// ธีม: BLACK & WHITE SCI-FI
 // ============================================================================
 
 window.PLANET_QUIZ_UI = window.PLANET_QUIZ_UI || {};
 
-(function () {
-
-  const FONT = '"Sarabun", "Kanit", "Tahoma", system-ui, sans-serif';
-  const TITLE = 'URANUS KNOWLEDGE CHALLENGE';
-  const LETTERS = ['A', 'B', 'C', 'D'];
+window.PLANET_QUIZ_UI['uranus'] = {
 
   // ==========================================================================
-  // 1. COLOR THEME
+  // 1. ขนาดและตำแหน่งหน้ามินิเกม
   // ==========================================================================
 
-  const COLORS = {
-    background: '#080b10',
-    panel: '#15191f',
-    panelDark: '#101318',
+  width: 1.88,
+  height: 1.30,
 
-    white: '#ffffff',
-    light: '#f8fafc',
-    silver: '#e2e8f0',
-    gray: '#94a3b8',
+  position: {
+    x: 0,
+    y: 0,
+    z: 0
+  },
 
-    border: '#ffffff',
-    divider: '#cbd5e1',
+  distance: 1.8,
 
-    button: '#1f2937',
-    buttonHover: '#475569',
-    buttonDark: '#111827',
-
-    correct: '#86efac',
-    correctBg: '#0f2a16',
-    correctBorder: '#22c55e',
-
-    wrong: '#fca5a5',
-    wrongBg: '#2e0f0f',
-    wrongBorder: '#ef4444'
-  };
+  rotation: {
+    x: 0,
+    y: 0,
+    z: 0
+  },
 
   // ==========================================================================
-  // 2. TEXT STYLE
+  // 2. รูปแบบหลักของหน้ามินิเกม
   // ==========================================================================
 
-  function ts(extra) {
-    return Object.assign(
-      {
-        fontFamily: FONT,
-        lineHeight: 1.25
-      },
-      extra || {}
-    );
-  }
+  style: {
+
+    fontFamily: '"Sarabun", "Kanit", "Tahoma", system-ui, sans-serif',
+
+    fontSize: 36,
+
+    // พื้นหลังสีดำเข้ม
+    panelBgColor: '#080b10',
+
+    // กรอบสีขาว
+    panelBorderColor: '#ffffff',
+
+    // ชื่อดาว
+    titleColor: '#ffffff',
+
+    // ชื่อภาษาอังกฤษ
+    subtitleColor: '#cbd5e1',
+
+    // ข้อความทั่วไป
+    textColor: '#ffffff',
+
+    // ปุ่มคำตอบ
+    buttonColor: '#1f2937',
+
+    // สีเมื่อชี้ปุ่ม
+    buttonHoverColor: '#475569',
+
+    // ปุ่มปิด
+    closeButtonColor: '#374151',
+
+    // ปุ่มทึบ 100%
+    opacity: 1
+  },
 
   // ==========================================================================
-  // 3. OPTION LABEL
+  // 3. พื้นหลังหน้ามินิเกม
   // ==========================================================================
 
-  function optionLabel(q, i) {
+  background: {
 
-    const opt =
-      q.options && q.options[i] !== undefined
-        ? q.options[i]
-        : '';
+    color: '#080b10',
 
-    const letter = LETTERS[i] || String(i + 1);
+    opacity: 0.97,
 
-    return letter + '. ' + opt;
-  }
+    outerGlow: true,
 
-  // ==========================================================================
-  // 4. MAIN FRAME
-  // ==========================================================================
+    outerGlowColor: '#ffffff',
 
-  function frame(api, container, ui, subtitle) {
-
-    api.basePanel(
-      TITLE,
-      subtitle,
-      ui.style,
-      container,
-      ui
-    );
-
-    api.renderCardDecorations(
-      { style: ui.style },
-      container,
-      ui
-    );
-  }
+    outerGlowOpacity: 0.16
+  },
 
   // ==========================================================================
-  // 5. PROGRESS BAR
+  // 4. กรอบหน้ามินิเกม
   // ==========================================================================
 
-  function progress(
-    api,
-    container,
-    total,
-    doneCount,
-    currentIndex,
-    currentColor
-  ) {
+  border: {
 
-    if (!total || total <= 0) return;
+    style: 'frame',
 
-    const availW = 1.7;
-    const gap = 0.04;
+    color: '#ffffff',
 
-    const segW =
-      (availW - (total - 1) * gap) / total;
+    thickness: 0.024,
 
-    const x0 =
-      -availW / 2 + segW / 2;
+    cornerSize: 0.16,
 
-    for (let i = 0; i < total; i++) {
-
-      let color = COLORS.button;
-
-      if (i < doneCount) {
-        color = COLORS.white;
-      }
-
-      if (i === currentIndex) {
-        color = currentColor;
-      }
-
-      api.make(
-        'a-plane',
-        {
-          position:
-            (x0 + i * (segW + gap)).toFixed(3) +
-            ' 0.455 0.025',
-
-          width: segW.toFixed(3),
-
-          height: 0.035,
-
-          material:
-            'shader: flat; ' +
-            'color: ' + color + '; ' +
-            'opacity: 0.95; ' +
-            'side: double'
-        },
-        container
-      );
-    }
-  }
+    cornerColor: '#cbd5e1'
+  },
 
   // ==========================================================================
-  // 6. BACKGROUND PANEL
+  // 5. ส่วนหัวหน้ามินิเกม
   // ==========================================================================
 
-  function panel(
-    api,
-    container,
-    pos,
-    w,
-    h,
-    color,
-    opacity
-  ) {
+  header: {
 
-    api.make(
-      'a-plane',
-      {
-        position: pos,
+    show: true,
 
-        width: w,
+    titlePos: '0 0.52 0.02',
 
-        height: h,
+    subtitlePos: '0 0.41 0.02',
 
-        material:
-          'shader: flat; ' +
-          'color: ' + color + '; ' +
-          'opacity: ' + opacity + '; ' +
-          'transparent: true; ' +
-          'side: double'
-      },
-      container
-    );
-  }
+    showDivider: true,
+
+    dividerY: 0.33,
+
+    dividerColor: '#ffffff'
+  },
+
+  // ==========================================================================
+  // 6. องค์ประกอบตกแต่ง
+  // ==========================================================================
+
+  decorations: [],
 
   // ==========================================================================
   // 7. QUESTION SCREEN
   // หน้าคำถาม
   // ==========================================================================
 
-  function renderQuestion(ctx) {
+  questionScreen: {
 
-    const {
-      container,
-      question: q,
-      index,
-      total,
-      uiConfig: ui,
-      answerQuestion,
-      exitQuiz,
-      api
-    } = ctx;
+    titlePrefix: '',
+
+    subtitleTemplate: 'คำถามข้อ {current} จาก {total}',
 
     // ------------------------------------------------------------------------
-    // HEADER
+    // กล่องแสดงคำถาม
     // ------------------------------------------------------------------------
 
-    frame(
-      api,
-      container,
-      ui,
-      'ภารกิจสำรวจดาวยูเรนัส · ข้อที่ ' +
-        (index + 1) +
-        ' / ' +
-        total
-    );
+    questionBox: {
+
+      position: '0 0.23 0.03',
+
+      width: 1.55,
+
+      fontSize: 38,
+
+      color: '#ffffff',
+
+      align: 'center'
+    },
 
     // ------------------------------------------------------------------------
-    // PROGRESS
+    // รูปแบบปุ่มตัวเลือกคำตอบ
     // ------------------------------------------------------------------------
 
-    progress(
-      api,
-      container,
-      total,
-      index,
-      index,
-      COLORS.white
-    );
+    optionsLayout: {
+
+      mode: 'vertical',
+
+      startPos: {
+        x: 0,
+        y: 0.05,
+        z: 0.035
+      },
+
+      rowSpacing: 0.15,
+
+      width: 1.55,
+
+      height: 0.125,
+
+      // สีพื้นหลังปุ่ม
+      color: '#1f2937',
+
+      // สีเมื่อชี้เมาส์
+      hoverColor: '#475569',
+
+      // สีข้อความ
+      textColor: '#ffffff',
+
+      fontSize: 40,
+
+      // กรอบปุ่มสีขาว
+      borderColor: '#ffffff',
+
+      borderThickness: 0.005,
+
+      opacity: 1
+    },
 
     // ------------------------------------------------------------------------
-    // QUESTION BACKGROUND
+    // ปุ่มออกจากมินิเกม
     // ------------------------------------------------------------------------
 
-    panel(
-      api,
-      container,
-      '0 0.25 0.02',
-      1.84,
-      0.33,
-      COLORS.panel,
-      0.85
-    );
+    exitButton: {
 
-    // ------------------------------------------------------------------------
-    // QUESTION TEXT
-    // ------------------------------------------------------------------------
+      enabled: true,
 
-    api.txt(
-      container,
+      label: 'ออกจากมินิเกม',
 
-      q.q || ('รอเพิ่มคำถามข้อที่ ' + (index + 1)),
+      position: '0 -0.545 0.035',
 
-      '0 0.25 0.03',
+      width: 0.85,
 
-      1.8,
+      height: 0.10,
 
-      COLORS.white,
+      color: '#374151',
 
-      'center',
+      hoverColor: '#4b5563',
 
-      ts({
-        fontSize: 42,
-        maxHeight: 0.30,
-        minFontSize: 32,
-        centerAnchor: true
-      })
-    );
+      textColor: '#ffffff',
 
-    // ------------------------------------------------------------------------
-    // ANSWER OPTIONS 2 x 2
-    // ------------------------------------------------------------------------
-
-    (q.options || []).forEach(function (opt, i) {
-
-      const col = i % 2;
-      const row = Math.floor(i / 2);
-
-      const x = (col - 0.5) * 0.96;
-      const y = -0.10 - row * 0.33;
-
-      api.button(
-        container,
-
-        optionLabel(q, i),
-
-        x.toFixed(3) +
-          ' ' +
-          y.toFixed(3) +
-          ' 0.035',
-
-        0.92,
-
-        0.30,
-
-        function () {
-          answerQuestion(i);
-        },
-
-        COLORS.button,
-
-        COLORS.buttonHover,
-
-        ts({
-          fontSize: 56,
-          maxHeight: 0.27,
-          minFontSize: 38,
-          textColor: COLORS.white,
-          borderColor: COLORS.border,
-          borderThickness: 0.006,
-          opacity: 1
-        })
-      );
-    });
-
-    // ------------------------------------------------------------------------
-    // EXIT BUTTON
-    // ------------------------------------------------------------------------
-
-    api.button(
-      container,
-
-      'ออกจากแบบทดสอบ',
-
-      '0 -0.69 0.035',
-
-      0.9,
-
-      0.12,
-
-      exitQuiz,
-
-      COLORS.buttonDark,
-
-      COLORS.buttonHover,
-
-      ts({
-        fontSize: 70,
-        textColor: COLORS.white,
-        borderColor: COLORS.border,
-        borderThickness: 0.005,
-        opacity: 1
-      })
-    );
-  }
+      fontSize: 64
+    }
+  },
 
   // ==========================================================================
   // 8. FEEDBACK SCREEN
-  // หน้าเฉลยคำตอบ
+  // หน้าแสดงผลคำตอบ
   // ==========================================================================
 
-  function renderFeedback(ctx) {
+  feedbackScreen: {
 
-    const {
-      container,
-      question: q,
-      answer: a,
-      isCorrect: ok,
-      index,
-      total,
-      uiConfig: ui,
-      nextStep,
-      api
-    } = ctx;
+    // ข้อความเมื่อตอบถูก
+    correctTitle: 'ตอบถูกต้อง',
 
-    // ------------------------------------------------------------------------
-    // HEADER
-    // ------------------------------------------------------------------------
+    // ข้อความเมื่อตอบผิด
+    wrongTitle: 'คำตอบยังไม่ถูก',
 
-    frame(
-      api,
-      container,
-      ui,
-      'ภารกิจสำรวจดาวยูเรนัส · ข้อที่ ' +
-        (index + 1) +
-        ' / ' +
-        total
-    );
+    subtitleTemplate: 'คำถามข้อ {current} จาก {total}',
+
+    // สีสถานะคำตอบ
+    correctTitleColor: '#86efac',
+
+    wrongTitleColor: '#fca5a5',
+
+    correctBorderColor: '#22c55e',
+
+    wrongBorderColor: '#ef4444',
 
     // ------------------------------------------------------------------------
-    // PROGRESS
+    // คำตอบที่ผู้เล่นเลือก
     // ------------------------------------------------------------------------
 
-    progress(
-      api,
-      container,
-      total,
-      index,
-      index,
-      ok ? COLORS.correctBorder : COLORS.wrongBorder
-    );
+    selectedText: {
+
+      prefix: 'คำตอบของคุณ: ',
+
+      position: '0 0.20 0.03',
+
+      width: 1.55,
+
+      fontSize: 34,
+
+      color: '#ffffff',
+
+      correctColor: '#86efac',
+
+      wrongColor: '#fca5a5'
+    },
 
     // ------------------------------------------------------------------------
-    // RESULT BANNER
+    // เฉลยคำตอบที่ถูกต้อง
     // ------------------------------------------------------------------------
 
-    panel(
-      api,
-      container,
-      '0 0.33 0.02',
-      1.84,
-      0.17,
-      ok ? COLORS.correctBg : COLORS.wrongBg,
-      0.92
-    );
+    correctAnswerText: {
 
-    api.txt(
-      container,
+      prefix: 'เฉลย: ',
 
-      ok ? '✔ ตอบถูกต้อง!' : '✘ ยังไม่ถูกต้อง',
+      position: '0 0.05 0.03',
 
-      '0 0.33 0.03',
+      width: 1.55,
 
-      1.7,
+      fontSize: 34,
 
-      ok ? COLORS.correct : COLORS.wrong,
-
-      'center',
-
-      ts({
-        fontSize: 62,
-        lineHeight: 1.1,
-        centerAnchor: true
-      })
-    );
+      color: '#e2e8f0'
+    },
 
     // ------------------------------------------------------------------------
-    // SELECTED ANSWER
+    // คำอธิบายประกอบเฉลย
     // ------------------------------------------------------------------------
 
-    api.txt(
-      container,
+    explanationText: {
 
-      'คุณเลือก ' + optionLabel(q, a.selected),
+      position: '0 -0.14 0.03',
 
-      '0 0.17 0.03',
+      width: 1.55,
 
-      1.8,
+      fontSize: 34,
 
-      ok ? COLORS.correct : COLORS.wrong,
-
-      'center',
-
-      ts({
-        fontSize: 38,
-        lineHeight: 1.1,
-        maxHeight: 0.15,
-        minFontSize: 24,
-        centerAnchor: true
-      })
-    );
+      color: '#f8fafc'
+    },
 
     // ------------------------------------------------------------------------
-    // CORRECT ANSWER
+    // ปุ่มข้อถัดไป / ดูผลคะแนน
     // ------------------------------------------------------------------------
 
-    if (!ok) {
+    nextButton: {
 
-      api.txt(
-        container,
+      nextLabel: 'ไปข้อถัดไป',
 
-        'เฉลย ' + optionLabel(q, q.correct),
+      resultLabel: 'ดูผลคะแนน',
 
-        '0 0.03 0.03',
+      position: '0 -0.47 0.035',
 
-        1.8,
+      width: 0.95,
 
-        COLORS.white,
+      height: 0.17,
 
-        'center',
+      color: '#1f2937',
 
-        ts({
-          fontSize: 38,
-          lineHeight: 1.1,
-          maxHeight: 0.15,
-          minFontSize: 24,
-          centerAnchor: true
-        })
-      );
+      hoverColor: '#475569',
 
-    } else if (q.topic) {
+      textColor: '#ffffff',
 
-      api.txt(
-        container,
-
-        'หัวข้อ: ' + q.topic,
-
-        '0 0.03 0.03',
-
-        1.8,
-
-        COLORS.silver,
-
-        'center',
-
-        ts({
-          fontSize: 38,
-          lineHeight: 1.1,
-          maxHeight: 0.15,
-          minFontSize: 24,
-          centerAnchor: true
-        })
-      );
+      fontSize: 72
     }
-
-    // ------------------------------------------------------------------------
-    // EXPLANATION BACKGROUND
-    // ------------------------------------------------------------------------
-
-    panel(
-      api,
-      container,
-      '0 -0.22 0.02',
-      1.82,
-      0.36,
-      COLORS.panel,
-      0.85
-    );
-
-    // ------------------------------------------------------------------------
-    // EXPLANATION TEXT
-    // ------------------------------------------------------------------------
-
-    api.txt(
-      container,
-
-      q.explanation || '',
-
-      '0 -0.22 0.03',
-
-      1.74,
-
-      COLORS.light,
-
-      'center',
-
-      ts({
-        fontSize: 40,
-        maxHeight: 0.32,
-        minFontSize: 30,
-        centerAnchor: true
-      })
-    );
-
-    // ------------------------------------------------------------------------
-    // NEXT BUTTON
-    // ------------------------------------------------------------------------
-
-    const isLast = index === total - 1;
-
-    api.button(
-      container,
-
-      isLast ? 'ดูสรุปคะแนน' : 'ข้อถัดไป',
-
-      '0 -0.58 0.035',
-
-      1.2,
-
-      0.17,
-
-      nextStep,
-
-      COLORS.button,
-
-      COLORS.buttonHover,
-
-      ts({
-        fontSize: 72,
-        textColor: COLORS.white,
-        borderColor: COLORS.border,
-        borderThickness: 0.006,
-        opacity: 1
-      })
-    );
-  }
+  },
 
   // ==========================================================================
   // 9. RESULTS SCREEN
   // หน้าสรุปผลคะแนน
   // ==========================================================================
 
-  function renderResults(ctx) {
+  resultsScreen: {
 
-    const {
-      container,
-      planet,
-      score,
-      total,
-      answers,
-      questions,
-      uiConfig: ui,
-      returnToCard,
-      closeUI,
-      api
-    } = ctx;
+    title: 'ผลมินิเกม',
+
+    subtitleTemplate: '{name} · คะแนน {score} / {total}',
 
     // ------------------------------------------------------------------------
-    // HEADER
+    // แสดงคะแนนและสรุปผล
     // ------------------------------------------------------------------------
 
-    frame(
-      api,
-      container,
-      ui,
-      'สรุปผลภารกิจสำรวจดาวยูเรนัส'
-    );
+    reviewText: {
+
+      position: '0 0.08 0.03',
+
+      width: 1.55,
+
+      fontSize: 36,
+
+      color: '#ffffff'
+    },
 
     // ------------------------------------------------------------------------
-    // SCORE
+    // ปุ่มกลับสู่การ์ดข้อมูลดาวยูเรนัส
     // ------------------------------------------------------------------------
 
-    api.txt(
-      container,
+    finishButton: {
 
-      'คะแนน ' + score + ' / ' + total,
+      label: 'กลับสู่การ์ดข้อมูล',
 
-      '0 0.385 0.03',
+      action: 'card',
 
-      1.7,
+      position: '-0.45 -0.46 0.035',
 
-      COLORS.white,
+      width: 0.82,
 
-      'center',
+      height: 0.16,
 
-      ts({
-        fontSize: 84,
-        lineHeight: 1.1,
-        centerAnchor: true
-      })
-    );
+      color: '#1f2937',
 
-    // ------------------------------------------------------------------------
-    // STAR RATING
-    // ------------------------------------------------------------------------
+      hoverColor: '#475569',
 
-    const filled = Math.max(
-      0,
-      Math.min(
-        5,
-        Math.round(
-          (total > 0 ? score / total : 0) * 5
-        )
-      )
-    );
+      textColor: '#ffffff',
 
-    api.txt(
-      container,
-
-      '★'.repeat(filled) +
-        '☆'.repeat(5 - filled),
-
-      '0 0.215 0.03',
-
-      1.0,
-
-      COLORS.silver,
-
-      'center',
-
-      ts({
-        fontSize: 70,
-        lineHeight: 1.1,
-        centerAnchor: true
-      })
-    );
+      fontSize: 60
+    },
 
     // ------------------------------------------------------------------------
-    // RESULT MESSAGE
+    // ปุ่มกลับสู่ระบบสุริยะ
     // ------------------------------------------------------------------------
 
-    const ratio = total > 0 ? score / total : 0;
+    closeSolarButton: {
 
-    const msg =
-      ratio >= 0.8
-        ? 'ยอดเยี่ยม! คุณเข้าใจดาวยูเรนัสได้ดีมาก'
-        : ratio >= 0.5
-          ? 'ผ่านภารกิจ ลองทบทวนข้อที่พลาดแล้วเล่นอีกครั้ง'
-          : 'ลองกลับไปอ่านการ์ดข้อมูลดาวยูเรนัส แล้วเล่นอีกครั้ง';
+      enabled: true,
 
-    api.txt(
-      container,
+      label: 'กลับสู่ระบบสุริยะ',
 
-      msg,
+      action: 'solar',
 
-      '0 0.10 0.03',
+      position: '0.45 -0.46 0.035',
 
-      1.8,
+      width: 0.82,
 
-      COLORS.light,
+      height: 0.16,
 
-      'center',
+      color: '#374151',
 
-      ts({
-        fontSize: 40,
-        maxHeight: 0.12,
-        minFontSize: 30,
-        centerAnchor: true
-      })
-    );
+      hoverColor: '#4b5563',
 
-    // ------------------------------------------------------------------------
-    // QUESTION REVIEW
-    // ------------------------------------------------------------------------
+      textColor: '#ffffff',
 
-    (questions || []).forEach(function (q, i) {
-
-      const a = answers && answers[i];
-
-      const good =
-        a && a.selected === a.correct;
-
-      const label =
-        (good ? '✔' : '✘') +
-        '  ' +
-        (i + 1) +
-        '. ' +
-        (q.topic || ('ข้อที่ ' + (i + 1)));
-
-      api.txt(
-        container,
-
-        label,
-
-        '-0.8 ' +
-          (0.0 - i * 0.11).toFixed(3) +
-          ' 0.03',
-
-        1.6,
-
-        good ? COLORS.correct : COLORS.wrong,
-
-        'left',
-
-        ts({
-          fontSize: 44,
-          lineHeight: 1.0
-        })
-      );
-    });
-
-    // ------------------------------------------------------------------------
-    // RESULT BUTTONS
-    // ------------------------------------------------------------------------
-
-    const by = '-0.66';
-    const bw = 0.62;
-    const bh = 0.15;
-
-    const bs = ts({
-      fontSize: 84,
-      lineHeight: 1.2,
-      opacity: 1,
-      borderThickness: 0.006
-    });
-
-    // ------------------------------------------------------------------------
-    // PLAY AGAIN
-    // ------------------------------------------------------------------------
-
-    api.button(
-      container,
-
-      'เล่นอีกครั้ง',
-
-      '-0.66 ' + by + ' 0.035',
-
-      bw,
-
-      bh,
-
-      function () {
-        api.startQuiz(planet);
-      },
-
-      COLORS.button,
-
-      COLORS.buttonHover,
-
-      Object.assign(
-        {},
-        bs,
-        {
-          textColor: COLORS.white,
-          borderColor: COLORS.border
-        }
-      )
-    );
-
-    // ------------------------------------------------------------------------
-    // RETURN TO CARD
-    // ------------------------------------------------------------------------
-
-    api.button(
-      container,
-
-      'กลับสู่การ์ด',
-
-      '0 ' + by + ' 0.035',
-
-      bw,
-
-      bh,
-
-      returnToCard,
-
-      COLORS.button,
-
-      COLORS.buttonHover,
-
-      Object.assign(
-        {},
-        bs,
-        {
-          textColor: COLORS.white,
-          borderColor: COLORS.border
-        }
-      )
-    );
-
-    // ------------------------------------------------------------------------
-    // RETURN TO SOLAR SYSTEM
-    // ------------------------------------------------------------------------
-
-    api.button(
-      container,
-
-      'กลับสู่ระบบสุริยะ',
-
-      '0.66 ' + by + ' 0.035',
-
-      bw,
-
-      bh,
-
-      closeUI,
-
-      COLORS.buttonDark,
-
-      COLORS.buttonHover,
-
-      Object.assign(
-        {},
-        bs,
-        {
-          textColor: COLORS.white,
-          borderColor: COLORS.border
-        }
-      )
-    );
+      fontSize: 60
+    }
   }
-
-  // ==========================================================================
-  // 10. URANUS QUIZ UI CONFIGURATION
-  // ==========================================================================
-
-  window.PLANET_QUIZ_UI['uranus'] = {
-
-    // ------------------------------------------------------------------------
-    // SIZE AND POSITION
-    // ------------------------------------------------------------------------
-
-    width: 2.0,
-
-    height: 1.56,
-
-    position: {
-      x: 0,
-      y: 0,
-      z: 0
-    },
-
-    distance: 1.6,
-
-    rotation: {
-      x: 0,
-      y: 0,
-      z: 0
-    },
-
-    scale: 1,
-
-    // ------------------------------------------------------------------------
-    // MAIN STYLE
-    // ------------------------------------------------------------------------
-
-    style: {
-
-      fontFamily: FONT,
-
-      fontSize: 40,
-
-      panelBgColor: COLORS.background,
-
-      panelBorderColor: COLORS.border,
-
-      titleColor: COLORS.white,
-
-      subtitleColor: COLORS.silver,
-
-      textColor: COLORS.white,
-
-      buttonColor: COLORS.button,
-
-      buttonHoverColor: COLORS.buttonHover,
-
-      closeButtonColor: COLORS.buttonDark,
-
-      opacity: 1
-    },
-
-    // ------------------------------------------------------------------------
-    // BACKGROUND
-    // ------------------------------------------------------------------------
-
-    background: {
-
-      color: COLORS.background,
-
-      opacity: 0.96,
-
-      image: '',
-
-      outerGlow: true,
-
-      outerGlowColor: COLORS.white,
-
-      outerGlowOpacity: 0.20,
-
-      outerGlowSpread: 0.08
-    },
-
-    // ------------------------------------------------------------------------
-    // BORDER
-    // ------------------------------------------------------------------------
-
-    border: {
-
-      style: 'corners',
-
-      color: COLORS.white,
-
-      thickness: 0.022,
-
-      opacity: 0.98,
-
-      cornerSize: 0.20,
-
-      cornerColor: COLORS.silver
-    },
-
-    // ------------------------------------------------------------------------
-    // HEADER
-    // ------------------------------------------------------------------------
-
-    header: {
-
-      show: true,
-
-      titlePos: '0 0.69 0.02',
-
-      subtitlePos: '0 0.585 0.02',
-
-      titleWidth: 1.65,
-
-      subtitleWidth: 1.7,
-
-      align: 'center',
-
-      showDivider: true,
-
-      dividerY: 0.515,
-
-      dividerWidth: 1.8,
-
-      dividerColor: COLORS.silver
-    },
-
-    // ------------------------------------------------------------------------
-    // DECORATIONS
-    // ------------------------------------------------------------------------
-
-    decorations: [
-
-      // ดาวยูเรนัสจำลอง
-      {
-        type: 'sphere',
-
-        position: '-0.88 0.66 0.04',
-
-        radius: 0.06,
-
-        color: COLORS.silver,
-
-        opacity: 0.95
-      },
-
-      // วงแหวนรอบดาว
-      {
-        type: 'ring',
-
-        position: '-0.88 0.66 0.035',
-
-        radiusInner: 0.075,
-
-        radiusOuter: 0.088,
-
-        color: COLORS.white,
-
-        opacity: 0.75
-      }
-
-    ],
-
-    // ------------------------------------------------------------------------
-    // CUSTOM RENDER FUNCTIONS
-    // ------------------------------------------------------------------------
-
-    renderQuestion: renderQuestion,
-
-    renderFeedback: renderFeedback,
-
-    renderResults: renderResults
-
-  };
-
-})();
+};
