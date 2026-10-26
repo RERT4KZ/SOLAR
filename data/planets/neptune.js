@@ -28,107 +28,335 @@
 window.PLANET_DATA = window.PLANET_DATA || [];
 
 window.PLANET_DATA.push({
-  // --- 1. ข้อมูลพื้นฐานและเนื้อหาของดาว ---
-  id: '',
-  name: '',
-  en: '',
-  info: '',
+
+  // ============================================================
+  // 1. ข้อมูลดาวเนปจูน
+  // ============================================================
+
+  id: "neptune",
+
+  name: "ดาวเนปจูน",
+
+  en: "Neptune",
+
+  info: "ดาวเคราะห์ลำดับที่ 8 และอยู่ไกลดวงอาทิตย์ที่สุดในบรรดาดาวเคราะห์ เป็นดาวเคราะห์น้ำแข็งยักษ์ที่มีลมแรงมากและบรรยากาศมีมีเทน",
+
   facts: [
-    // ใส่รายการข้อมูลเป็นบรรทัดๆ ได้ที่นี่ เช่น:
-    // 'ข้อมูลบรรทัดที่ 1',
-    // 'ข้อมูลบรรทัดที่ 2'
+    "อยู่ลำดับที่ 8 และไกลดวงอาทิตย์ที่สุดในกลุ่มดาวเคราะห์",
+    "โคจรรอบดวงอาทิตย์ใช้เวลาประมาณ 165 ปีโลก",
+    "หมุนรอบตัวเองหนึ่งรอบใช้เวลาประมาณ 16 ชั่วโมง",
+    "มีลมแรงได้มากกว่า 2,000 กิโลเมตรต่อชั่วโมง",
+    "ดวงจันทร์บริวารที่ใหญ่ที่สุดชื่อไทรทัน"
   ],
 
-  // --- 2. ตั้งค่าโมเดล 3D และรูปภาพประกอบ ---
-  color: '',
-  radius: 0,
-  image: '',
-  texture: '',
+  // ============================================================
+  // 2. โมเดลดาวเคราะห์ 3D
+  // ============================================================
 
-  // --- 3. ปรับแต่งสไตล์เฉพาะของดาวดวงนี้ (เว้นว่างไว้หากต้องการใช้ค่ามาตรฐานกลาง) ---
+  color: "#3e67d5",
+
+  radius: 0.39,
+
+  image: "",
+
+  texture: "assets/images/neptune.jpg",
+
+  // ============================================================
+  // 3. GLOBAL STYLE
+  // ============================================================
+
   style: {
-    fontFamily: '',
-    fontSize: 0,
-    panelBgColor: '',
-    panelBorderColor: '',
-    titleColor: '',
-    subtitleColor: '',
-    textColor: '',
-    buttonColor: '',
-    buttonHoverColor: '',
-    closeButtonColor: '',
-    highlightColor: ''
-  }
-});
 
-// --- 4. การ์ดข้อมูลแยกอิสระ ---
+    fontFamily: '"Kanit", "Sarabun", "Tahoma", sans-serif',
+
+    fontSize: 40,
+
+    panelBgColor: "#030B1E",
+
+    panelBorderColor: "#00E5FF",
+
+    titleColor: "#E0F7FF",
+
+    subtitleColor: "#38BDF8",
+
+    textColor: "#E2E8F0",
+
+    buttonColor: "#075985",
+
+    buttonHoverColor: "#0284C7",
+
+    closeButtonColor: "#1E293B",
+
+    highlightColor: "#00D9FF"
+
+  },
+
+  // ============================================================
+  // 4. FUTURISTIC GAMING CARD
+  // ============================================================
+
   card: {
-    width: 1.84,
-    height: 1.28,
-    layout: 'horizontal',
-    position: { x: 0, y: 0, z: 0 },
+
+    // ขนาดการ์ด
+    width: 2.15,
+
+    height: 1.48,
+
+    // รูปแบบจัดวาง
+    layout: "horizontal",
+
+    // ตำแหน่งการ์ด
+    position: {
+      x: 0,
+      y: 0,
+      z: 0
+    },
+
+    distance: 0,
+
+    rotation: {
+      x: 0,
+      y: 0,
+      z: 0
+    },
+
+    // ============================================================
+    // 5. BACKGROUND
+    // ============================================================
+
     background: {
-      color: '#160812',
-      opacity: 1.0,
+
+      // พื้นหลังสีน้ำเงินดำ
+      color: "#030B1E",
+
+      opacity: 0.97,
+
+      image: "",
+
+      // เปิดเอฟเฟกต์เรืองแสง
       outerGlow: true,
-      outerGlowColor: '#fb7185',
-      outerGlowOpacity: 0.35       // เพิ่มแสงเรืองรอบการ์ดให้เด่นขึ้น
+
+      outerGlowColor: "#00BFFF",
+
+      outerGlowOpacity: 0.30
+
     },
+
+    // ============================================================
+    // 6. NEON BORDER
+    // ============================================================
+
     border: {
-      style: 'full',
-      color: '#fda4af',
-      thickness: 0.024,
-      opacity: 1.0
+
+      style: "frame",
+
+      color: "#00E5FF",
+
+      thickness: 0.018,
+
+      opacity: 1,
+
+      cornerSize: 0.18
+
     },
+
+    // ============================================================
+    // 7. HEADER
+    // ============================================================
+
     header: {
-      badgeText: '✦ ดาวฝาแฝดของโลก · GODDESS OF BEAUTY ✦',
-      titleFontSize: 44,
-      subtitleFontSize: 30,
-      titleColor: '#fff1f2',
-      subtitleColor: '#fecdd3',
-      showDivider: true,
-      dividerColor: '#fb7185'
-    },
-    media: {
-      position: { x: -0.48, y: -0.01, z: 0.22 },
-      modelRadius: 0.20,
-      showCaption: true,
-      caption: '✦ แบบจำลอง 3D ดาวศุกร์ ✦',
-      captionColor: '#fecdd3'
-    },
-    content: {
-      position: { x: -0.15, y: -0.01, z: 0.02 },
-      width: 0.94,
-      fontSize: 28,                // ขนาดปกติ อ่านง่าย ไม่ตกบรรทัด
-      lineHeight: 46,
-      align: 'left',
-      bulletPrefix: '✦ '
-    },
-    buttons: [
-      {
-        id: 'quiz',
-        label: '✦ ท้าทายควิซดาวศุกร์',
-        action: 'quiz',
-        position: { x: 0.32, y: -0.46, z: 0.035 },
-        width: 0.68,
-        height: 0.13,
-        color: '#be123c',          // พื้นปุ่มสีแดงกุหลาบสด
-        hoverColor: '#fb7185',
-        textColor: '#ffffff',      // ตัวอักษรขาวสว่าง เห็นทันทีโดยไม่ต้องชี้
-        fontSize: 32
+
+      titlePos: {
+        x: 0,
+        y: 0.58,
+        z: 0.03
       },
-      {
-        id: 'close',
-        label: '✕ กลับสู่ระบบสุริยะ',
-        action: 'close',
-        position: { x: -0.50, y: -0.46, z: 0.035 },
-        width: 0.46,
-        height: 0.13,
-        color: '#9f1239',          // ไวน์แดงสว่างขึ้น แยกจากพื้นหลังชัดเจน
-        hoverColor: '#e11d48',
-        textColor: '#ffffff',
-        fontSize: 32
+
+      subtitlePos: {
+        x: 0,
+        y: 0.46,
+        z: 0.03
+      },
+
+      titleWidth: 1.65,
+
+      subtitleWidth: 1.35,
+
+      titleFontSize: 50,
+
+      subtitleFontSize: 34,
+
+      // ชื่อดาวสีฟ้าขาว
+      titleColor: "#E0F7FF",
+
+      // ชื่ออังกฤษสีฟ้า
+      subtitleColor: "#38BDF8",
+
+      align: "center",
+
+      // เส้นแบ่งหัวข้อ
+      showDivider: true,
+
+      dividerY: 0.38,
+
+      dividerColor: "#00E5FF"
+
+    },
+
+    // ============================================================
+    // 8. PLANET DISPLAY
+    // ============================================================
+
+    media: {
+
+      show: true,
+
+      position: {
+        x: -0.58,
+        y: -0.02,
+        z: 0.04
+      },
+
+      // แสดงโมเดลดาว 3D
+      show3D: true,
+
+      modelRadius: 0.25,
+
+      modelOffset: {
+        x: 0,
+        y: 0.09,
+        z: 0.05
+      },
+
+      // แสดงภาพประกอบเมื่อมีภาพ
+      showImage: true,
+
+      imageWidth: 0.40,
+
+      imageHeight: 0.26,
+
+      imageOffset: {
+        x: 0,
+        y: -0.25,
+        z: 0.02
+      },
+
+      showCaption: true,
+
+      captionPos: {
+        x: 0,
+        y: -0.42,
+        z: 0.03
       }
+
+    },
+
+    // ============================================================
+    // 9. INFORMATION PANEL
+    // ============================================================
+
+    content: {
+
+      position: {
+        x: 0.24,
+        y: -0.02,
+        z: 0.04
+      },
+
+      width: 1.12,
+
+      maxHeight: 0.73,
+
+      fontSize: 33,
+
+      lineHeight: 44,
+
+      align: "left",
+
+      bulletPrefix: "◆ ",
+
+      includeInfo: true,
+
+      includeFacts: true
+
+    },
+
+    // ============================================================
+    // 10. GAMING BUTTONS
+    // ============================================================
+
+    buttonLayout: "custom",
+
+    buttons: [
+
+      // --------------------------------------------------------
+      // ปุ่มเริ่มมินิเกม
+      // --------------------------------------------------------
+
+      {
+
+        id: "quiz",
+
+        label: "▶ เริ่มมินิเกม",
+
+        action: "quiz",
+
+        position: {
+          x: -0.27,
+          y: -0.60,
+          z: 0.05
+        },
+
+        width: 0.78,
+
+        height: 0.16,
+
+        // สีฟ้าแบบเกม
+        color: "#0369A1",
+
+        // สีเมื่อชี้เมาส์
+        hoverColor: "#00BFFF",
+
+        textColor: "#FFFFFF",
+
+        fontSize: 38
+
+      },
+
+      // --------------------------------------------------------
+      // ปุ่มปิดหน้าต่าง
+      // --------------------------------------------------------
+
+      {
+
+        id: "close",
+
+        label: "✕ ปิด",
+
+        action: "close",
+
+        position: {
+          x: 0.48,
+          y: -0.60,
+          z: 0.05
+        },
+
+        width: 0.43,
+
+        height: 0.16,
+
+        color: "#1E293B",
+
+        hoverColor: "#EF4444",
+
+        textColor: "#E2E8F0",
+
+        fontSize: 36
+
+      }
+
     ]
+
   }
+
 });
