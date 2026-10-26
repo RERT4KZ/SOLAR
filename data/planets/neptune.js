@@ -56,8 +56,8 @@ window.PLANET_DATA = window.PLANET_DATA || [];
 
     radius: 0.39,
 
-    image: 'assets/images/neptune.jpg',
-
+    image: '',
+    texture: 'assets/images/neptune.jpg',
   
 
     // ============================================================
