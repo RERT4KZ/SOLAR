@@ -58,9 +58,9 @@ window.PLANET_DATA = window.PLANET_DATA.filter(p => p.id !== 'mercury');
 
       // left-align: position.x = ขอบซ้ายของข้อความ (txt() บวก width/2 ให้อัตโนมัติ)
       // ขอบซ้าย x = -0.06 width = 1.18 → ขอบขวา 1.12 (ในการ์ด)
-      // ฟอนต์ 46 ระยะห่างแถว 0.20 จัดกลุ่มกลางแผง → y = 0.19, -0.01, -0.21, -0.41
-      const FACT_TOP_Y = 0.19;
-      const FACT_STEP = 0.20;
+      // ฟอนต์ 52 ระยะห่างแถว 0.17 จัดกลุ่มกลางแผง → y = 0.145, -0.025, -0.195, -0.365
+      const FACT_TOP_Y = 0.145;
+      const FACT_STEP = 0.17;
       facts.forEach((fact, i) => {
         api.txt(
           dyn,
@@ -68,7 +68,7 @@ window.PLANET_DATA = window.PLANET_DATA.filter(p => p.id !== 'mercury');
           `-0.06 ${(FACT_TOP_Y - i * FACT_STEP).toFixed(3)} 0.055`,
           1.18,
           C.white, 'left',
-          style(46, { lineHeight: 1.2, minFontSize: 34, maxHeight: 0.18 })
+          style(52, { lineHeight: 1.15, minFontSize: 40, maxHeight: 0.16 })
         );
       });
 
