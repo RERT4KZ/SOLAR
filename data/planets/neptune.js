@@ -179,7 +179,7 @@ window.PLANET_DATA.push({
       subtitleFontSize: 35,
 
       // ชื่อดาวสีฟ้าขาว
-      titleColor: "#DDF8FF",
+      titleColor: "#7dee0c",
 
       // ชื่อภาษาอังกฤษ
       subtitleColor: "#38BDF8",
@@ -308,9 +308,9 @@ window.PLANET_DATA.push({
         color: "#0369A1",
 
         // เมื่อชี้เมาส์
-        hoverColor: "#00BFFF",
+        hoverColor: "#0fec25",
 
-        textColor: "#FFFFFF",
+        textColor: "#921010",
 
         fontSize: 36
 
