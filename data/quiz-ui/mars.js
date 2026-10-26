@@ -1,9 +1,6 @@
 // ============================================================================
-// ไฟล์ตั้งค่าดีไซน์หน้ามินิเกม (Quiz UI): ดาวอังคาร (Mars)
+// หน้ามินิเกม (Quiz UI): ดาวอังคาร (Mars)
 // ไฟล์: data/quiz-ui/mars.js
-// ============================================================================
-// แก้ไขไฟล์นี้เพื่อปรับแต่งรูปลักษณ์ของหน้ามินิเกมเฉพาะ "ดาวอังคาร" ได้อย่างอิสระ
-// โดยไม่ส่งผลกระทบต่อหน้ามินิเกมของดาวดวงอื่น และไม่กระทบกับการ์ดข้อมูลดาวใน data/planets/mars.js
 // ============================================================================
 
 window.PLANET_QUIZ_UI = window.PLANET_QUIZ_UI || {};
@@ -16,19 +13,20 @@ window.PLANET_QUIZ_UI['mars'] = {
   rotation: { x: 0, y: 0, z: 0 },
   style: {
     fontFamily: '"Sarabun", "Kanit", "Tahoma", system-ui, sans-serif',
-    fontSize: 38,
-    panelBgColor: '#1a0a06',
+    fontSize: 36,
+    panelBgColor: '#140805',
     panelBorderColor: '#ea580c',
-    titleColor: '#fed7aa',
+    titleColor: '#ffe4c7',
     subtitleColor: '#fdba74',
     textColor: '#ffffff',
-    buttonColor: '#9a3412',
-    buttonHoverColor: '#ea580c',
-    closeButtonColor: '#3b2013'
+    buttonColor: '#7c2d12',
+    buttonHoverColor: '#c2410c',
+    closeButtonColor: '#57534e',
+    opacity: 1            // ปุ่มทึบ 100% ทุกหน้า เพื่อให้ข้อความบนปุ่มไม่ถูกบัง
   },
   background: {
-    color: '#1a0a06',
-    opacity: 0.96,
+    color: '#140805',
+    opacity: 0.97,
     outerGlow: true,
     outerGlowColor: '#c2410c',
     outerGlowOpacity: 0.16
@@ -42,84 +40,100 @@ window.PLANET_QUIZ_UI['mars'] = {
   },
   header: {
     show: true,
-    titlePos: '0 0.51 0.02',
-    subtitlePos: '0 0.39 0.02',
+    titlePos: '0 0.52 0.02',
+    subtitlePos: '0 0.41 0.02',
     showDivider: true,
-    dividerY: 0.32,
+    dividerY: 0.33,
     dividerColor: '#ea580c'
   },
   decorations: [],
   questionScreen: {
     titlePrefix: '',
-    subtitleTemplate: 'คำถาม {current} / {total}',
-    questionBox: { position: '0 0.24 0.03', width: 1.44, fontSize: 38, color: '#ffffff', align: 'center' },
+    subtitleTemplate: 'คำถามข้อ {current} จาก {total}',
+    questionBox: { position: '0 0.23 0.03', width: 1.55, fontSize: 38, color: '#ffffff', align: 'center' },
     optionsLayout: {
       mode: 'vertical',
-      startPos: { x: 0, y: 0.110, z: 0.035 },
-      rowSpacing: 0.13,
-      width: 1.46,
-      height: 0.12,
-      color: '#9a3412',
-      hoverColor: '#ea580c',
+      startPos: { x: 0, y: 0.05, z: 0.035 },
+      rowSpacing: 0.15,
+      width: 1.55,
+      height: 0.125,
+      color: '#7c2d12',
+      hoverColor: '#c2410c',
       textColor: '#ffffff',
-      fontSize: 36
+      fontSize: 40,
+      borderColor: '#ea580c',
+      borderThickness: 0.005,
+      opacity: 1
     },
     exitButton: {
       enabled: true,
       label: 'ออกจากมินิเกม',
-      position: '0 -0.53 0.035',
+      position: '0 -0.545 0.035',
       width: 0.85,
-      height: 0.12,
-      color: '#3b2013',
-      hoverColor: '#5c3520',
-      textColor: '#fed7aa',
-      fontSize: 34
+      height: 0.10,
+      color: '#57534e',
+      hoverColor: '#78716c',
+      textColor: '#ffffff',
+      fontSize: 64
     }
   },
   feedbackScreen: {
     correctTitle: 'ตอบถูกต้อง',
     wrongTitle: 'คำตอบยังไม่ถูก',
-    selectedText: { prefix: 'คำตอบของคุณ: ', position: '0 0.20 0.03', width: 1.44, fontSize: 38, color: '#ffffff' },
-    correctAnswerText: { prefix: 'เฉลย: ', position: '0 0.06 0.03', width: 1.44, fontSize: 38, color: '#fdba74' },
-    explanationText: { position: '0 -0.10 0.03', width: 1.44, fontSize: 36, color: '#ffedd5' },
+    subtitleTemplate: 'คำถามข้อ {current} จาก {total}',
+    correctTitleColor: '#86efac',
+    wrongTitleColor: '#fca5a5',
+    correctBorderColor: '#22c55e',
+    wrongBorderColor: '#ef4444',
+    selectedText: {
+      prefix: 'คำตอบของคุณ: ',
+      position: '0 0.20 0.03',
+      width: 1.55,
+      fontSize: 34,
+      color: '#ffffff',
+      correctColor: '#86efac',
+      wrongColor: '#fca5a5'
+    },
+    correctAnswerText: { prefix: 'เฉลย: ', position: '0 0.05 0.03', width: 1.55, fontSize: 34, color: '#fdba74' },
+    explanationText: { position: '0 -0.14 0.03', width: 1.55, fontSize: 34, color: '#ffedd5' },
     nextButton: {
       nextLabel: 'ไปข้อถัดไป',
       resultLabel: 'ดูผลคะแนน',
-      position: '0 -0.43 0.035',
+      position: '0 -0.47 0.035',
       width: 0.95,
       height: 0.17,
       color: '#9a3412',
       hoverColor: '#ea580c',
       textColor: '#ffffff',
-      fontSize: 38
+      fontSize: 72
     }
   },
   resultsScreen: {
     title: 'ผลมินิเกม',
     subtitleTemplate: '{name} · คะแนน {score} / {total}',
-    reviewText: { position: '0 0.06 0.03', width: 1.44, fontSize: 34, color: '#ffffff' },
+    reviewText: { position: '0 0.08 0.03', width: 1.55, fontSize: 36, color: '#ffffff' },
     finishButton: {
-      label: 'กลับสู่การ์ดข้อมูลดาว',
+      label: 'กลับสู่การ์ดข้อมูล',
       action: 'card',
-      position: '-0.38 -0.46 0.035',
-      width: 0.72,
-      height: 0.15,
+      position: '-0.45 -0.46 0.035',
+      width: 0.82,
+      height: 0.16,
       color: '#9a3412',
       hoverColor: '#ea580c',
       textColor: '#ffffff',
-      fontSize: 34
+      fontSize: 60
     },
     closeSolarButton: {
       enabled: true,
       label: 'กลับสู่ระบบสุริยะ',
       action: 'solar',
-      position: '0.40 -0.46 0.035',
-      width: 0.72,
-      height: 0.15,
-      color: '#3b2013',
-      hoverColor: '#5c3520',
-      textColor: '#fed7aa',
-      fontSize: 34
+      position: '0.45 -0.46 0.035',
+      width: 0.82,
+      height: 0.16,
+      color: '#57534e',
+      hoverColor: '#78716c',
+      textColor: '#ffffff',
+      fontSize: 60
     }
   }
 };
