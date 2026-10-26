@@ -65,90 +65,302 @@ window.PLANET_DATA.push({
   // --- 4. ตั้งค่าโครงสร้าง ขนาด ตำแหน่ง และปุ่มของการ์ดข้อมูลแยกอิสระ (Independent Card Config) ---
   // ดาวยูเรนัสใช้โทนน้ำแข็งสีฟ้าอมเขียวและการจัดวางแบบมีกรอบเต็ม (all border)
   card: {
-    width: 1.82,
-    height: 1.28,
-    layout: 'horizontal',
-    position: { x: 0, y: 0, z: 0 },
-    distance: 0,
-    rotation: { x: 0, y: 0, z: 0 },
-    background: {
-      color: '#062028',
-      opacity: 0.95,
-      image: '',
-      outerGlow: true,
-      outerGlowColor: '#2dd4bf',
-      outerGlowOpacity: 0.16
+
+  // ============================================================
+  // 1. CARD STRUCTURE — FROZEN KINGDOM
+  // ============================================================
+
+  width: 2.25,
+  height: 1.55,
+
+  layout: 'horizontal',
+
+  position: {
+    x: 0,
+    y: 0,
+    z: 0
+  },
+
+  distance: 0,
+
+  rotation: {
+    x: 0,
+    y: 0,
+    z: 0
+  },
+
+
+  // ============================================================
+  // 2. BACKGROUND — FROZEN COSMIC OCEAN
+  // ============================================================
+
+  background: {
+
+    // พื้นหลังสีน้ำเงินเข้มอมเขียว
+    color: '#061C2B',
+
+    // ความทึบของพื้นหลัง
+    opacity: 0.97,
+
+    // ภาพพื้นหลัง (สามารถกำหนดเพิ่มเติมได้)
+    image: '',
+
+    // เปิดแสงเรืองรอบการ์ด
+    outerGlow: true,
+
+    // แสงคริสตัลสีฟ้าน้ำแข็ง
+    outerGlowColor: '#73F5E9',
+
+    // ความเข้มของแสง
+    outerGlowOpacity: 0.45
+
+  },
+
+
+  // ============================================================
+  // 3. BORDER — LEGENDARY ICE CRYSTAL FRAME
+  // ============================================================
+
+  border: {
+
+    // กรอบแฟนตาซี
+    style: 'frame',
+
+    // สีเงินน้ำแข็ง
+    color: '#B8F4F5',
+
+    // ความหนากรอบ
+    thickness: 0.025,
+
+    opacity: 1,
+
+    // ขนาดมุมกรอบ
+    cornerSize: 0.20
+
+  },
+
+
+  // ============================================================
+  // 4. HEADER — FROZEN CELESTIAL TITLE
+  // ============================================================
+
+  header: {
+
+    // ชื่อดาวภาษาไทย
+    titlePos: {
+      x: 0,
+      y: 0.62,
+      z: 0.04
     },
-    border: {
-      style: 'all',
-      color: '#5eead4',
-      thickness: 0.02,
-      opacity: 0.9
+
+    // ชื่อดาวภาษาอังกฤษ
+    subtitlePos: {
+      x: 0,
+      y: 0.49,
+      z: 0.04
     },
-    header: {
-      titlePos: { x: 0, y: 0.49, z: 0.02 },
-      subtitlePos: { x: 0, y: 0.39, z: 0.02 },
-      titleWidth: 1.4,
-      subtitleWidth: 1.25,
-      titleFontSize: 46,
-      subtitleFontSize: 38,
-      titleColor: '#99f6e4',
-      subtitleColor: '#ccfbf1',
-      align: 'center',
-      showDivider: true,
-      dividerY: 0.32,
-      dividerColor: '#2dd4bf'
+
+    titleWidth: 1.65,
+
+    subtitleWidth: 1.45,
+
+    // ขนาดชื่อดาว
+    titleFontSize: 56,
+
+    subtitleFontSize: 39,
+
+    // สีฟ้าน้ำแข็ง
+    titleColor: '#9CFFF3',
+
+    // สีเงินสว่าง
+    subtitleColor: '#E5FFFF',
+
+    align: 'center',
+
+    // แสดงเส้นแบ่ง
+    showDivider: true,
+
+    dividerY: 0.41,
+
+    // เส้นแบ่งสีคริสตัล
+    dividerColor: '#73F5E9'
+
+  },
+
+
+  // ============================================================
+  // 5. MEDIA — URANUS PLANET DISPLAY
+  // ============================================================
+
+  media: {
+
+    show: true,
+
+    // โมเดลดาวอยู่ด้านซ้าย
+    position: {
+      x: -0.62,
+      y: -0.04,
+      z: 0.04
     },
-    media: {
-      show: true,
-      position: { x: -0.50, y: 0.0, z: 0.03 },
-      show3D: true,
-      modelRadius: 0.21,
-      modelOffset: { x: 0, y: 0.08, z: 0.04 },
-      showImage: true,
-      imageWidth: 0.38,
-      imageHeight: 0.24,
-      imageOffset: { x: 0, y: -0.22, z: 0.01 },
-      showCaption: true,
-      captionPos: { x: 0, y: -0.38, z: 0.02 }
+
+    // แสดงดาวแบบ 3D
+    show3D: true,
+
+    // ขนาดโมเดล
+    modelRadius: 0.27,
+
+    // ตำแหน่งโมเดล
+    modelOffset: {
+      x: 0,
+      y: 0.12,
+      z: 0.06
     },
-    content: {
-      position: { x: 0.22, y: -0.01, z: 0.02 },
-      width: 0.98,
-      maxHeight: 0.60,
-      fontSize: 36,
-      lineHeight: 46,
-      align: 'left',
-      bulletPrefix: '• ',
-      includeInfo: true,
-      includeFacts: true
+
+    // แสดงภาพประกอบ
+    showImage: true,
+
+    imageWidth: 0.47,
+
+    imageHeight: 0.27,
+
+    imageOffset: {
+      x: 0,
+      y: -0.24,
+      z: 0.02
     },
-    buttonLayout: 'custom',
-    buttons: [
-      {
-        id: 'quiz',
-        label: 'เริ่มมินิเกมคำถาม',
-        action: 'quiz',
-        position: { x: -0.22, y: -0.49, z: 0.03 },
-        width: 0.64,
-        height: 0.13,
-        color: '#0f766e',
-        hoverColor: '#0d9488',
-        textColor: '#ffffff',
-        fontSize: 38
+
+    // แสดงคำอธิบายใต้ภาพ
+    showCaption: true,
+
+    captionPos: {
+      x: 0,
+      y: -0.42,
+      z: 0.04
+    }
+
+  },
+
+
+  // ============================================================
+  // 6. CONTENT — ANCIENT ICE KNOWLEDGE
+  // ============================================================
+
+  content: {
+
+    // ตำแหน่งข้อมูลด้านขวา
+    position: {
+      x: 0.28,
+      y: -0.035,
+      z: 0.04
+    },
+
+    // ความกว้างของข้อมูล
+    width: 1.12,
+
+    // ความสูงสูงสุด
+    maxHeight: 0.77,
+
+    // ขนาดตัวอักษร
+    fontSize: 32,
+
+    // ระยะห่างบรรทัด
+    lineHeight: 43,
+
+    align: 'left',
+
+    // สัญลักษณ์น้ำแข็งแฟนตาซี
+    bulletPrefix: '❄ ',
+
+    // แสดงคำอธิบายดาว
+    includeInfo: true,
+
+    // แสดงข้อมูลน่าสนใจ
+    includeFacts: true
+
+  },
+
+
+  // ============================================================
+  // 7. RPG BUTTON SYSTEM — FROZEN QUEST
+  // ============================================================
+
+  buttonLayout: 'custom',
+
+  buttons: [
+
+    // ----------------------------------------------------------
+    // BUTTON 1 — FROZEN QUEST
+    // ----------------------------------------------------------
+
+    {
+
+      id: 'quiz',
+
+      // ปุ่มเริ่มภารกิจ
+      label: '❄ เริ่มมินิเกมคำถาม',
+
+      action: 'quiz',
+
+      position: {
+        x: -0.27,
+        y: -0.62,
+        z: 0.06
       },
-      {
-        id: 'close',
-        label: 'ปิดหน้าต่าง',
-        action: 'close',
-        position: { x: 0.38, y: -0.49, z: 0.03 },
-        width: 0.42,
-        height: 0.13,
-        color: '#1e3a44',
-        hoverColor: '#2d5360',
-        textColor: '#99f6e4',
-        fontSize: 38
-      }
-    ]
-  }
+
+      width: 0.82,
+
+      height: 0.16,
+
+      // สีฟ้าน้ำแข็ง
+      color: '#138C9E',
+
+      // สีเมื่อชี้เมาส์
+      hoverColor: '#68FFF0',
+
+      // สีข้อความ
+      textColor: '#FFFFFF',
+
+      fontSize: 43
+
+    },
+
+
+    // ----------------------------------------------------------
+    // BUTTON 2 — CLOSE FROZEN PORTAL
+    // ----------------------------------------------------------
+
+    {
+
+      id: 'close',
+
+      label: '✕ ปิดหน้าต่าง',
+
+      action: 'close',
+
+      position: {
+        x: 0.49,
+        y: -0.62,
+        z: 0.06
+      },
+
+      width: 0.51,
+
+      height: 0.16,
+
+      // พื้นหลังสีน้ำเงินเข้ม
+      color: '#91c2e0',
+
+      // สีเมื่อชี้เมาส์
+      hoverColor: '#E05A75',
+
+      // สีข้อความ
+      textColor: '#090a0a',
+
+      fontSize: 40
+
+    }
+
+  ]
+
+}
 });
