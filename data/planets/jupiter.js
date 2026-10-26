@@ -6,6 +6,10 @@
 // แต่ละแท็บมี 3 ระดับ: (1) ตัวเลขเด่นด้านซ้าย (2) ย่อหน้าความรู้หลัก (3) ปุ่ม "รู้เพิ่มเติม" เปิดความรู้เสริม
 // ข้อมูลทั้งหมดอยู่ในอาร์เรย์ PAGES ด้านล่าง แก้ข้อความได้ที่นั่นโดยไม่ต้องแตะโค้ดวาดการ์ด
 //
+// ธีม: "Storm Amber Hologram" — พื้นอวกาศสีน้ำเงินอมม่วงเข้ม + ส้มอำพัน/ครีมตามแถบเมฆของดาว
+//      ใช้เส้นโฮโลแกรมสีฟ้าอ่อนเหมือนการ์ดดวงอาทิตย์ เพื่อให้ทั้งระบบดูเป็นชุดเดียวกัน
+//      ตกแต่งด้วยแถบเมฆ (Belts), วงโคจรคู่พร้อมดวงจันทร์กาลิเลียนทั้ง 4 และดาวพื้นหลัง
+//
 // ความปลอดภัยต่อดาวดวงอื่น: ไฟล์นี้ลงทะเบียนเฉพาะ id 'jupiter' และไม่แก้ค่าส่วนกลางใด ๆ
 // หากการวาดการ์ดแบบใหม่เกิดข้อผิดพลาด จะถอยกลับไปใช้ตัววาดการ์ดมาตรฐานของระบบ (fallback) โดยอัตโนมัติ
 //
@@ -20,8 +24,26 @@ window.PLANET_DATA = window.PLANET_DATA.filter(
 
 (function () {
   const FONT = '"Sarabun", "Kanit", "Tahoma", system-ui, sans-serif';
-  // ตำแหน่งทรงกลมของดาวในการ์ด (x y z): เพิ่ม x = ขยับไปทางขวา, ลด x = ขยับไปทางซ้าย
-  const MODEL_NUDGE = '0 0 0';
+  // ตำแหน่งทรงกลมของดาวในการ์ด (x y z) เทียบกับศูนย์กลางวงแหวน: เพิ่ม x = ขยับไปทางขวา, ลด x = ขยับไปทางซ้าย
+  // ใช้แนวทางเดียวกับดวงอาทิตย์: ทรงกลมยื่นเข้าหาผู้ชมทำให้ดูเยื้องซ้ายเล็กน้อย (parallax) จึงขยับไปทางขวาเล็กน้อย
+  // หากเห็นว่าดาวยังไม่อยู่กึ่งกลางวงแหวน ให้ปรับค่านี้ (เช่น '0.02 0 0' หรือ '0.04 0 0')
+  const MODEL_NUDGE = '0.03 0 0';
+
+  // พาเลตสี (แก้สีทั้งการ์ดได้ที่นี่)
+  const C = {
+    amber: '#fbbf24',      // สีเน้นหลัก (หัวข้อ, ตัวเลขเด่น)
+    amberDeep: '#b45309',  // ปุ่ม active / ปุ่มหลัก
+    amberHover: '#d97706',
+    cream: '#e8c9a8',      // สีครีมของแถบเมฆ
+    tan: '#d6a37c',
+    hologram: '#7deaff',   // เส้นโฮโลแกรม (เหมือนการ์ดดวงอาทิตย์)
+    hologramSoft: '#bff4ff',
+    btn: '#1a1530',        // ปุ่มรอง (น้ำเงินอมม่วงเข้ม)
+    btnHover: '#33264f',
+    btnMore: '#241a40',
+    btnMoreHover: '#3a2b63',
+    text: '#fff7ed'
+  };
 
   // --------------------------------------------------------------------------
   // เนื้อหาความรู้ (แก้ไขข้อความที่นี่)
@@ -235,7 +257,7 @@ window.PLANET_DATA = window.PLANET_DATA.filter(
       clearDyn();
       const pg = PAGES[state.page];
 
-      // --- แท็บ 6 หน้า ---
+      // --- แท็บ 6 หน้า (ตัวอักษรขนาดเดียวกับการ์ดดวงอาทิตย์ อ่านง่ายกว่าเดิม) ---
       const tabW = 0.372, tabH = 0.15, gap = 0.03;
       const x0 = -1.19 + tabW / 2;
       PAGES.forEach((t, i) => {
@@ -243,12 +265,12 @@ window.PLANET_DATA = window.PLANET_DATA.filter(
         api.button(
           dyn, t.tab, (x0 + i * (tabW + gap)).toFixed(3) + ' 0.5 0.035', tabW, tabH,
           () => go(i, false),
-          active ? '#b45309' : '#2e2218',
-          active ? '#d97706' : '#5c3512',
+          active ? C.amberDeep : C.btn,
+          active ? C.amberHover : C.btnHover,
           {
-            fontSize: 112, lineHeight: 1.2, fontFamily: FONT, opacity: 1,
-            textColor: active ? '#fff7ed' : '#fde8cc',
-            borderColor: active ? '#fbbf24' : '#d6a37c', borderThickness: 0.005
+            fontSize: 150, lineHeight: 1.2, fontFamily: FONT, opacity: 1,
+            textColor: active ? C.text : C.hologramSoft,
+            borderColor: active ? C.amber : C.hologram, borderThickness: 0.005
           }
         );
       });
@@ -258,13 +280,22 @@ window.PLANET_DATA = window.PLANET_DATA.filter(
         position: '-0.80 -0.525 0.03', width: 0.92, height: 0.21,
         material: 'shader: flat; color: #2b1405; opacity: 0.55; transparent: true; side: double'
       }, dyn);
-      api.txt(dyn, pg.stat.big, '-0.80 -0.472 0.04', 0.86, '#fbbf24', 'center',
+      // เส้นขอบบน (อำพัน) และล่าง (ฟ้าโฮโลแกรม) ของกล่องตัวเลข
+      api.make('a-plane', {
+        position: '-0.80 -0.4215 0.036', width: 0.92, height: 0.004,
+        material: 'shader: flat; color: ' + C.amber + '; opacity: 0.75; side: double'
+      }, dyn);
+      api.make('a-plane', {
+        position: '-0.80 -0.6285 0.036', width: 0.92, height: 0.004,
+        material: 'shader: flat; color: ' + C.hologram + '; opacity: 0.5; side: double'
+      }, dyn);
+      api.txt(dyn, pg.stat.big, '-0.80 -0.472 0.04', 0.86, C.amber, 'center',
         { fontSize: 92, lineHeight: 1.15, fontFamily: FONT });
-      api.txt(dyn, pg.stat.label, '-0.80 -0.578 0.04', 0.86, '#fde8cc', 'center',
+      api.txt(dyn, pg.stat.label, '-0.80 -0.578 0.04', 0.86, C.hologramSoft, 'center',
         { fontSize: 52, lineHeight: 1.15, fontFamily: FONT });
 
-      // --- หัวข้อของหน้า ---
-      const accent = state.more ? '#e8c9a8' : '#fbbf24';
+      // --- หัวข้อของหน้า (โหมดปกติ = อำพัน, โหมดรู้เพิ่มเติม = ฟ้าโฮโลแกรม เหมือนดวงอาทิตย์) ---
+      const accent = state.more ? C.hologram : C.amber;
       const titleText = state.more ? pg.title + ' · รู้เพิ่มเติม' : pg.title;
       api.txt(dyn, titleText, '-0.22 0.335 0.04', 1.40, accent, 'left',
         { fontSize: 54, lineHeight: 1.1, fontFamily: FONT });
@@ -280,7 +311,7 @@ window.PLANET_DATA = window.PLANET_DATA.filter(
       let cursor = top;
       paras.forEach((text, i) => {
         const h = lay.heights[i];
-        const el = api.txt(dyn, text, '-0.20 ' + (cursor - h / 2).toFixed(3) + ' 0.04', bodyW, '#fff7ed', 'left',
+        const el = api.txt(dyn, text, '-0.20 ' + (cursor - h / 2).toFixed(3) + ' 0.04', bodyW, C.text, 'left',
           { fontSize: lay.size, lineHeight: 1.3, fontFamily: FONT });
         if (el && typeof el.setAttribute === 'function') {
           el.setAttribute('position', (-0.20 + bodyW / 2).toFixed(3) + ' ' + (cursor - h / 2).toFixed(3) + ' 0.04');
@@ -292,19 +323,19 @@ window.PLANET_DATA = window.PLANET_DATA.filter(
         cursor -= h + pGap;
       });
 
-      // --- ปุ่มด้านล่าง ---
+      // --- ปุ่มด้านล่าง (ตำแหน่งและขนาดเหมือนการ์ดดวงอาทิตย์) ---
       const by = '-0.745', bw = 0.62, bh = 0.15;
       api.button(dyn, 'ปิดการ์ด', '-0.72 ' + by + ' 0.035', bw, bh, () => api.closeUI(),
-        '#2e2218', '#5c3512',
-        { fontSize: 100, lineHeight: 1.2, fontFamily: FONT, opacity: 1, textColor: '#fde8cc', borderColor: '#d6a37c', borderThickness: 0.006 });
+        C.btn, C.btnHover,
+        { fontSize: 100, lineHeight: 1.2, fontFamily: FONT, opacity: 1, textColor: C.hologramSoft, borderColor: C.hologram, borderThickness: 0.006 });
       api.button(dyn, state.more ? 'ย้อนกลับ' : 'รู้เพิ่มเติม', '0 ' + by + ' 0.035', bw, bh,
         () => go(state.page, !state.more),
-        '#3f2e21', '#574130',
-        { fontSize: 100, lineHeight: 1.2, fontFamily: FONT, opacity: 1, textColor: '#fff7ed', borderColor: '#d6a37c', borderThickness: 0.006 });
+        C.btnMore, C.btnMoreHover,
+        { fontSize: 100, lineHeight: 1.2, fontFamily: FONT, opacity: 1, textColor: '#e6fbff', borderColor: C.hologram, borderThickness: 0.006 });
       if (hasQuiz()) {
         api.button(dyn, 'เริ่มมินิเกม', '0.72 ' + by + ' 0.035', bw, bh, () => api.startQuiz(p),
-          '#b45309', '#d97706',
-          { fontSize: 100, lineHeight: 1.2, fontFamily: FONT, opacity: 1, textColor: '#fff7ed', borderColor: '#fbbf24', borderThickness: 0.006 });
+          C.amberDeep, C.amberHover,
+          { fontSize: 100, lineHeight: 1.2, fontFamily: FONT, opacity: 1, textColor: C.text, borderColor: C.amber, borderThickness: 0.006 });
       }
 
       setTimeout(refreshRays, 0);
@@ -351,17 +382,16 @@ window.PLANET_DATA = window.PLANET_DATA.filter(
 
     // การ์ดแบบ Holographic Futuristic: ซ้าย = ทรงกลม 3D + ตัวเลขเด่น, ขวา = ความรู้แบบแท็บ, ล่าง = ปุ่มควบคุม
     style: {
-      fontFamily: '',
       fontSize: 44,
-      panelBgColor: '#150f0a',
+      panelBgColor: '#0b0a1a',
       panelBorderColor: '#f59e0b',
       titleColor: '#fbbf24',
-      subtitleColor: '#e8c9a8',
+      subtitleColor: '#7deaff',
       textColor: '#fff7ed',
-      buttonColor: '#2e2218',
-      buttonHoverColor: '#5c3512',
-      closeButtonColor: '#2e2218',
-      highlightColor: '#fbbf24'
+      buttonColor: '#1a1530',
+      buttonHoverColor: '#33264f',
+      closeButtonColor: '#1a1530',
+      highlightColor: '#7deaff'
     },
 
     renderCard: renderPlanetCardSafe,
@@ -377,9 +407,10 @@ window.PLANET_DATA = window.PLANET_DATA.filter(
       distance: 1.8,
       layout: 'horizontal',
 
+      // พื้นหลังกึ่งทึบ ให้เห็นอวกาศจาง ๆ แต่ไม่รบกวนข้อความ
       background: {
-        color: '#150f0a',
-        opacity: 0.90,
+        color: '#0b0a1a',
+        opacity: 0.88,
         image: ''
       },
 
@@ -388,7 +419,7 @@ window.PLANET_DATA = window.PLANET_DATA.filter(
         color: '#f59e0b',
         thickness: 0.012,
         cornerSize: 0.12,
-        cornerColor: '#f59e0b',
+        cornerColor: '#fbbf24',
         glowColor: '#d97706',
         glowOpacity: 0.14
       },
@@ -432,19 +463,42 @@ window.PLANET_DATA = window.PLANET_DATA.filter(
 
       decorations: [
         // แผ่นกระจกจางๆ ด้านซ้าย (โมเดล) และด้านขวา (ความรู้)
-        { type: 'plane', position: '-0.80 -0.125 0.006', width: 0.92, height: 1.04, color: '#2b1d10', opacity: 0.35 },
-        { type: 'plane', position: '0.47 -0.11 0.006', width: 1.50, height: 0.98, color: '#241608', opacity: 0.40 },
+        { type: 'plane', position: '-0.80 -0.125 0.006', width: 0.92, height: 1.04, color: '#1a1238', opacity: 0.32 },
+        { type: 'plane', position: '0.47 -0.11 0.006', width: 1.50, height: 0.98, color: '#150f2e', opacity: 0.40 },
 
-        // เส้นกรอบบางๆ (hairline) ซ้อนด้านในกรอบนอก
-        { type: 'plane', position: '0 0.835 0.012', width: 2.46, height: 0.004, color: '#d6a37c', opacity: 0.5 },
-        { type: 'plane', position: '0 -0.835 0.012', width: 2.46, height: 0.004, color: '#d6a37c', opacity: 0.5 },
-        { type: 'plane', position: '-1.23 0 0.012', width: 0.004, height: 1.67, color: '#d6a37c', opacity: 0.5 },
-        { type: 'plane', position: '1.23 0 0.012', width: 0.004, height: 1.67, color: '#d6a37c', opacity: 0.5 },
+        // เส้นกรอบบางสีฟ้าโฮโลแกรม (hairline) ซ้อนด้านในกรอบสีอำพัน เหมือนการ์ดดวงอาทิตย์
+        { type: 'plane', position: '0 0.835 0.012', width: 2.46, height: 0.004, color: '#7deaff', opacity: 0.5 },
+        { type: 'plane', position: '0 -0.835 0.012', width: 2.46, height: 0.004, color: '#7deaff', opacity: 0.5 },
+        { type: 'plane', position: '-1.23 0 0.012', width: 0.004, height: 1.67, color: '#7deaff', opacity: 0.5 },
+        { type: 'plane', position: '1.23 0 0.012', width: 0.004, height: 1.67, color: '#7deaff', opacity: 0.5 },
 
-        // วงโคจรบางๆ รอบโมเดล พร้อมดวงจันทร์จุดเล็ก (อยู่หลังทรงกลม ไม่บังผิวดาว)
-        { type: 'ring', position: '-0.80 0 0.016', radiusInner: 0.408, radiusOuter: 0.412, color: '#fbbf24', opacity: 0.45 },
-        { type: 'circle', position: '-0.565 0.336 0.02', radius: 0.014, color: '#fbbf24', opacity: 0.9 },
-        { type: 'circle', position: '-1.136 -0.235 0.02', radius: 0.010, color: '#d6a37c', opacity: 0.9 }
+        // แถบเมฆ (Belts / Zones) จางๆ หลังทรงกลม สื่อลายแถบของดาวพฤหัสบดี
+        { type: 'plane', position: '-0.80 0.300 0.008', width: 0.88, height: 0.030, color: '#b45309', opacity: 0.16 },
+        { type: 'plane', position: '-0.80 0.215 0.008', width: 0.88, height: 0.045, color: '#e8c9a8', opacity: 0.10 },
+        { type: 'plane', position: '-0.80 0.105 0.008', width: 0.88, height: 0.030, color: '#d6a37c', opacity: 0.13 },
+        { type: 'plane', position: '-0.80 -0.060 0.008', width: 0.88, height: 0.050, color: '#b45309', opacity: 0.13 },
+        { type: 'plane', position: '-0.80 -0.185 0.008', width: 0.88, height: 0.030, color: '#e8c9a8', opacity: 0.10 },
+        { type: 'plane', position: '-0.80 -0.300 0.008', width: 0.88, height: 0.040, color: '#d6a37c', opacity: 0.13 },
+
+        // วงโคจรคู่รอบโมเดล พร้อมดวงจันทร์กาลิเลียนทั้ง 4 (ไอโอ ยูโรปา แกนีมีด คัลลิสโต) อยู่หลังทรงกลม
+        { type: 'ring', position: '-0.80 0 0.016', radiusInner: 0.408, radiusOuter: 0.412, color: '#fbbf24', opacity: 0.50 },
+        { type: 'ring', position: '-0.80 0 0.016', radiusInner: 0.453, radiusOuter: 0.456, color: '#7deaff', opacity: 0.30 },
+        { type: 'circle', position: '-0.486 0.264 0.02', radius: 0.013, color: '#fde047', opacity: 0.95 },   // ไอโอ (เหลืองกำมะถัน)
+        { type: 'circle', position: '-1.185 -0.140 0.02', radius: 0.010, color: '#e5e7eb', opacity: 0.95 }, // ยูโรปา (ขาวน้ำแข็ง)
+        { type: 'circle', position: '-1.028 0.394 0.02', radius: 0.016, color: '#a8a29e', opacity: 0.95 },  // แกนีมีด (เทา)
+        { type: 'circle', position: '-0.539 -0.373 0.02', radius: 0.013, color: '#b8a58e', opacity: 0.95 }, // คัลลิสโต (น้ำตาลหม่น)
+
+        // ดาวพื้นหลัง (อยู่ขอบการ์ด ไม่ทับข้อความ)
+        { type: 'circle', position: '-1.10 0.74 0.01', radius: 0.005, color: '#ffffff', opacity: 0.85 },
+        { type: 'circle', position: '-0.96 0.64 0.01', radius: 0.003, color: '#bff4ff', opacity: 0.70 },
+        { type: 'circle', position: '-1.19 0.62 0.01', radius: 0.003, color: '#ffffff', opacity: 0.60 },
+        { type: 'circle', position: '1.08 0.75 0.01', radius: 0.005, color: '#ffffff', opacity: 0.85 },
+        { type: 'circle', position: '1.19 0.65 0.01', radius: 0.003, color: '#bff4ff', opacity: 0.70 },
+        { type: 'circle', position: '0.97 0.71 0.01', radius: 0.003, color: '#fde8cc', opacity: 0.70 },
+        { type: 'circle', position: '-1.17 -0.70 0.01', radius: 0.004, color: '#ffffff', opacity: 0.75 },
+        { type: 'circle', position: '-1.10 -0.80 0.01', radius: 0.003, color: '#bff4ff', opacity: 0.65 },
+        { type: 'circle', position: '1.16 -0.71 0.01', radius: 0.004, color: '#ffffff', opacity: 0.75 },
+        { type: 'circle', position: '1.09 -0.80 0.01', radius: 0.003, color: '#fde8cc', opacity: 0.65 }
       ],
 
       buttonLayout: {
@@ -463,10 +517,10 @@ window.PLANET_DATA = window.PLANET_DATA.filter(
           position: '-0.72 -0.745 0.035',
           width: 0.62,
           height: 0.15,
-          color: '#2e2218',
-          hoverColor: '#5c3512',
-          textColor: '#fde8cc',
-          borderColor: '#d6a37c',
+          color: '#1a1530',
+          hoverColor: '#33264f',
+          textColor: '#bff4ff',
+          borderColor: '#7deaff',
           borderThickness: 0.006,
           fontSize: 100,
           opacity: 1
