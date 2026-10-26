@@ -2,85 +2,16 @@
 // ไฟล์ตั้งค่าดีไซน์หน้ามินิเกม (Quiz UI): ดาวเสาร์ (Saturn) — "SATURN KNOWLEDGE CHALLENGE"
 // ไฟล์: data/quiz-ui/saturn.js
 // ============================================================================
-// ไฟล์นี้รวม "คำถามมินิเกม" และ "หน้าตามินิเกม" ไว้ด้วยกัน (ดาวละ 2 ไฟล์: planets + quiz-ui)
 // หน้าตาของมินิเกมดาวเสาร์ทั้ง 3 หน้าจอ (คำถาม / เฉลย / สรุปผล) วาดด้วยฟังก์ชันเฉพาะดวงนี้ในไฟล์นี้
 // ผ่าน hook renderQuestion / renderFeedback / renderResults ที่ระบบรองรับอยู่แล้ว
 // จึงไม่กระทบมินิเกมของดาวดวงอื่น และไม่ต้องแก้ index.html
 //
 // คุณสมบัติ: แถบความคืบหน้า (Progress) · ข้อที่ N / รวม · ปุ่มตัวเลือกใหญ่สำหรับเมาส์/Controller
 //            เฉลยพร้อมสัญลักษณ์ ✔/✘ (ไม่พึ่งสีอย่างเดียว) · คำอธิบายหลังตอบ · ปุ่มเล่นใหม่ในหน้าสรุปผล
+// ธีม: Ringed Gold — ทองนวลและน้ำตาลเข้ม ให้เข้ากับการ์ดข้อมูลดาวเสาร์ (data/planets/saturn.js)
 // ============================================================================
 
 window.PLANET_QUIZ_UI = window.PLANET_QUIZ_UI || {};
-
-// ------------------------------------------------------------------
-// คำถามมินิเกม (อยู่ในไฟล์นี้เลย จึงไม่ต้องมีไฟล์ data/quiz/saturn.js แยก)
-//   topic = หัวข้อสั้น ๆ ที่แสดงในหน้าเฉลยและหน้าสรุปผล
-//   correct = ลำดับข้อที่ถูก (0 = ข้อแรก ... 3 = ข้อสี่)
-// ------------------------------------------------------------------
-window.PLANET_QUIZ = window.PLANET_QUIZ || {};
-window.PLANET_QUIZ['saturn'] = [
-  {
-    "topic": "ลำดับดาว",
-    "q": "ดาวเสาร์เป็นดาวลำดับที่เท่าไร?",
-    "options": [
-      "ลำดับที่ 4",
-      "ลำดับที่ 5",
-      "ลำดับที่ 6",
-      "ลำดับที่ 7"
-    ],
-    "correct": 2,
-    "explanation": "ดาวเสาร์เป็นดาวเคราะห์ลำดับที่ 6 จากดวงอาทิตย์ ถัดจากดาวพฤหัสบดี"
-  },
-  {
-    "topic": "ขนาด",
-    "q": "ดาวเสาร์ใหญ่เป็นอันดับที่เท่าไร?",
-    "options": [
-      "อันดับ 1",
-      "อันดับ 2",
-      "อันดับ 3",
-      "อันดับ 4"
-    ],
-    "correct": 1,
-    "explanation": "ดาวเสาร์ใหญ่เป็นอันดับ 2 ในระบบสุริยะ รองจากดาวพฤหัสบดี"
-  },
-  {
-    "topic": "ประเภทดาว",
-    "q": "ดาวเสาร์เป็นดาวเคราะห์ประเภทใด?",
-    "options": [
-      "ดาวก๊าซยักษ์",
-      "ดาวเคราะห์หิน",
-      "ดาวเคราะห์แคระ",
-      "ดาวฤกษ์"
-    ],
-    "correct": 0,
-    "explanation": "ดาวเสาร์เป็นดาวก๊าซยักษ์ ส่วนใหญ่เป็นไฮโดรเจนและฮีเลียม"
-  },
-  {
-    "topic": "วงแหวน",
-    "q": "วงแหวนดาวเสาร์ประกอบด้วยอะไร?",
-    "options": [
-      "ก๊าซไฮโดรเจน",
-      "ฝุ่นจากภูเขาไฟ",
-      "โลหะหนัก",
-      "น้ำแข็งและเศษหิน"
-    ],
-    "correct": 3,
-    "explanation": "วงแหวนเกิดจากน้ำแข็งและเศษหินจำนวนมหาศาลที่โคจรรอบดาวเสาร์"
-  },
-  {
-    "topic": "ดวงจันทร์",
-    "q": "ดวงจันทร์ที่ใหญ่สุดของดาวเสาร์คือ?",
-    "options": [
-      "ยูโรปา",
-      "ไทรทัน",
-      "ไททัน",
-      "ไอโอ"
-    ],
-    "correct": 2,
-    "explanation": "ไททันใหญ่ที่สุด จากดวงจันทร์ที่ยืนยันแล้วราว 290 ดวงของดาวเสาร์"
-  }
-];
 
 (function () {
   const FONT = '"Sarabun", "Kanit", "Tahoma", system-ui, sans-serif';
@@ -109,8 +40,8 @@ window.PLANET_QUIZ['saturn'] = [
     const segW = (availW - (total - 1) * gap) / total;
     const x0 = -availW / 2 + segW / 2;
     for (let i = 0; i < total; i++) {
-      let color = '#3a3014';
-      if (i < doneCount) color = '#eab308';
+      let color = '#2a2314';
+      if (i < doneCount) color = '#ca8a04';
       if (i === currentIndex) color = currentColor;
       api.make('a-plane', {
         position: (x0 + i * (segW + gap)).toFixed(3) + ' 0.455 0.025',
@@ -132,10 +63,10 @@ window.PLANET_QUIZ['saturn'] = [
   function renderQuestion(ctx) {
     const { container, question: q, index, total, uiConfig: ui, answerQuestion, exitQuiz, api } = ctx;
     frame(api, container, ui, MISSION + ' · ข้อที่ ' + (index + 1) + ' / ' + total);
-    progress(api, container, total, index, index, '#22d3ee');
+    progress(api, container, total, index, index, '#fde047');
 
-    panel(api, container, '0 0.25 0.02', 1.84, 0.33, '#2a2008', 0.65);
-    api.txt(container, q.q || ('รอเพิ่มคำถามข้อที่ ' + (index + 1)), '0 0.25 0.03', 1.8, '#fef9c3', 'center',
+    panel(api, container, '0 0.25 0.02', 1.84, 0.33, '#2e2208', 0.65);
+    api.txt(container, q.q || ('รอเพิ่มคำถามข้อที่ ' + (index + 1)), '0 0.25 0.03', 1.8, '#fefce8', 'center',
       ts({ fontSize: 42, maxHeight: 0.30, minFontSize: 32, centerAnchor: true }));
 
     // ตัวเลือกคำตอบแบบ 2x2
@@ -144,12 +75,12 @@ window.PLANET_QUIZ['saturn'] = [
       const x = (col - 0.5) * 0.96;
       const y = -0.10 - row * 0.33;
       api.button(container, optionLabel(q, i), x.toFixed(3) + ' ' + y.toFixed(3) + ' 0.035', 0.92, 0.30,
-        () => answerQuestion(i), '#6b4a0f', '#ca8a04',
-        ts({ fontSize: 56, maxHeight: 0.27, minFontSize: 38, textColor: '#fffbeb', borderColor: '#fde047', borderThickness: 0.006, opacity: 1 }));
+        () => answerQuestion(i), '#4a3f20', '#a16207',
+        ts({ fontSize: 56, maxHeight: 0.27, minFontSize: 38, textColor: '#fffbeb', borderColor: '#cdb98d', borderThickness: 0.006, opacity: 1 }));
     });
 
-    api.button(container, 'ออกจากแบบทดสอบ', '0 -0.69 0.035', 0.9, 0.12, exitQuiz, '#2a2314', '#574e35',
-      ts({ fontSize: 70, textColor: '#fef08a', borderColor: '#cdb98d', borderThickness: 0.005, opacity: 1 }));
+    api.button(container, 'ออกจากแบบทดสอบ', '0 -0.69 0.035', 0.9, 0.12, exitQuiz, '#2a2314', '#5a4a1c',
+      ts({ fontSize: 70, textColor: '#f3e8c4', borderColor: '#cdb98d', borderThickness: 0.005, opacity: 1 }));
   }
 
   // ------------------------------------------------------------------ หน้าเฉลย
@@ -180,7 +111,7 @@ window.PLANET_QUIZ['saturn'] = [
 
     const isLast = index === total - 1;
     api.button(container, isLast ? 'ดูสรุปคะแนน' : 'ข้อถัดไป', '0 -0.58 0.035', 1.2, 0.17, nextStep, '#a16207', '#ca8a04',
-      ts({ fontSize: 72, textColor: '#ffffff', borderColor: '#fef08a', borderThickness: 0.006, opacity: 1 }));
+      ts({ fontSize: 72, textColor: '#ffffff', borderColor: '#fde047', borderThickness: 0.006, opacity: 1 }));
   }
 
   // ------------------------------------------------------------------ หน้าสรุปผล
@@ -192,7 +123,7 @@ window.PLANET_QUIZ['saturn'] = [
       ts({ fontSize: 84, lineHeight: 1.1, centerAnchor: true }));
 
     const filled = Math.max(0, Math.min(5, Math.round((total > 0 ? score / total : 0) * 5)));
-    api.txt(container, '★'.repeat(filled) + '☆'.repeat(5 - filled), '0 0.215 0.03', 1.0, '#fbbf24', 'center',
+    api.txt(container, '★'.repeat(filled) + '☆'.repeat(5 - filled), '0 0.215 0.03', 1.0, '#fde047', 'center',
       ts({ fontSize: 70, lineHeight: 1.1, centerAnchor: true }));
 
     const ratio = total > 0 ? score / total : 0;
@@ -214,11 +145,11 @@ window.PLANET_QUIZ['saturn'] = [
     const by = '-0.66', bw = 0.62, bh = 0.15;
     const bs = ts({ fontSize: 84, lineHeight: 1.2, opacity: 1, borderThickness: 0.006 });
     api.button(container, 'เล่นอีกครั้ง', '-0.66 ' + by + ' 0.035', bw, bh, () => api.startQuiz(planet),
-      '#a16207', '#ca8a04', Object.assign({}, bs, { textColor: '#ffffff', borderColor: '#fef08a' }));
+      '#a16207', '#ca8a04', Object.assign({}, bs, { textColor: '#ffffff', borderColor: '#fde047' }));
     api.button(container, 'กลับสู่การ์ด', '0 ' + by + ' 0.035', bw, bh, returnToCard,
-      '#6b4a0f', '#a16207', Object.assign({}, bs, { textColor: '#fffbeb', borderColor: '#fde047' }));
+      '#4a3f20', '#a16207', Object.assign({}, bs, { textColor: '#fffbeb', borderColor: '#cdb98d' }));
     api.button(container, 'กลับสู่ระบบสุริยะ', '0.66 ' + by + ' 0.035', bw, bh, closeUI,
-      '#2a2314', '#574e35', Object.assign({}, bs, { textColor: '#fef08a', borderColor: '#cdb98d' }));
+      '#2a2314', '#5a4a1c', Object.assign({}, bs, { textColor: '#f3e8c4', borderColor: '#cdb98d' }));
   }
 
   window.PLANET_QUIZ_UI['saturn'] = {
@@ -230,28 +161,28 @@ window.PLANET_QUIZ['saturn'] = [
     rotation: { x: 0, y: 0, z: 0 },
     scale: 1,
 
-    // --- 2. ฟอนต์และสีหลัก ---
+    // --- 2. ฟอนต์และสีหลัก (ธีม Ringed Gold: ทองนวลบนพื้นน้ำตาลเข้ม ตรงกับการ์ดข้อมูลดาวเสาร์) ---
     style: {
       fontFamily: FONT,
       fontSize: 40,
-      panelBgColor: '#14110a',
+      panelBgColor: '#12100a',
       panelBorderColor: '#fde047',
-      titleColor: '#fef08a',
+      titleColor: '#fde047',
       subtitleColor: '#e7d9a8',
-      textColor: '#fffbeb',
-      buttonColor: '#6b4a0f',
-      buttonHoverColor: '#ca8a04',
+      textColor: '#fdf8e8',
+      buttonColor: '#4a3f20',
+      buttonHoverColor: '#a16207',
       closeButtonColor: '#2a2314'
     },
 
     // --- 3. พื้นหลังและกรอบ ---
     background: {
-      color: '#14110a',
+      color: '#12100a',
       opacity: 0.96,
       image: '',
       outerGlow: true,
       outerGlowColor: '#eab308',
-      outerGlowOpacity: 0.25,
+      outerGlowOpacity: 0.22,
       outerGlowSpread: 0.08
     },
     border: {
@@ -260,7 +191,7 @@ window.PLANET_QUIZ['saturn'] = [
       thickness: 0.022,
       opacity: 0.98,
       cornerSize: 0.20,
-      cornerColor: '#fef08a'
+      cornerColor: '#fde68a'
     },
     header: {
       show: true,
@@ -272,16 +203,16 @@ window.PLANET_QUIZ['saturn'] = [
       showDivider: true,
       dividerY: 0.515,
       dividerWidth: 1.8,
-      dividerColor: '#eab308'
+      dividerColor: '#cdb98d'
     },
 
-    // --- 4. ของตกแต่ง: ไอคอนดาวมุมซ้ายบน ---
+    // --- 4. ของตกแต่ง: ไอคอนดาวเสาร์มุมซ้ายบน (ทรงกลม + วงแหวน) ---
     decorations: [
-      { type: 'sphere', position: '-0.88 0.66 0.04', radius: 0.06, color: '#ddc38e', opacity: 0.95 },
-      { type: 'ring', position: '-0.88 0.66 0.035', radiusInner: 0.085, radiusOuter: 0.098, color: '#cdb98d', opacity: 0.8 }
+      { type: 'sphere', position: '-0.88 0.66 0.04', radius: 0.05, color: '#ddc38e', opacity: 0.95 },
+      { type: 'ring', position: '-0.88 0.66 0.035', radiusInner: 0.075, radiusOuter: 0.088, color: '#cdb98d', opacity: 0.8 }
     ],
 
-    // --- 5. ฟังก์ชันวาดหน้าจอเฉพาะดาวดวงนี้ ---
+    // --- 5. ฟังก์ชันวาดหน้าจอเฉพาะดาวเสาร์ ---
     renderQuestion: renderQuestion,
     renderFeedback: renderFeedback,
     renderResults: renderResults
