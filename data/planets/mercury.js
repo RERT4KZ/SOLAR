@@ -9,6 +9,12 @@
 //   - bullet = สัญลักษณ์หน้าหัวข้อย่อย, decorations ใช้ type 'plane' หรือ 'circle'
 // ============================================================================
 
+// ---- สวิตช์ทดสอบ: ถ้าตัวอักษรเบี้ยว ให้ลองเปลี่ยนทีละค่าเป็น false แล้วรีเฟรช เพื่อหาว่าตัวไหนทำให้เบี้ยว ----
+const MERCURY_USE_BORDER = true;       // กรอบรอบการ์ด
+const MERCURY_USE_GLOW = true;         // แสงเรืองรอบกรอบ
+const MERCURY_USE_DECORATIONS = true;  // เส้น/แผ่น/จุดตกแต่ง
+// ----------------------------------------------------------------------------------------------
+
 window.PLANET_DATA = window.PLANET_DATA || [];
 
 window.PLANET_DATA = window.PLANET_DATA.filter(
@@ -66,15 +72,15 @@ window.PLANET_DATA.push({
     },
 
     // กรอบแบบมีมุม (frame) พร้อมแสงเรืองรอบการ์ด
-    border: {
+    border: MERCURY_USE_BORDER ? {
       style: 'frame',
       color: '#e2e8f0',
       thickness: 0.012,
       cornerSize: 0.12,
       cornerColor: '#38bdf8',
       glowColor: '#38bdf8',
-      glowOpacity: 0.18
-    },
+      glowOpacity: MERCURY_USE_GLOW ? 0.18 : 0
+    } : { style: 'none', thickness: 0, cornerSize: 0, glowOpacity: 0 },
 
     header: {
       show: true,
@@ -115,7 +121,7 @@ window.PLANET_DATA.push({
     sections: [],
 
     // --- ตกแต่งเพิ่มเติม ---
-    decorations: [
+    decorations: !MERCURY_USE_DECORATIONS ? [] : [
       // แผ่นกระจกจาง ๆ ด้านซ้าย (โมเดล) และด้านขวา (ความรู้)
       { type: 'plane', position: '-0.80 -0.125 0.006', width: 0.92, height: 1.04, color: '#131b2c', opacity: 0.55 },
       { type: 'plane', position: '0.47 -0.11 0.006', width: 1.50, height: 0.98, color: '#0e1524', opacity: 0.55 },
