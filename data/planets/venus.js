@@ -132,7 +132,7 @@ window.PLANET_DATA.push({
       { type: 'plane', position: '0.47 -0.11 0.006', width: 1.50, height: 0.98, color: '#2c0e1b', opacity: 0.55 },
 
       // แถบพื้นหลังด้านล่างรองรับปุ่ม
-      { type: 'plane', position: '0 -0.745 0.008', width: 2.30, height: 0.21, color: '#3a1224', opacity: 0.45 },
+      { type: 'plane', position: '0 -0.73 0.008', width: 2.30, height: 0.25, color: '#3a1224', opacity: 0.45 },
 
       // เส้นกรอบบาง (hairline) ซ้อนด้านในกรอบนอก
       { type: 'plane', position: '0 0.835 0.012', width: 2.46, height: 0.004, color: '#fda4af', opacity: 0.5 },
@@ -159,42 +159,47 @@ window.PLANET_DATA.push({
 
     buttonLayout: {
       mode: 'custom',
-      position: '0 -0.745 0.035',
+      position: '0 -0.73 0.035',
       spacing: 0.06
     },
 
-    // ปุ่ม: สีพื้นสว่าง ตัวอักษรขาว มีขอบ มองเห็นข้อความได้ทันทีโดยไม่ต้องชี้
+    // ปุ่มขนาดใหญ่ (0.80 x 0.19, ฟอนต์ 130) เห็นข้อความชัดทันทีโดยไม่ต้องชี้
+    // ขอบล่างปุ่ม = -0.73 - 0.095 = -0.825 → ยังอยู่เหนือเส้นกรอบล่าง (-0.835)
     buttons: [
       {
         id: 'close',
         enabled: true,
         label: 'ปิดการ์ด',
         action: 'close',
-        position: '-0.72 -0.745 0.035',
-        width: 0.62,
-        height: 0.15,
+        position: '-0.70 -0.73 0.035',
+        width: 0.80,
+        height: 0.19,
         color: '#4c0519',
         hoverColor: '#9f1239',
         textColor: '#fff1f2',
         borderColor: '#fda4af',
         borderThickness: 0.006,
-        fontSize: 100,
+        fontSize: 130,
+        minFontSize: 100,
+        maxHeight: 0.17,
         opacity: 1
       },
       {
         id: 'quiz',
         enabled: true,
-        label: 'เริ่มมินิเกม',
+        label: '✦ เริ่มมินิเกม',
         action: 'quiz',
-        position: '0.72 -0.745 0.035',
-        width: 0.62,
-        height: 0.15,
+        position: '0.70 -0.73 0.035',
+        width: 0.80,
+        height: 0.19,
         color: '#be123c',
         hoverColor: '#e11d48',
         textColor: '#ffffff',
         borderColor: '#fecdd3',
         borderThickness: 0.006,
-        fontSize: 100,
+        fontSize: 130,
+        minFontSize: 100,
+        maxHeight: 0.17,
         opacity: 1
       }
     ]
