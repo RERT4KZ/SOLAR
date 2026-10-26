@@ -55,10 +55,9 @@ window.PLANET_DATA = window.PLANET_DATA || [];
 
     radius: 0.38,
 
-    image: '',
+    image: 'assets/images/uranus.jpg',
 
-    // พื้นผิวดาวยูเรนัสจากโปรเจกต์
-    texture: 'assets/images/2k_uranus.jpg',
+    
 
     // ============================================================
     // 4. PLANET STYLE
