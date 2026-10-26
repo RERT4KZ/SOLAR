@@ -1,366 +1,492 @@
 // ============================================================================
-// ไฟล์ข้อมูลประจำดวงดาว: ดาวยูเรนัส (Uranus)
-// ไฟล์: data/planets/uranus.js
-// ============================================================================
-// [ค่าอ้างอิงเดิมของดาวยูเรนัส (นำไปวางในช่องด้านล่าง หรือปรับแต่งเองได้)]
-//   id: 'uranus'
-//   name: 'ดาวยูเรนัส'
-//   en: 'Uranus'
-//   color: '#81d3d9'
-//   radius: 0.38
-//   info: 'ดาวเคราะห์น้ำแข็งยักษ์ที่มีแกนหมุนเอียงมาก'
-//   image: 'assets/images/uranus.svg'
-//
-// [มาตรฐานดีไซน์กลางที่ใช้เหมือนกันทั้งโปรเจกต์ (หากเว้นว่าง ระบบจะใช้ค่าเหล่านี้)]
-//   - ฟอนต์หลัก (fontFamily)     : '"Sarabun", "Kanit", "Tahoma", system-ui, sans-serif'
-//   - ขนาดฟอนต์ (fontSize)       : 42 (px บน Canvas 1024px)
-//   - ขนาดแผงการ์ด UI            : กว้าง 1.78 เมตร x สูง 1.22 เมตร
-//   - สีพื้นหลังการ์ด (panelBgColor): '#071827' (ความโปร่งใส opacity 0.94)
-//   - สีเส้นขอบการ์ด (panelBorderColor): '#22d3ee'
-//   - สีหัวข้อชื่อดาว (titleColor) : '#a5f3fc' (ขนาดกว้าง 1.35)
-//   - สีชื่อภาษาอังกฤษ (subtitleColor): '#c8e9f3' (ขนาดกว้าง 1.25)
-//   - สีข้อความเนื้อหา (textColor) : '#ffffff' (ขนาดกว้าง 0.90, จัดชิดซ้าย)
-//   - สีปุ่มมินิเกม (buttonColor)  : '#0e7490' (เมื่อชี้เมาส์: '#0891b2')
-//   - สีปุ่มปิดการ์ด (closeButtonColor): '#334155'
-//   - สีเรืองแสงรอบดาว (highlightColor): '#6cd7ff'
+// SOLAR ODYSSEY VR
+// PLANET: URANUS (ดาวยูเรนัส)
+// THEME: BLACK & WHITE SCI-FI GAMING HUD
+// FILE: data/planets/uranus.js
 // ============================================================================
 
 window.PLANET_DATA = window.PLANET_DATA || [];
 
-window.PLANET_DATA.push({
-  // --- 1. ข้อมูลพื้นฐานและเนื้อหาของดาว ---
-  id: "uranus",
-  name: "ดาวยูเรนัส",
-  en: "Uranus",
-  info: "ดาวเคราะห์ลำดับที่ 7 จากดวงอาทิตย์ เป็นดาวเคราะห์น้ำแข็งยักษ์ สีฟ้าอมเขียวจากมีเทนในบรรยากาศ และมีแกนหมุนเอียงเกือบตะแคง",
-  facts: [
-    "อยู่ลำดับที่ 7 จากดวงอาทิตย์",
-    "แกนหมุนเอียงประมาณ 97.77 องศา",
-    "โคจรรอบดวงอาทิตย์ใช้เวลาประมาณ 84 ปีโลก",
-    "สีฟ้าอมเขียวเกิดจากก๊าซมีเทนในบรรยากาศ",
-    "ค้นพบโดยวิลเลียม เฮอร์เชล ในปี ค.ศ. 1781"
-  ],
-
-  // --- 2. ตั้งค่าโมเดล 3D และรูปภาพประกอบ ---
-  color: "#81d3d9",
-  radius: 0.39,
-  image: "",
-  texture: 'assets/images/uranus.jpg',
-
-  // --- 3. ปรับแต่งสไตล์เฉพาะของดาวดวงนี้ (เว้นว่างไว้หากต้องการใช้ค่ามาตรฐานกลาง) ---
-  style: {
-    fontFamily: '',
-    fontSize: 0,
-    panelBgColor: '',
-    panelBorderColor: '',
-    titleColor: '',
-    subtitleColor: '',
-    textColor: '',
-    buttonColor: '',
-    buttonHoverColor: '',
-    closeButtonColor: '',
-    highlightColor: ''
-  },
-
-  // --- 4. ตั้งค่าโครงสร้าง ขนาด ตำแหน่ง และปุ่มของการ์ดข้อมูลแยกอิสระ (Independent Card Config) ---
-  // ดาวยูเรนัสใช้โทนน้ำแข็งสีฟ้าอมเขียวและการจัดวางแบบมีกรอบเต็ม (all border)
-  card: {
+(function () {
 
   // ============================================================
-  // 1. CARD STRUCTURE — FROZEN KINGDOM
+  // 1. BLACK & WHITE ANIMATED BORDER
   // ============================================================
 
-  width: 2.25,
-  height: 1.55,
+  // กรอบเปลี่ยนสีขาวและดำ
+  const BW_LINE_PALETTE = [
+    '#ffffff', // สีขาว
+    '#000000'  // สีดำ
+  ];
 
-  layout: 'horizontal',
-
-  position: {
-    x: 0,
-    y: 0,
-    z: 0
-  },
-
-  distance: 0,
-
-  rotation: {
-    x: 0,
-    y: 0,
-    z: 0
-  },
-
+  // เปลี่ยนสีทุก 850 มิลลิวินาที
+  const BW_INTERVAL_MS = 850;
 
   // ============================================================
-  // 2. BACKGROUND — FROZEN COSMIC OCEAN
+  // 2. URANUS PLANET DATA
   // ============================================================
 
-  background: {
+  const uranusPlanetData = {
 
-    // พื้นหลังสีน้ำเงินเข้มอมเขียว
-    color: '#061C2B',
+    id: 'uranus',
 
-    // ความทึบของพื้นหลัง
-    opacity: 0.97,
+    name: 'ดาวยูเรนัส',
 
-    // ภาพพื้นหลัง (สามารถกำหนดเพิ่มเติมได้)
+    en: 'Uranus',
+
+    // ข้อมูลดาวยูเรนัส
+    info: 'ดาวยูเรนัสเป็นดาวเคราะห์ลำดับที่ 7 จากดวงอาทิตย์ เป็นดาวเคราะห์น้ำแข็งยักษ์ที่มีบรรยากาศประกอบด้วยไฮโดรเจน ฮีเลียม และมีเทน',
+
+    facts: [
+      'เป็นดาวเคราะห์ลำดับที่ 7 จากดวงอาทิตย์',
+      'จัดเป็นดาวเคราะห์น้ำแข็งยักษ์ (Ice Giant)',
+      'มีสีฟ้าอมเขียวเนื่องจากก๊าซมีเทนในบรรยากาศ',
+      'แกนหมุนเอียงประมาณ 98 องศา ทำให้ดูเหมือนหมุนตะแคง',
+      'โคจรรอบดวงอาทิตย์ใช้เวลาประมาณ 84 ปีโลก',
+      'หมุนรอบตัวเองหนึ่งรอบใช้เวลาประมาณ 17 ชั่วโมง',
+      'มีระบบวงแหวนล้อมรอบดาวเคราะห์'
+    ],
+
+    // ============================================================
+    // 3. PLANET 3D MODEL
+    // ============================================================
+
+    color: '#9dd9df',
+
+    radius: 0.38,
+
     image: '',
 
-    // เปิดแสงเรืองรอบการ์ด
-    outerGlow: true,
+    // พื้นผิวดาวยูเรนัสจากโปรเจกต์
+    texture: 'assets/images/2k_uranus.jpg',
 
-    // แสงคริสตัลสีฟ้าน้ำแข็ง
-    outerGlowColor: '#73F5E9',
+    // ============================================================
+    // 4. PLANET STYLE
+    // ============================================================
 
-    // ความเข้มของแสง
-    outerGlowOpacity: 0.45
+    style: {
 
-  },
+      fontFamily: '',
 
+      fontSize: 37,
 
-  // ============================================================
-  // 3. BORDER — LEGENDARY ICE CRYSTAL FRAME
-  // ============================================================
+      // พื้นหลังสีดำ
+      panelBgColor: '#080b10',
 
-  border: {
+      // กรอบสีขาว
+      panelBorderColor: '#ffffff',
 
-    // กรอบแฟนตาซี
-    style: 'frame',
+      // ชื่อดาว
+      titleColor: '#ffffff',
 
-    // สีเงินน้ำแข็ง
-    color: '#B8F4F5',
-
-    // ความหนากรอบ
-    thickness: 0.025,
-
-    opacity: 1,
-
-    // ขนาดมุมกรอบ
-    cornerSize: 0.20
-
-  },
-
-
-  // ============================================================
-  // 4. HEADER — FROZEN CELESTIAL TITLE
-  // ============================================================
-
-  header: {
-
-    // ชื่อดาวภาษาไทย
-    titlePos: {
-      x: 0,
-      y: 0.62,
-      z: 0.04
-    },
-
-    // ชื่อดาวภาษาอังกฤษ
-    subtitlePos: {
-      x: 0,
-      y: 0.49,
-      z: 0.04
-    },
-
-    titleWidth: 1.65,
-
-    subtitleWidth: 1.45,
-
-    // ขนาดชื่อดาว
-    titleFontSize: 56,
-
-    subtitleFontSize: 39,
-
-    // สีฟ้าน้ำแข็ง
-    titleColor: '#9CFFF3',
-
-    // สีเงินสว่าง
-    subtitleColor: '#E5FFFF',
-
-    align: 'center',
-
-    // แสดงเส้นแบ่ง
-    showDivider: true,
-
-    dividerY: 0.41,
-
-    // เส้นแบ่งสีคริสตัล
-    dividerColor: '#73F5E9'
-
-  },
-
-
-  // ============================================================
-  // 5. MEDIA — URANUS PLANET DISPLAY
-  // ============================================================
-
-  media: {
-
-    show: true,
-
-    // โมเดลดาวอยู่ด้านซ้าย
-    position: {
-      x: -0.62,
-      y: -0.04,
-      z: 0.04
-    },
-
-    // แสดงดาวแบบ 3D
-    show3D: true,
-
-    // ขนาดโมเดล
-    modelRadius: 0.27,
-
-    // ตำแหน่งโมเดล
-    modelOffset: {
-      x: 0,
-      y: 0.12,
-      z: 0.06
-    },
-
-    // แสดงภาพประกอบ
-    showImage: true,
-
-    imageWidth: 0.47,
-
-    imageHeight: 0.27,
-
-    imageOffset: {
-      x: 0,
-      y: -0.24,
-      z: 0.02
-    },
-
-    // แสดงคำอธิบายใต้ภาพ
-    showCaption: true,
-
-    captionPos: {
-      x: 0,
-      y: -0.42,
-      z: 0.04
-    }
-
-  },
-
-
-  // ============================================================
-  // 6. CONTENT — ANCIENT ICE KNOWLEDGE
-  // ============================================================
-
-  content: {
-
-    // ตำแหน่งข้อมูลด้านขวา
-    position: {
-      x: 0.28,
-      y: -0.035,
-      z: 0.04
-    },
-
-    // ความกว้างของข้อมูล
-    width: 1.12,
-
-    // ความสูงสูงสุด
-    maxHeight: 0.77,
-
-    // ขนาดตัวอักษร
-    fontSize: 32,
-
-    // ระยะห่างบรรทัด
-    lineHeight: 43,
-
-    align: 'left',
-
-    // สัญลักษณ์น้ำแข็งแฟนตาซี
-    bulletPrefix: '❄ ',
-
-    // แสดงคำอธิบายดาว
-    includeInfo: true,
-
-    // แสดงข้อมูลน่าสนใจ
-    includeFacts: true
-
-  },
-
-
-  // ============================================================
-  // 7. RPG BUTTON SYSTEM — FROZEN QUEST
-  // ============================================================
-
-  buttonLayout: 'custom',
-
-  buttons: [
-
-    // ----------------------------------------------------------
-    // BUTTON 1 — FROZEN QUEST
-    // ----------------------------------------------------------
-
-    {
-
-      id: 'quiz',
-
-      // ปุ่มเริ่มภารกิจ
-      label: '❄ เริ่มมินิเกมคำถาม',
-
-      action: 'quiz',
-
-      position: {
-        x: -0.27,
-        y: -0.62,
-        z: 0.06
-      },
-
-      width: 0.82,
-
-      height: 0.16,
-
-      // สีฟ้าน้ำแข็ง
-      color: '#138C9E',
-
-      // สีเมื่อชี้เมาส์
-      hoverColor: '#68FFF0',
+      // ชื่อภาษาอังกฤษ
+      subtitleColor: '#cbd5e1',
 
       // สีข้อความ
-      textColor: '#FFFFFF',
+      textColor: '#ffffff',
 
-      fontSize: 43
+      // สีปุ่ม
+      buttonColor: '#1f2937',
+
+      // สีเมื่อชี้ปุ่ม
+      buttonHoverColor: '#475569',
+
+      // ปุ่มปิดการ์ด
+      closeButtonColor: '#374151',
+
+      // สีเน้น
+      highlightColor: '#f8fafc'
 
     },
 
+    // ============================================================
+    // 5. CARD CONFIGURATION
+    // ============================================================
 
-    // ----------------------------------------------------------
-    // BUTTON 2 — CLOSE FROZEN PORTAL
-    // ----------------------------------------------------------
+    card: {
 
-    {
+      width: 2.06,
 
-      id: 'close',
+      height: 1.48,
 
-      label: '✕ ปิดหน้าต่าง',
+      position: '0 0 0',
 
-      action: 'close',
+      rotation: '0 0 0',
 
-      position: {
-        x: 0.49,
-        y: -0.62,
-        z: 0.06
+      distance: 1.8,
+
+      layout: 'horizontal',
+
+      // ==========================================================
+      // 6. BACKGROUND
+      // ==========================================================
+
+      background: {
+
+        color: '#080b10',
+
+        opacity: 0.97,
+
+        image: '',
+
+        outerGlow: true,
+
+        outerGlowColor: '#ffffff',
+
+        outerGlowOpacity: 0.20
+
       },
 
-      width: 0.51,
+      // ==========================================================
+      // 7. BORDER
+      // ==========================================================
 
-      height: 0.16,
+      border: {
 
-      // พื้นหลังสีน้ำเงินเข้ม
-      color: '#91c2e0',
+        style: 'frame',
 
-      // สีเมื่อชี้เมาส์
-      hoverColor: '#E05A75',
+        color: '#ffffff',
 
-      // สีข้อความ
-      textColor: '#090a0a',
+        thickness: 0.024,
 
-      fontSize: 40
+        opacity: 1.0
+
+      },
+
+      // ==========================================================
+      // 8. HEADER
+      // ==========================================================
+
+      header: {
+
+        show: true,
+
+        titlePos: '0 0.60 0.02',
+
+        subtitlePos: '0 0.49 0.02',
+
+        titleColor: '#ffffff',
+
+        subtitleColor: '#cbd5e1',
+
+        titleFontSize: 52,
+
+        subtitleFontSize: 38,
+
+        titleWidth: 1.60,
+
+        subtitleWidth: 1.40,
+
+        showDivider: true,
+
+        dividerColor: '#ffffff',
+
+        dividerY: 0.41,
+
+        dividerWidth: 1.90
+
+      },
+
+      // ==========================================================
+      // 9. PLANET MEDIA
+      // ==========================================================
+
+      media: {
+
+        show: true,
+
+        show3D: true,
+
+        position: '-0.64 0.04 0.035',
+
+        modelRadius: 0.26,
+
+        frameColor: '#ffffff',
+
+        showCaption: true,
+
+        captionColor: '#e2e8f0'
+
+      },
+
+      // ==========================================================
+      // 10. INFORMATION CONTENT
+      // ==========================================================
+
+      content: {
+
+        position: '0.30 0.03 0.03',
+
+        width: 1.22,
+
+        maxHeight: 0.78,
+
+        fontSize: 31,
+
+        lineHeight: 1.42,
+
+        align: 'left',
+
+        bullet: '• ',
+
+        showInfoSummary: false,
+
+        color: '#ffffff'
+
+      },
+
+      // ==========================================================
+      // 11. CARD DECORATIONS
+      // ==========================================================
+
+      decorations: [
+
+        // พื้นหลังส่วนข้อมูล
+        {
+          type: 'plane',
+
+          position: '0.30 0.03 0.012',
+
+          width: 1.34,
+
+          height: 0.84,
+
+          color: '#15191f',
+
+          opacity: 0.85
+        },
+
+        // เส้นแบ่งระหว่างดาวกับข้อมูล
+        {
+          type: 'plane',
+
+          position: '-0.34 0.03 0.016',
+
+          width: 0.006,
+
+          height: 0.84,
+
+          color: '#ffffff',
+
+          opacity: 0.90
+        }
+
+      ]
+
+    },
+
+    // ============================================================
+    // 12. CUSTOM CARD RENDERER
+    // ============================================================
+
+    renderCard: function (cardContainer, p, api) {
+
+      const cardCfg = p.card || {};
+
+      const s = p.style || {};
+
+      // สร้างพื้นหลังและกรอบการ์ด
+      api.basePanel(
+        p.name,
+        p.en,
+        s,
+        cardContainer,
+        cardCfg
+      );
+
+      // สร้างองค์ประกอบตกแต่ง
+      api.renderCardDecorations(
+        p,
+        cardContainer,
+        cardCfg
+      );
+
+      // แสดงโมเดลดาวยูเรนัส 3D
+      api.planetImage(
+        p,
+        cardContainer,
+        cardCfg
+      );
+
+      // แสดงข้อมูลดาวยูเรนัส
+      api.renderCardContent(
+        p,
+        cardContainer,
+        cardCfg
+      );
+
+      // ==========================================================
+      // 13. BUTTON SETTINGS
+      // ==========================================================
+
+      const btnBase = {
+
+        textColor: '#ffffff',
+
+        borderColor: '#ffffff',
+
+        borderThickness: 0.008,
+
+        opacity: 1
+
+      };
+
+      // ==========================================================
+      // 14. CLOSE CARD BUTTON
+      // ==========================================================
+
+      api.button(
+
+        cardContainer,
+
+        'ปิดการ์ด',
+
+        '-0.52 -0.58 0.035',
+
+        0.66,
+
+        0.20,
+
+        function () {
+          api.closeUI();
+        },
+
+        '#374151',
+
+        '#4b5563',
+
+        Object.assign(
+          {},
+          s,
+          btnBase,
+          {
+            fontSize: 120
+          }
+        )
+
+      );
+
+      // ==========================================================
+      // 15. PLAY MINIGAME BUTTON
+      // ==========================================================
+
+      api.button(
+
+        cardContainer,
+
+        'เล่นมินิเกม',
+
+        '0.40 -0.58 0.035',
+
+        0.96,
+
+        0.20,
+
+        function () {
+          api.startQuiz(p);
+        },
+
+        '#1f2937',
+
+        '#475569',
+
+        Object.assign(
+          {},
+          s,
+          btnBase,
+          {
+            fontSize: 84
+          }
+        )
+
+      );
+
+      // ==========================================================
+      // 16. REFRESH VR RAYCASTERS
+      // ==========================================================
+
+      if (
+        typeof window.refreshRaycasters === 'function'
+      ) {
+
+        setTimeout(
+          window.refreshRaycasters,
+          0
+        );
+
+      }
+
+      // ==========================================================
+      // 17. BLACK & WHITE ANIMATED BORDER
+      // ==========================================================
+
+      let step = 0;
+
+      const timer = setInterval(function () {
+
+        // หากการ์ดถูกปิด ให้หยุด Timer
+        if (!cardContainer.isConnected) {
+
+          clearInterval(timer);
+
+          return;
+
+        }
+
+        // เปลี่ยนสีขาวและดำสลับกัน
+        step = (
+          step + 1
+        ) % BW_LINE_PALETTE.length;
+
+        const color = BW_LINE_PALETTE[step];
+
+        // เปลี่ยนสีเฉพาะกรอบ outline
+        cardContainer
+          .querySelectorAll('[round-rect]')
+          .forEach(function (el) {
+
+            try {
+
+              const cfg = el.getAttribute('round-rect');
+
+              if (
+                !cfg ||
+                cfg.mode !== 'outline'
+              ) {
+                return;
+              }
+
+              const mesh = el.getObject3D('mesh');
+
+              if (
+                mesh &&
+                mesh.material &&
+                mesh.material.color
+              ) {
+
+                mesh.material.color.set(color);
+
+              }
+
+            } catch (e) {
+
+              // ป้องกันข้อผิดพลาดไม่ให้ระบบหยุด
+            }
+
+          });
+
+      }, BW_INTERVAL_MS);
 
     }
 
-  ]
+  };
 
-}
-});
+  // ============================================================
+  // 18. REGISTER URANUS
+  // ============================================================
+
+  window.PLANET_DATA.push(
+    uranusPlanetData
+  );
+
+})();
