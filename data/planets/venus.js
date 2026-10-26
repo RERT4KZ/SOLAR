@@ -2,12 +2,6 @@
 // ไฟล์ข้อมูลประจำดวงดาว: ดาวศุกร์ (Venus)
 // ไฟล์: data/planets/venus.js
 // ============================================================================
-// หมายเหตุรูปแบบค่า (ยึดตามไฟล์ saturn.js ที่ใช้งานได้จริง)
-//   - ตำแหน่งทุกชนิดเป็นสตริง 'x y z' เช่น '-0.80 0 0.035' (ห้ามใช้ { x, y, z })
-//   - lineHeight เป็นอัตราส่วน เช่น 1.3 (ไม่ใช่พิกเซล)
-//   - fontSize ของปุ่มอยู่บนสเกลแคนวาส 1024 (ใช้ราว 100)
-//   - bullet = สัญลักษณ์หน้าหัวข้อย่อย, decorations ใช้ type 'plane' หรือ 'circle'
-// ============================================================================
 
 window.PLANET_DATA = window.PLANET_DATA || [];
 
@@ -49,7 +43,7 @@ window.PLANET_DATA.push({
     highlightColor: '#fb7185'
   },
 
-  // --- 4. การ์ดข้อมูล (ขนาดและตำแหน่งชุดเดียวกับดาวเสาร์) ---
+  // --- 4. การ์ดข้อมูล ---
   card: {
     width: 2.65,
     height: 1.80,
@@ -121,7 +115,7 @@ window.PLANET_DATA.push({
       { type: 'plane', position: '0.47 -0.11 0.006', width: 1.50, height: 0.98, color: '#2c0e1b', opacity: 0.55 },
 
       // แถบพื้นหลังด้านล่างรองรับปุ่ม
-      { type: 'plane', position: '0 -0.745 0.008', width: 2.30, height: 0.21, color: '#3a1224', opacity: 0.45 },
+      { type: 'plane', position: '0 -0.745 0.008', width: 2.30, height: 0.26, color: '#3a1224', opacity: 0.45 },
 
       // เส้นกรอบบาง (hairline) ซ้อนด้านในกรอบนอก
       { type: 'plane', position: '0 0.835 0.012', width: 2.46, height: 0.004, color: '#fda4af', opacity: 0.5 },
@@ -152,7 +146,7 @@ window.PLANET_DATA.push({
       spacing: 0.06
     },
 
-    // ปุ่ม: สีพื้นสว่าง ตัวอักษรขาว มีขอบ มองเห็นข้อความได้ทันทีโดยไม่ต้องชี้
+    // ปุ่ม: ขนาดใหญ่ขึ้น ตัวอักษรใหญ่ขึ้น มองเห็นได้ทันทีโดยไม่ต้องชี้เมาส์
     buttons: [
       {
         id: 'close',
@@ -160,14 +154,14 @@ window.PLANET_DATA.push({
         label: 'ปิดการ์ด',
         action: 'close',
         position: '-0.72 -0.745 0.035',
-        width: 0.62,
-        height: 0.15,
+        width: 0.78,          // กว้างขึ้นจาก 0.62
+        height: 0.18,         // สูงขึ้นจาก 0.15
         color: '#4c0519',
         hoverColor: '#9f1239',
         textColor: '#fff1f2',
         borderColor: '#fda4af',
         borderThickness: 0.006,
-        fontSize: 100,
+        fontSize: 130,        // ใหญ่ขึ้นจาก 100
         opacity: 1
       },
       {
@@ -176,14 +170,14 @@ window.PLANET_DATA.push({
         label: 'เริ่มมินิเกม',
         action: 'quiz',
         position: '0.72 -0.745 0.035',
-        width: 0.62,
-        height: 0.15,
+        width: 0.78,          // กว้างขึ้นจาก 0.62
+        height: 0.18,         // สูงขึ้นจาก 0.15
         color: '#be123c',
         hoverColor: '#e11d48',
         textColor: '#ffffff',
         borderColor: '#fecdd3',
         borderThickness: 0.006,
-        fontSize: 100,
+        fontSize: 130,        // ใหญ่ขึ้นจาก 100
         opacity: 1
       }
     ]
