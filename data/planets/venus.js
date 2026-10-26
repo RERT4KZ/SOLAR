@@ -49,15 +49,87 @@ window.PLANET_DATA.push({
   // --- 3. ปรับแต่งสไตล์เฉพาะของดาวดวงนี้ (เว้นว่างไว้หากต้องการใช้ค่ามาตรฐานกลาง) ---
   style: {
     fontFamily: '',
-    fontSize: 36,
-    panelBgColor: '#1a0c13',       // พื้นหลังสีดำเหลือบกุหลาบเข้ม (Rose Obsidian)
+    fontSize: 44,
+    badgeText: '✦ ดาวฝาแฝดของโลก · GODDESS OF BEAUTY ✦',
+    panelBgColor: '#160812',       // พื้นหลังสีดำเหลือบกุหลาบเข้ม (Rose Obsidian)
     panelBorderColor: '#fb7185',   // ขอบการ์ดสีโรสโกลด์ / ชมพูพีชสว่าง (Rose Gold)
-    titleColor: '#ffe4e6',         // หัวข้อสีขาวประกายชมพูโรส
+    titleColor: '#fff1f2',         // หัวข้อสีขาวประกายชมพูโรส
     subtitleColor: '#fecdd3',      // ชื่อภาษาอังกฤษสีพีชพาสเทล
     textColor: '#ffffff',          // ข้อความเนื้อหาสีขาวคมชัด
-    buttonColor: '#881337',        // ปุ่มมินิเกมสีแดงกุหลาบเข้มบรอนซ์ (Deep Rose Bronze)
-    buttonHoverColor: '#e11d48',   // สีปุ่มเมื่อชี้เมาส์สว่างเป็นชมพูโรสสด
-    closeButtonColor: '#3f1d28',   // ปุ่มปิดสีไวน์เข้ม
+    buttonColor: '#be123c',        // ปุ่มมินิเกมสีแดงกุหลาบคริมสันสว่าง เห็นชัดเจน
+    buttonHoverColor: '#fb7185',   // สีปุ่มเมื่อชี้เมาส์สว่างเป็นชมพูประกายโรสโกลด์
+    closeButtonColor: '#4c0519',   // ปุ่มปิดสีไวน์แดงชัดเจน ไม่มืดทึบ
     highlightColor: '#fda4af'      // แสงเรืองรองสีชมพูโรสโกลด์รอบดาว
+  },
+
+  // --- 4. ตั้งค่าการ์ดข้อมูลแยกอิสระ (แก้ไขเฉพาะดาวดวงนี้ได้โดยไม่กระทบดาวดวงอื่น) ---
+  card: {
+    width: 1.84,
+    height: 1.28,
+    layout: 'horizontal',
+    position: { x: 0, y: 0, z: 0 },
+    background: {
+      color: '#160812',
+      opacity: 1.0,
+      outerGlow: true,
+      outerGlowColor: '#fb7185',
+      outerGlowOpacity: 0.28
+    },
+    border: {
+      style: 'full',               // กรอบเส้นล้อมรอบครบทั้ง 4 ด้าน (กรอบรอบๆ สวยงาม)
+      color: '#fb7185',            // ขอบสีโรสโกลด์สว่างคมชัด
+      thickness: 0.022,
+      opacity: 1.0
+    },
+    header: {
+      badgeText: '✦ ดาวฝาแฝดของโลก · GODDESS OF BEAUTY ✦',
+      titleFontSize: 46,           // ขนาดตัวอักษรชื่อดาว (ปรับให้พอดี สวยงาม)
+      subtitleFontSize: 34,        // ขนาดตัวอักษรภาษาอังกฤษ
+      titleColor: '#fff1f2',
+      subtitleColor: '#fecdd3',
+      showDivider: true,
+      dividerColor: '#fb7185'
+    },
+    media: {
+      position: { x: -0.48, y: -0.01, z: 0.22 }, // ลอยเด่นหน้าการ์ด ไม่ถูกตัดแหว่ง
+      modelRadius: 0.20,
+      showCaption: true,
+      caption: 'แบบจำลอง 3D ดาวศุกร์',
+      captionColor: '#fecdd3'
+    },
+    content: {
+      position: { x: -0.15, y: -0.01, z: 0.02 },
+      width: 0.94,
+      fontSize: 28,                // ขนาดตัวอักษรพอเหมาะ ไม่ตกบรรทัด
+      lineHeight: 44,
+      align: 'left',
+      bulletPrefix: '✦ '
+    },
+    buttons: [
+      {
+        id: 'quiz',
+        label: '✦ ท้าทายควิซดาวศุกร์',
+        action: 'quiz',
+        position: { x: 0.32, y: -0.46, z: 0.035 },
+        width: 0.68,
+        height: 0.13,
+        color: '#be123c',          // สีปุ่มแดงกุหลาบคริมสันสว่าง เห็นตัวอักษรได้ทันทีโดยไม่ต้องชี้เมาส์
+        hoverColor: '#fb7185',     // สีปุ่มเมื่อชี้เมาส์สว่างเป็นชมพูประกายโรสโกลด์
+        textColor: '#ffffff',      // ตัวอักษรสีขาวสว่าง ชัดเจน
+        fontSize: 34
+      },
+      {
+        id: 'close',
+        label: '✕ กลับสู่ระบบสุริยะ',
+        action: 'close',
+        position: { x: -0.50, y: -0.46, z: 0.035 },
+        width: 0.46,
+        height: 0.13,
+        color: '#4c0519',          // สีปุ่มแดงไวน์เบอร์กันดีชัดเจน ไม่กลืนกับพื้นหลัง
+        hoverColor: '#e11d48',     // สีเมื่อชี้เมาส์
+        textColor: '#fff1f2',      // ตัวอักษรสีขาวอมชมพู สว่างชัดเจน
+        fontSize: 34
+      }
+    ]
   }
 });
