@@ -8,7 +8,8 @@
 //
 // คุณสมบัติ: แถบความคืบหน้า (Progress) · ข้อที่ N / รวม · ปุ่มตัวเลือกใหญ่สำหรับเมาส์/Controller
 //            เฉลยพร้อมสัญลักษณ์ ✔/✘ (ไม่พึ่งสีอย่างเดียว) · คำอธิบายหลังตอบ · ปุ่มเล่นใหม่ในหน้าสรุปผล
-// ธีม: Storm Amber — ส้มอำพันและน้ำตาลเข้ม ให้เข้ากับการ์ดข้อมูลดาวพฤหัสบดี (data/planets/jupiter.js)
+// ธีม: Storm Amber Hologram — พื้นอวกาศน้ำเงินอมม่วงเข้ม + ส้มอำพัน + เส้นฟ้าโฮโลแกรม
+//      ตรงกับการ์ดข้อมูลดาวพฤหัสบดี (data/planets/jupiter.js) และชุดเดียวกับการ์ดดวงอาทิตย์
 // ============================================================================
 
 window.PLANET_QUIZ_UI = window.PLANET_QUIZ_UI || {};
@@ -40,8 +41,8 @@ window.PLANET_QUIZ_UI = window.PLANET_QUIZ_UI || {};
     const segW = (availW - (total - 1) * gap) / total;
     const x0 = -availW / 2 + segW / 2;
     for (let i = 0; i < total; i++) {
-      let color = '#2e2218';
-      if (i < doneCount) color = '#b45309';
+      let color = '#241a40';
+      if (i < doneCount) color = '#d97706';
       if (i === currentIndex) color = currentColor;
       api.make('a-plane', {
         position: (x0 + i * (segW + gap)).toFixed(3) + ' 0.455 0.025',
@@ -63,9 +64,9 @@ window.PLANET_QUIZ_UI = window.PLANET_QUIZ_UI || {};
   function renderQuestion(ctx) {
     const { container, question: q, index, total, uiConfig: ui, answerQuestion, exitQuiz, api } = ctx;
     frame(api, container, ui, MISSION + ' · ข้อที่ ' + (index + 1) + ' / ' + total);
-    progress(api, container, total, index, index, '#fbbf24');
+    progress(api, container, total, index, index, '#7deaff');
 
-    panel(api, container, '0 0.25 0.02', 1.84, 0.33, '#2b1405', 0.65);
+    panel(api, container, '0 0.25 0.02', 1.84, 0.33, '#1a1238', 0.70);
     api.txt(container, q.q || ('รอเพิ่มคำถามข้อที่ ' + (index + 1)), '0 0.25 0.03', 1.8, '#fff7ed', 'center',
       ts({ fontSize: 42, maxHeight: 0.30, minFontSize: 32, centerAnchor: true }));
 
@@ -75,12 +76,12 @@ window.PLANET_QUIZ_UI = window.PLANET_QUIZ_UI || {};
       const x = (col - 0.5) * 0.96;
       const y = -0.10 - row * 0.33;
       api.button(container, optionLabel(q, i), x.toFixed(3) + ' ' + y.toFixed(3) + ' 0.035', 0.92, 0.30,
-        () => answerQuestion(i), '#5c3512', '#b45309',
+        () => answerQuestion(i), '#2a1f45', '#b45309',
         ts({ fontSize: 56, maxHeight: 0.27, minFontSize: 38, textColor: '#fff7ed', borderColor: '#d6a37c', borderThickness: 0.006, opacity: 1 }));
     });
 
-    api.button(container, 'ออกจากแบบทดสอบ', '0 -0.69 0.035', 0.9, 0.12, exitQuiz, '#2e2218', '#5c3512',
-      ts({ fontSize: 70, textColor: '#fde8cc', borderColor: '#d6a37c', borderThickness: 0.005, opacity: 1 }));
+    api.button(container, 'ออกจากแบบทดสอบ', '0 -0.69 0.035', 0.9, 0.12, exitQuiz, '#1a1530', '#33264f',
+      ts({ fontSize: 70, textColor: '#bff4ff', borderColor: '#7deaff', borderThickness: 0.005, opacity: 1 }));
   }
 
   // ------------------------------------------------------------------ หน้าเฉลย
@@ -101,11 +102,11 @@ window.PLANET_QUIZ_UI = window.PLANET_QUIZ_UI || {};
       api.txt(container, 'เฉลย ' + optionLabel(q, q.correct), '0 0.03 0.03', 1.8, '#fde047', 'center',
         ts({ fontSize: 38, lineHeight: 1.1, maxHeight: 0.15, minFontSize: 24, centerAnchor: true }));
     } else if (q.topic) {
-      api.txt(container, 'หัวข้อ: ' + q.topic, '0 0.03 0.03', 1.8, '#e8c9a8', 'center',
+      api.txt(container, 'หัวข้อ: ' + q.topic, '0 0.03 0.03', 1.8, '#bff4ff', 'center',
         ts({ fontSize: 38, lineHeight: 1.1, maxHeight: 0.15, minFontSize: 24, centerAnchor: true }));
     }
 
-    panel(api, container, '0 -0.22 0.02', 1.82, 0.36, '#241608', 0.7);
+    panel(api, container, '0 -0.22 0.02', 1.82, 0.36, '#150f2e', 0.75);
     api.txt(container, q.explanation || '', '0 -0.22 0.03', 1.74, '#fef3c7', 'center',
       ts({ fontSize: 40, maxHeight: 0.32, minFontSize: 30, centerAnchor: true }));
 
@@ -147,9 +148,9 @@ window.PLANET_QUIZ_UI = window.PLANET_QUIZ_UI || {};
     api.button(container, 'เล่นอีกครั้ง', '-0.66 ' + by + ' 0.035', bw, bh, () => api.startQuiz(planet),
       '#b45309', '#d97706', Object.assign({}, bs, { textColor: '#ffffff', borderColor: '#fbbf24' }));
     api.button(container, 'กลับสู่การ์ด', '0 ' + by + ' 0.035', bw, bh, returnToCard,
-      '#5c3512', '#b45309', Object.assign({}, bs, { textColor: '#fff7ed', borderColor: '#d6a37c' }));
+      '#241a40', '#3a2b63', Object.assign({}, bs, { textColor: '#e6fbff', borderColor: '#7deaff' }));
     api.button(container, 'กลับสู่ระบบสุริยะ', '0.66 ' + by + ' 0.035', bw, bh, closeUI,
-      '#2e2218', '#5c3512', Object.assign({}, bs, { textColor: '#fde8cc', borderColor: '#d6a37c' }));
+      '#1a1530', '#33264f', Object.assign({}, bs, { textColor: '#bff4ff', borderColor: '#7deaff' }));
   }
 
   window.PLANET_QUIZ_UI['jupiter'] = {
@@ -161,23 +162,23 @@ window.PLANET_QUIZ_UI = window.PLANET_QUIZ_UI || {};
     rotation: { x: 0, y: 0, z: 0 },
     scale: 1,
 
-    // --- 2. ฟอนต์และสีหลัก (ธีม Storm Amber: ส้มอำพันบนพื้นน้ำตาลเข้ม ตรงกับการ์ดข้อมูลดาวพฤหัสบดี) ---
+    // --- 2. ฟอนต์และสีหลัก (ธีม Storm Amber Hologram) ---
     style: {
       fontFamily: FONT,
       fontSize: 40,
-      panelBgColor: '#150f0a',
+      panelBgColor: '#0b0a1a',
       panelBorderColor: '#f59e0b',
       titleColor: '#fbbf24',
-      subtitleColor: '#e8c9a8',
+      subtitleColor: '#7deaff',
       textColor: '#fff7ed',
-      buttonColor: '#5c3512',
+      buttonColor: '#2a1f45',
       buttonHoverColor: '#b45309',
-      closeButtonColor: '#2e2218'
+      closeButtonColor: '#1a1530'
     },
 
     // --- 3. พื้นหลังและกรอบ ---
     background: {
-      color: '#150f0a',
+      color: '#0b0a1a',
       opacity: 0.96,
       image: '',
       outerGlow: true,
@@ -203,13 +204,30 @@ window.PLANET_QUIZ_UI = window.PLANET_QUIZ_UI || {};
       showDivider: true,
       dividerY: 0.515,
       dividerWidth: 1.8,
-      dividerColor: '#d6a37c'
+      dividerColor: '#7deaff'
     },
 
-    // --- 4. ของตกแต่ง: ไอคอนดาวพฤหัสบดีมุมซ้ายบน ---
+    // --- 4. ของตกแต่ง: ดาวพฤหัสบดีพร้อมจุดแดงมุมซ้ายบน / วงโคจรไอโอมุมขวาบน / ดาวพื้นหลัง ---
     decorations: [
+      // ไอคอนดาวพฤหัสบดี (ซ้าย): ทรงกลม + วงแหวนอำพัน + จุดแดงใหญ่
       { type: 'sphere', position: '-0.88 0.66 0.04', radius: 0.06, color: '#d6a37c', opacity: 0.95 },
-      { type: 'ring', position: '-0.88 0.66 0.035', radiusInner: 0.075, radiusOuter: 0.088, color: '#f59e0b', opacity: 0.75 }
+      { type: 'circle', position: '-0.865 0.642 0.102', radius: 0.012, color: '#b9462d', opacity: 0.95 },
+      { type: 'ring', position: '-0.88 0.66 0.035', radiusInner: 0.075, radiusOuter: 0.088, color: '#f59e0b', opacity: 0.75 },
+
+      // วงโคจรพร้อมดวงจันทร์ไอโอ (ขวา) ให้หัวหน้าต่างสมดุลสองฝั่ง
+      { type: 'ring', position: '0.88 0.66 0.035', radiusInner: 0.075, radiusOuter: 0.078, color: '#7deaff', opacity: 0.55 },
+      { type: 'circle', position: '0.934 0.713 0.04', radius: 0.012, color: '#fde047', opacity: 0.95 },
+      { type: 'circle', position: '0.88 0.66 0.04', radius: 0.008, color: '#e8c9a8', opacity: 0.8 },
+
+      // ดาวพื้นหลัง (อยู่ขอบหน้าต่าง ไม่ทับข้อความและปุ่ม)
+      { type: 'circle', position: '-0.93 0.50 0.01', radius: 0.004, color: '#ffffff', opacity: 0.8 },
+      { type: 'circle', position: '0.93 0.52 0.01', radius: 0.003, color: '#bff4ff', opacity: 0.7 },
+      { type: 'circle', position: '-0.70 0.73 0.01', radius: 0.003, color: '#fde8cc', opacity: 0.7 },
+      { type: 'circle', position: '0.66 0.74 0.01', radius: 0.004, color: '#ffffff', opacity: 0.75 },
+      { type: 'circle', position: '-0.92 -0.70 0.01', radius: 0.004, color: '#ffffff', opacity: 0.75 },
+      { type: 'circle', position: '-0.80 -0.74 0.01', radius: 0.003, color: '#bff4ff', opacity: 0.65 },
+      { type: 'circle', position: '0.92 -0.72 0.01', radius: 0.004, color: '#ffffff', opacity: 0.75 },
+      { type: 'circle', position: '0.78 -0.75 0.01', radius: 0.003, color: '#fde8cc', opacity: 0.65 }
     ],
 
     // --- 5. ฟังก์ชันวาดหน้าจอเฉพาะดาวพฤหัสบดี ---
