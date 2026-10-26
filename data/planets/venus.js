@@ -32,52 +32,30 @@ window.PLANET_DATA = window.PLANET_DATA.filter(p => p.id !== 'venus');
     api.renderCardDecorations(p, container, cfg);
     api.planetImage(p, container, cfg);
 
-    // --- ข้อเท็จจริง (แสดงทีละ 1 ข้อ พร้อมปุ่มเลื่อน) ---
+    // --- ข้อเท็จจริง (แสดงครบทุกข้อในหน้าเดียว ไม่ต้องกดเลื่อน) ---
     const facts = Array.isArray(p.facts) && p.facts.length ? p.facts : [p.info || ''];
-    let factIdx = 0;
     const dyn = api.make('a-entity', { id: 'venus-dyn' }, container);
 
     function draw() {
       while (dyn.firstChild) dyn.removeChild(dyn.firstChild);
 
-      // --- ข้อความ fact ปัจจุบัน ---
+      // --- ข้อความ fact ทุกข้อ เรียงจากบนลงล่าง ---
       // left-align: position.x = ขอบซ้ายของข้อความ (txt() บวก width/2 ให้อัตโนมัติ)
       // ขอบซ้าย x = -0.06 (ชิดเส้นแบ่ง) width = 1.18 → ขอบขวา = -0.06+1.18 = 1.12 ✓ (ในการ์ด)
-      // [แก้ข้อความขาดหาย] ลดฟอนต์ 50 → 46, ให้ย่อได้ถึง 30, ระยะบรรทัด 1.38 → 1.30
-      // และกำหนด maxHeight 0.70 (พื้นที่ระหว่างเส้นเน้น y 0.385 กับปุ่ม ◀ ▶) ให้ข้อความยาวแสดงครบทุกบรรทัด
-      api.txt(
-        dyn,
-        '✦ ' + facts[factIdx],
-        '-0.06 0.05 0.055',
-        1.18,
-        C.white, 'left',
-        style(46, { lineHeight: 1.30, minFontSize: 30, maxHeight: 0.70 })
-      );
-
-      // ตัวเลข n/total ด้านขวาล่าง
-      api.txt(
-        dyn,
-        `${factIdx + 1} / ${facts.length}`,
-        '1.00 -0.52 0.055',
-        0.22, C.peach, 'center',
-        style(60, { lineHeight: 1.0, minFontSize: 46 })
-      );
-
-      // ปุ่ม ◀ / ▶ เลื่อน fact
-      if (facts.length > 1) {
-        api.button(
-          dyn, '◀', '0.10 -0.540 0.060', 0.24, 0.16,
-          () => { factIdx = (factIdx + facts.length - 1) % facts.length; draw(); },
-          '#3b0a1a', '#9f1239',
-          style(110, { textColor: C.white, minFontSize: 90, opacity: 1 })
+      // พื้นที่ใช้ได้: ใต้เส้นเน้น y 0.385 ถึงเหนือปุ่มหลัก (ขอบบนปุ่ม y -0.66)
+      // แบ่ง 4 ช่อง ช่องละ 0.24 → y = 0.26, 0.02, -0.22, -0.46 (แต่ละช่องสูงสุด 0.22)
+      const FACT_TOP_Y = 0.26;
+      const FACT_STEP = 0.24;
+      facts.forEach((fact, i) => {
+        api.txt(
+          dyn,
+          '✦ ' + fact,
+          `-0.06 ${(FACT_TOP_Y - i * FACT_STEP).toFixed(3)} 0.055`,
+          1.18,
+          C.white, 'left',
+          style(40, { lineHeight: 1.25, minFontSize: 26, maxHeight: 0.22 })
         );
-        api.button(
-          dyn, '▶', '0.44 -0.540 0.060', 0.24, 0.16,
-          () => { factIdx = (factIdx + 1) % facts.length; draw(); },
-          '#3b0a1a', '#9f1239',
-          style(110, { textColor: C.white, minFontSize: 90, opacity: 1 })
-        );
-      }
+      });
 
       // --- ปุ่มหลัก 2 ปุ่ม: ขนาดใหญ่ ฟอนต์ใหญ่ เห็นทันทีโดยไม่ต้องชี้เมาส์ ---
       api.button(
