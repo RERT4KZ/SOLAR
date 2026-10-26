@@ -249,7 +249,7 @@ window.PLANET_DATA = window.PLANET_DATA.filter(
           active ? '#c2410c' : '#0b2a4a',
           active ? '#ea580c' : '#134e7a',
           {
-            fontSize: 112, lineHeight: 1.2, fontFamily: FONT, opacity: 1,
+            fontSize: 150, lineHeight: 1.2, fontFamily: FONT, opacity: 1,
             textColor: active ? '#fff7ed' : '#bff4ff',
             borderColor: active ? '#ffb45e' : '#7deaff', borderThickness: 0.005
           }
