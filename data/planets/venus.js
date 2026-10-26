@@ -2,18 +2,19 @@
 // ไฟล์ข้อมูลประจำดวงดาว: ดาวศุกร์ (Venus)
 // ไฟล์: data/planets/venus.js
 // ============================================================================
-// [ค่าอ้างอิงเดิมของดาวศุกร์]
-//   id: 'venus' | name: 'ดาวศุกร์' | en: 'Venus'
-//   color: '#e7bd7b' | radius: 0.38
-//
-// [มาตรฐานดีไซน์กลางที่ใช้เหมือนกันทั้งโปรเจกต์ (หากเว้นว่าง ระบบจะใช้ค่าเหล่านี้)]
-//   - ฟอนต์หลัก (fontFamily)     : '"Sarabun", "Kanit", "Tahoma", system-ui, sans-serif'
-//   - ขนาดแผงการ์ด UI            : กว้าง 1.78 เมตร x สูง 1.22 เมตร
-//   - สีปุ่มมินิเกม / ปุ่มปิด / สีเรืองแสง ตามที่กำหนดใน style และ card.buttons
+// หมายเหตุรูปแบบค่า (ยึดตามไฟล์ saturn.js ที่ใช้งานได้จริง)
+//   - ตำแหน่งทุกชนิดเป็นสตริง 'x y z' เช่น '-0.80 0 0.035' (ห้ามใช้ { x, y, z })
+//   - lineHeight เป็นอัตราส่วน เช่น 1.3 (ไม่ใช่พิกเซล)
+//   - fontSize ของปุ่มอยู่บนสเกลแคนวาส 1024 (ใช้ราว 100)
+//   - bullet = สัญลักษณ์หน้าหัวข้อย่อย, decorations ใช้ type 'plane' หรือ 'circle'
 // ============================================================================
- 
+
 window.PLANET_DATA = window.PLANET_DATA || [];
- 
+
+window.PLANET_DATA = window.PLANET_DATA.filter(
+  p => p.id !== 'venus'
+);
+
 window.PLANET_DATA.push({
   // --- 1. ข้อมูลพื้นฐานและเนื้อหาของดาว ---
   id: 'venus',
@@ -24,98 +25,166 @@ window.PLANET_DATA.push({
     'ฉายาฝาแฝดโลก ขนาดและมวลใกล้เคียงโลกมากที่สุด',
     'ผิวร้อนที่สุดในระบบสุริยะ อุณหภูมิสูงถึง 465°C',
     'หมุนรอบตัวเองกลับทิศ ดวงอาทิตย์ขึ้นทิศตะวันตก',
-    'สว่างที่สุดบนท้องฟ้า รู้จักในชื่อดาวประกายพรึก'
+    'สว่างที่สุดในบรรดาดาวบนท้องฟ้า รู้จักในชื่อดาวประกายพรึก'
   ],
- 
-  // --- 2. ตั้งค่าโมเดล 3D และรูปภาพประกอบ ---
+
+  // --- 2. โมเดล 3D ---
+  texture: 'assets/images/venus.jpg',
   color: '#e7bd7b',
   radius: 0.38,
   image: '',
-  texture: 'assets/images/venus.jpg',
- 
-  // --- 3. สไตล์เฉพาะของดาวดวงนี้ (ธีม Rose Gold) ---
+
+  // --- 3. สไตล์หลักของดาวดวงนี้ ---
   style: {
     fontFamily: '"Sarabun", "Kanit", "Tahoma", system-ui, sans-serif',
-    fontSize: 40,                  // ขนาดมาตรฐาน อ่านสบาย ไม่ใหญ่เกินกรอบ
-    badgeText: '✦ ดาวฝาแฝดของโลก · GODDESS OF BEAUTY ✦',
+    fontSize: 44,
     panelBgColor: '#160812',
     panelBorderColor: '#fb7185',
     titleColor: '#fff1f2',
     subtitleColor: '#fecdd3',
     textColor: '#ffffff',
-    buttonColor: '#be123c',        // ปุ่มสว่างตลอดเวลา เห็นข้อความโดยไม่ต้องชี้
+    buttonColor: '#be123c',
     buttonHoverColor: '#e11d48',
-    closeButtonColor: '#9f1239',   // ปุ่มปิดสว่างขึ้น เห็นชัดเจนตั้งแต่แรก
-    highlightColor: '#fda4af'
+    closeButtonColor: '#4c0519',
+    highlightColor: '#fb7185'
   },
- 
-  // --- 4. การ์ดข้อมูลแยกอิสระ ---
+
+  // --- 4. การ์ดข้อมูล (ขนาดและตำแหน่งชุดเดียวกับดาวเสาร์) ---
   card: {
-    width: 1.84,
-    height: 1.28,
+    width: 2.65,
+    height: 1.80,
+    position: '0 0 0',
+    scale: 0.8,
+    rotation: '0 0 0',
+    distance: 1.8,
     layout: 'horizontal',
-    position: { x: 0, y: 0, z: 0 },
+
     background: {
       color: '#160812',
-      opacity: 1.0,
-      outerGlow: true,
-      outerGlowColor: '#fb7185',
-      outerGlowOpacity: 0.35       // เพิ่มแสงเรืองรอบการ์ดให้เด่นขึ้น
+      opacity: 0.88,
+      image: ''
     },
+
+    // กรอบแบบมีมุม (frame) พร้อมแสงเรืองรอบการ์ด
     border: {
-      style: 'full',
-      color: '#fda4af',
-      thickness: 0.024,
-      opacity: 1.0
+      style: 'frame',
+      color: '#fb7185',
+      thickness: 0.012,
+      cornerSize: 0.12,
+      cornerColor: '#fda4af',
+      glowColor: '#fb7185',
+      glowOpacity: 0.18
     },
+
     header: {
-      badgeText: '✦ ดาวฝาแฝดของโลก · GODDESS OF BEAUTY ✦',
-      titleFontSize: 44,
-      subtitleFontSize: 30,
-      titleColor: '#fff1f2',
-      subtitleColor: '#fecdd3',
+      show: true,
+      title: 'ดาวศุกร์',
+      subtitle: 'V E N U S  ·  ดาวฝาแฝดของโลก',
+      titlePos: '0 0.77 0.02',
+      subtitlePos: '0 0.665 0.02',
+      titleWidth: 1.55,
+      subtitleWidth: 1.55,
       showDivider: true,
-      dividerColor: '#fb7185'
+      dividerY: 0.605,
+      dividerWidth: 2.4
     },
+
     media: {
-      position: { x: -0.48, y: -0.01, z: 0.22 },
-      modelRadius: 0.20,
+      show: true,
+      show3D: true,
       showCaption: true,
-      caption: '✦ แบบจำลอง 3D ดาวศุกร์ ✦',
-      captionColor: '#fecdd3'
+      caption: 'แบบจำลอง 3D ดาวศุกร์',
+      captionColor: '#fecdd3',
+      position: '-0.80 0 0.035',
+      modelRadius: 0.22,
+      showImage: false,
+      frameColor: '#fda4af'
     },
+
     content: {
-      position: { x: -0.15, y: -0.01, z: 0.02 },
-      width: 0.94,
-      fontSize: 28,                // ขนาดปกติ อ่านง่าย ไม่ตกบรรทัด
-      lineHeight: 46,
+      position: '0.47 -0.05 0.03',
+      width: 1.38,
+      maxHeight: 0.80,
+      fontSize: 44,
+      minFontSize: 28,
+      lineHeight: 1.3,
       align: 'left',
-      bulletPrefix: '✦ '
+      bullet: '• '
     },
+
+    sections: [],
+
+    // --- ตกแต่งเพิ่มเติม ---
+    decorations: [
+      // แผ่นกระจกจาง ๆ ด้านซ้าย (โมเดล) และด้านขวา (ความรู้)
+      { type: 'plane', position: '-0.80 -0.125 0.006', width: 0.92, height: 1.04, color: '#3a1224', opacity: 0.55 },
+      { type: 'plane', position: '0.47 -0.11 0.006', width: 1.50, height: 0.98, color: '#2c0e1b', opacity: 0.55 },
+
+      // แถบพื้นหลังด้านล่างรองรับปุ่ม
+      { type: 'plane', position: '0 -0.745 0.008', width: 2.30, height: 0.21, color: '#3a1224', opacity: 0.45 },
+
+      // เส้นกรอบบาง (hairline) ซ้อนด้านในกรอบนอก
+      { type: 'plane', position: '0 0.835 0.012', width: 2.46, height: 0.004, color: '#fda4af', opacity: 0.5 },
+      { type: 'plane', position: '0 -0.835 0.012', width: 2.46, height: 0.004, color: '#fda4af', opacity: 0.5 },
+      { type: 'plane', position: '-1.23 0 0.012', width: 0.004, height: 1.67, color: '#fda4af', opacity: 0.5 },
+      { type: 'plane', position: '1.23 0 0.012', width: 0.004, height: 1.67, color: '#fda4af', opacity: 0.5 },
+
+      // เส้นประดับสองข้างบรรทัดชื่อภาษาอังกฤษ
+      { type: 'plane', position: '-1.00 0.665 0.012', width: 0.38, height: 0.004, color: '#fda4af', opacity: 0.8 },
+      { type: 'plane', position: '1.00 0.665 0.012', width: 0.38, height: 0.004, color: '#fda4af', opacity: 0.8 },
+
+      // เส้นเน้นใต้แผงโมเดลและบนแผงความรู้
+      { type: 'plane', position: '-0.80 -0.65 0.012', width: 0.80, height: 0.004, color: '#fda4af', opacity: 0.7 },
+      { type: 'plane', position: '0.47 0.385 0.012', width: 1.40, height: 0.004, color: '#fda4af', opacity: 0.55 },
+
+      // จุดดาวประดับ
+      { type: 'circle', position: '-1.10 0.74 0.02', radius: 0.014, color: '#fecdd3', opacity: 0.9 },
+      { type: 'circle', position: '1.10 0.74 0.02', radius: 0.014, color: '#fecdd3', opacity: 0.9 },
+      { type: 'circle', position: '-0.565 0.336 0.02', radius: 0.012, color: '#fecdd3', opacity: 0.9 },
+      { type: 'circle', position: '-1.136 -0.235 0.02', radius: 0.010, color: '#fda4af', opacity: 0.9 },
+      { type: 'circle', position: '-0.45 -0.50 0.02', radius: 0.008, color: '#fecdd3', opacity: 0.8 },
+      { type: 'circle', position: '1.12 -0.50 0.02', radius: 0.010, color: '#fda4af', opacity: 0.8 }
+    ],
+
+    buttonLayout: {
+      mode: 'custom',
+      position: '0 -0.745 0.035',
+      spacing: 0.06
+    },
+
+    // ปุ่ม: สีพื้นสว่าง ตัวอักษรขาว มีขอบ มองเห็นข้อความได้ทันทีโดยไม่ต้องชี้
     buttons: [
       {
-        id: 'quiz',
-        label: '✦ ท้าทายควิซดาวศุกร์',
-        action: 'quiz',
-        position: { x: 0.32, y: -0.46, z: 0.035 },
-        width: 0.68,
-        height: 0.13,
-        color: '#be123c',          // พื้นปุ่มสีแดงกุหลาบสด
-        hoverColor: '#fb7185',
-        textColor: '#ffffff',      // ตัวอักษรขาวสว่าง เห็นทันทีโดยไม่ต้องชี้
-        fontSize: 32
+        id: 'close',
+        enabled: true,
+        label: 'ปิดการ์ด',
+        action: 'close',
+        position: '-0.72 -0.745 0.035',
+        width: 0.62,
+        height: 0.15,
+        color: '#4c0519',
+        hoverColor: '#9f1239',
+        textColor: '#fff1f2',
+        borderColor: '#fda4af',
+        borderThickness: 0.006,
+        fontSize: 100,
+        opacity: 1
       },
       {
-        id: 'close',
-        label: '✕ กลับสู่ระบบสุริยะ',
-        action: 'close',
-        position: { x: -0.50, y: -0.46, z: 0.035 },
-        width: 0.46,
-        height: 0.13,
-        color: '#9f1239',          // ไวน์แดงสว่างขึ้น แยกจากพื้นหลังชัดเจน
+        id: 'quiz',
+        enabled: true,
+        label: 'เริ่มมินิเกม',
+        action: 'quiz',
+        position: '0.72 -0.745 0.035',
+        width: 0.62,
+        height: 0.15,
+        color: '#be123c',
         hoverColor: '#e11d48',
         textColor: '#ffffff',
-        fontSize: 32
+        borderColor: '#fecdd3',
+        borderThickness: 0.006,
+        fontSize: 100,
+        opacity: 1
       }
     ]
   }
